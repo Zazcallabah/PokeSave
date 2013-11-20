@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSave", "PokeSave\PokeSave.csproj", "{B587C276-6F72-4E3F-A583-5C729E6AA58F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{24CCAE02-4831-4BBF-801D-81FFC7353E27}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B587C276-6F72-4E3F-A583-5C729E6AA58F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B587C276-6F72-4E3F-A583-5C729E6AA58F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B587C276-6F72-4E3F-A583-5C729E6AA58F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B587C276-6F72-4E3F-A583-5C729E6AA58F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
