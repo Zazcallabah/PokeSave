@@ -17,13 +17,6 @@ namespace PokeSave
 
 				B = new GameSave( inputstream );
 
-				var tail = new byte[16385];
-				var ended = inputstream.Read( tail, 0, tail.Length );
-				/*			if( ended < 16384 )
-								throw new ArgumentException( "file too short" );
-							if( ended > 16384 )
-								throw new ArgumentException( "file too long" );
-				*/
 			}
 			finally
 			{

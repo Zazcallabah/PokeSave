@@ -1,21 +1,27 @@
 namespace PokeSave
 {
-	public static class Cipher
+	public class Cipher
 	{
-		static int? _key;
+		readonly uint _key;
 
-		public static void Init( int key )
+		public Cipher( uint key1, uint key2 )
 		{
-			if( _key == null )
-				_key = key;
+			_key = key1 ^ key2;
 		}
 
-		public static int Run( int data )
+		public Cipher( uint key )
 		{
-			if( !_key.HasValue )
-				throw new System.InvalidOperationException( "Tried to decrypt without key" );
+			_key = key;
+		}
 
-			return _key.Value ^ data;
+		public uint Run( uint data )
+		{
+			return _key ^ data;
+		}
+
+		public uint RunLower( uint data )
+		{
+			return ( _key & 0xffff ) ^ ( data & 0xffff );
 		}
 	}
 }

@@ -4,22 +4,24 @@ namespace PokeSave
 {
 	public class ItemEntry
 	{
-		readonly byte[] _data;
+		readonly GameSection _data;
 		readonly int _offset;
-		readonly bool _pc;
+		readonly Cipher _xor;
 
-		public ItemEntry( byte[] data, int offset, bool pc )
+		public ItemEntry( GameSection data, int offset )
+			: this( data, offset, null ) { }
+		public ItemEntry( GameSection data, int offset, Cipher xor )
 		{
 			_data = data;
 			_offset = offset;
-			_pc = pc;
+			_xor = xor;
 		}
 
-		public int ID
+		public uint ID
 		{
 			get
 			{
-				return ByteConverter.ToShort( _data, _offset );
+				return _data.GetShort( _offset );
 			}
 		}
 
@@ -31,21 +33,12 @@ namespace PokeSave
 			}
 		}
 
-		public int CountEncrypted
+		public uint Count
 		{
 			get
 			{
-				return ByteConverter.ToShort( _data, _offset + 2 );
-			}
-		}
-
-		public int Count
-		{
-			get
-			{
-				if( _pc )
-					return CountEncrypted;
-				return Cipher.Run( CountEncrypted );
+				var data = _data.GetShort( _offset + 2 );
+				return _xor == null ? data : _xor.RunLower( data );
 			}
 		}
 
@@ -54,7 +47,7 @@ namespace PokeSave
 			if( ID == 0 )
 				return string.Empty;
 			var sb = new StringBuilder();
-			sb.Append( "(" + ID + Name + ") " + CountEncrypted );
+			sb.AppendLine( "\t(" + ID + Name + ") " + Count );
 			return sb.ToString();
 		}
 	}

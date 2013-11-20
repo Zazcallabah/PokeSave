@@ -387,22 +387,22 @@ namespace PokeSave
 376	 0x0178	Old Sea Map	Old Sea Map*	Bag Key items pocket icon.png	 Key items pocket";
 		#endregion
 
-		static Dictionary<int, string> _names;
+		static Dictionary<uint, string> _names;
 		public static void Init()
 		{
 			if( _names != null )
 				return;
 
-			_names = new Dictionary<int, string>();
+			_names = new Dictionary<uint, string>();
 			var lines = Datasource.Split( '\n' );
 			foreach( var entry in lines )
 			{
 				var d = entry.Split( '\t' );
-				_names.Add( Int32.Parse( d[0] ), d[3] );
+				_names.Add( UInt32.Parse( d[0] ), d[3] );
 			}
 		}
 
-		public static string Get( int index )
+		public static string Get( uint index )
 		{
 			Init();
 			if( _names.ContainsKey( index ) )
@@ -414,7 +414,7 @@ namespace PokeSave
 		{
 			Init();
 
-			return _names[Int32.Parse( index )];
+			return _names[UInt32.Parse( index )];
 		}
 	}
 }

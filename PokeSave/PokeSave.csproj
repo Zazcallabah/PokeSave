@@ -51,24 +51,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ByteConverter.cs" />
     <Compile Include="Cipher.cs" />
     <Compile Include="GameSave.cs" />
-    <Compile Include="Sections\GameSection.cs" />
+    <Compile Include="GameType.cs" />
+    <Compile Include="GameSection.cs" />
     <Compile Include="ItemEntry.cs" />
     <Compile Include="ItemList.cs" />
     <Compile Include="MonsterEntry.cs" />
-    <Compile Include="Sections\NullSection.cs" />
-    <Compile Include="Sections\PcBuffer.cs" />
+    <Compile Include="PcBuffer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Sections\RivalSection.cs" />
     <Compile Include="SaveFile.cs" />
-    <Compile Include="SectionFactory.cs" />
     <Compile Include="SectionId.cs" />
-    <Compile Include="Sections\TeamSection.cs" />
     <Compile Include="TextTable.cs" />
-    <Compile Include="Sections\TrainerSection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

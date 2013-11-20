@@ -25,12 +25,25 @@ namespace PokeSave
 			' ',' ',' ',' ',' ',' ',' ',' ',   ' ',' ',' ','>',' ',' ','+','_'
 		};
 
-		public static string ConvertArray( byte[] b, int index, int offset )
+		public static string ConvertArrayRaw( GameSection b, int index, int length )
 		{
 			var sb = new StringBuilder();
-			for( int i = index; i < index + offset; i++ )
+			for( int i = index; i < index + length; i++ )
 			{
-				sb.Append( _data[b[i]] );
+				sb.Append( _data[b.GetByte( i )] );
+			}
+			return sb.ToString();
+		}
+
+		public static string ConvertArray( GameSection b, int index, int length )
+		{
+			var sb = new StringBuilder();
+			for( int i = index; i < index + length; i++ )
+			{
+				var c = b.GetByte( i );
+				if( c == 255 )
+					break;
+				sb.Append( _data[c] );
 			}
 			return sb.ToString();
 		}

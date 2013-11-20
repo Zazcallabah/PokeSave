@@ -7,10 +7,10 @@ namespace TestProject1
 	public class CipherTests
 	{
 		[Test]
-		public void TestMethod1()
+		public void TestXorCipher()
 		{
-			Cipher.Init( 775683919 );
-			Assert.AreEqual( 311364, Cipher.Run( 775896843 ) );
+			var c = new Cipher( 775683919 );
+			Assert.AreEqual( 311364, c.Run( 775896843 ) );
 		}
 	}
 }
