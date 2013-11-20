@@ -1,0 +1,16 @@
+[Oo]bj/
+[Bb]in/
+Binaries
+*.sln.cache
+*.suo
+*.user
+/TestResults
+*.vspscc
+*.vssscc
+*.vsmdi
+_ReSharper*/
+*.resharper
+.DS_Store
+._.DS_Store
+*.results.xml
+test-results.xml
