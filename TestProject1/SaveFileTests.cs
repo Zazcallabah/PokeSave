@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using NUnit.Framework;
 using PokeSave;
 
@@ -20,20 +21,11 @@ namespace TestProject1
 		}
 
 		[Test]
-		public void AnotherSaveFilesHasPcItems()
-		{
-			_file = new SaveFile( "p3.sav" );
-			Debug.WriteLine( _file );
-			Assert.AreEqual( _file.A.SecretId, _file.B.SecretId );
-		}
-
-
-		[Test]
 		public void BothSaveFilesHasSameSecret()
 		{
 			Assert.AreEqual( _file.A.SecretId, _file.B.SecretId );
-
 		}
+
 		[Test]
 		public void SaveFileHasTrainerSectionId()
 		{
@@ -41,10 +33,34 @@ namespace TestProject1
 			Assert.AreEqual( 56268, _file.A.SecretId );
 			Assert.AreEqual( 40132, _file.A.PublicId );
 		}
+
 		[Test]
 		public void MonsterChecksumCalculatesOk()
 		{
-			Assert.AreEqual( _file.A.Team[0].Checksum, _file.A.Team[0].CalculatedChecksum );
+			var filenames = new[] { "p.sav", "p2.sav", "p3.sav" };
+			var files = filenames.Select( n => new SaveFile( n ) );
+
+			foreach( var s in files.SelectMany( file => new[] { file.A, file.B } ).SelectMany( save => new MonsterEntry[0].Concat( save.PcBuffer ).Concat( save.Team ) ) )
+			{
+				Assert.AreEqual( s.Checksum, s.CalculatedChecksum );
+			}
+		}
+
+		[Test]
+		public void MakeTeamShiny()
+		{
+			foreach( var p in _file.Newest.Team )
+			{
+				if( !p.Empty )
+				{
+					Assert.AreEqual( p.Checksum, p.CalculatedChecksum );
+					var engine = new PersonalityEngine() { OriginalTrainer = p.OriginalTrainerId };
+					p.SetPersonality( engine );
+					Assert.AreEqual( p.Checksum, p.CalculatedChecksum );
+				}
+			}
+
+			_file.Save( "out.sav" );
 		}
 
 		[Test]
