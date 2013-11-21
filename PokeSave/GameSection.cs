@@ -43,6 +43,7 @@ namespace PokeSave
 		#endregion
 
 		readonly byte[] _datasource;
+		public bool IsDirty { get; private set; }
 
 		public string GetText( int offset, int count )
 		{
@@ -54,32 +55,52 @@ namespace PokeSave
 			return TextTable.ConvertArrayRaw( this, offset, count );
 		}
 
-		public virtual uint GetByte( int offset )
+		public virtual byte this[int index]
 		{
-			return _datasource[offset];
+			get { return _datasource[index]; }
+			set
+			{
+				IsDirty = true;
+				_datasource[index] = value;
+			}
 		}
 
 		public uint GetInt( int offset )
 		{
-			return ( GetByte( offset + 3 ) << 24 )
-	| ( GetByte( offset + 2 ) << 16 )
-		| ( GetByte( offset + 1 ) << 8 )
-			| GetByte( offset );
+			return
+				  ( (uint) this[offset + 3] << 24 )
+				| ( (uint) this[offset + 2] << 16 )
+				| ( (uint) this[offset + 1] << 8 )
+				| ( this[offset] );
 		}
 
 		public uint GetShort( int offset )
 		{
-			return ( GetByte( offset + 1 ) << 8 ) | GetByte( offset );
+			return ( (uint) this[offset + 1] << 8 ) | this[offset];
 		}
 
-		public virtual void Set( int offset, byte data )
+		public virtual void SetInt( int offset, uint data )
 		{
-			// Todo calculate checksum
-			throw new NotImplementedException();
+			this[offset] = (byte) ( data & 0xff );
+			this[offset + 1] = (byte) ( ( data >> 8 ) & 0xff );
+			this[offset + 2] = (byte) ( data >> 16 & 0xff );
+			this[offset + 3] = (byte) ( data >> 24 & 0xff );
+		}
+
+		public virtual void SetShort( int offset, uint data )
+		{
+			this[offset] = (byte) ( data & 0xff );
+			this[offset + 1] = (byte) ( ( data >> 8 ) & 0xff );
 		}
 
 		protected GameSection()
 		{
+			IsDirty = false;
+		}
+
+		public GameSection( byte[] data )
+		{
+			_datasource = data;
 		}
 
 		public GameSection( Stream instream )
@@ -88,11 +109,12 @@ namespace PokeSave
 			var count = instream.Read( _datasource, 0, _datasource.Length );
 			if( count != _datasource.Length )
 				throw new ArgumentException( "file too short" );
+			IsDirty = false;
 		}
 
 		public int Length { get { return Sizes[ID]; } }
 		public string Name { get { return Names[ID]; } }
-		public uint Checksum { get { return GetShort( 0xff6 ); } }
+		public uint Checksum { get { return GetShort( 0xff6 ); } set { SetShort( 0xff6, value ); } }
 		public uint ID { get { return GetShort( 0xff4 ); } }
 		public uint SaveIndex { get { return GetShort( 0xffc ); } }
 
@@ -112,7 +134,19 @@ namespace PokeSave
 			}
 		}
 
-		// Todo: Write-method, Save-method
+		public void FixChecksum()
+		{
+			Checksum = CalculatedChecksum;
+			IsDirty = false;
+		}
+
+		public void Write( Stream stream )
+		{
+			if( IsDirty )
+				FixChecksum();
+
+			stream.Write( _datasource, 0, _datasource.Length );
+		}
 
 		public override string ToString()
 		{
