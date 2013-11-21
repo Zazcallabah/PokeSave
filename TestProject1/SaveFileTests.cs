@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using NUnit.Framework;
 using PokeSave;
@@ -47,9 +48,52 @@ namespace TestProject1
 		}
 
 		[Test]
+		[Ignore]
+		public void MakeTeamLeaderOther()
+		{
+
+			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
+			_file.Latest.Team[0].MonsterId = 277;
+			Assert.AreEqual( 277, _file.Latest.Team[0].MonsterId );
+			Assert.AreNotEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
+			_file.Save( "upd.sav" );
+			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
+
+		}
+
+		[Test]
+		[Ignore]
+		public void MakeTeamOwn()
+		{
+			var t = _file.Latest.TrainerId;
+			foreach( var p in _file.Latest.Team )
+			{
+				if( !p.Empty )
+				{
+					if( t != p.OriginalTrainerId )
+					{
+						p.OriginalTrainerId = t;
+					}
+				}
+			}
+
+			_file.Save( "fr.sav" );
+		}
+
+		[Test]
+		public void AfterSaveFileHasSameSize()
+		{
+			var f = new SaveFile( "p.sav" );
+			f.Save( "tmp.sav" );
+
+			Assert.AreEqual( new FileInfo( "p.sav" ).Length, new FileInfo( "tmp.sav" ).Length );
+		}
+
+		[Test]
+		[Ignore]
 		public void MakeTeamShiny()
 		{
-			foreach( var p in _file.Newest.Team )
+			foreach( var p in _file.Latest.Team )
 			{
 				if( !p.Empty )
 				{

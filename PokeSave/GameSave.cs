@@ -234,6 +234,8 @@ namespace PokeSave
 			}
 		}
 
+		public uint TrainerId { get { return _sections[0].GetInt( _pointers[Type]["PublicId"] ); } }
+
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
@@ -291,6 +293,11 @@ namespace PokeSave
 
 		public void Save( Stream stream )
 		{
+			foreach( var p in Team )
+				p.Save();
+			foreach( var p in PcBuffer )
+				p.Save();
+
 			foreach( var s in _originalOrderSections )
 			{
 				s.Write( stream );

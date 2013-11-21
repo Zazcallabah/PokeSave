@@ -55,7 +55,9 @@
   <ItemGroup>
     <Compile Include="Ability.cs" />
     <Compile Include="Cipher.cs" />
+    <Compile Include="MoveList.cs" />
     <Compile Include="EvolutionDirection.cs" />
+    <Compile Include="MonsterInfo.cs" />
     <Compile Include="MonsterList.cs" />
     <Compile Include="GameSave.cs" />
     <Compile Include="GameType.cs" />
@@ -63,6 +65,9 @@
     <Compile Include="ItemEntry.cs" />
     <Compile Include="ItemList.cs" />
     <Compile Include="MonsterEntry.cs" />
+    <Compile Include="MonsterNature.cs" />
+    <Compile Include="MonsterType.cs" />
+    <Compile Include="NameList.cs" />
     <Compile Include="PcBuffer.cs" />
     <Compile Include="PersonalityEngine.cs" />
     <Compile Include="Program.cs" />
@@ -70,6 +75,23 @@
     <Compile Include="SaveFile.cs" />
     <Compile Include="SubstructureOffset.cs" />
     <Compile Include="TextTable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="abilities.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="dex.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="items.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="moves.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="names.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -56,7 +56,11 @@ namespace PokeSave
 		public uint Language { get { return _data.GetShort( _offset + 18 ); } }
 		public string OriginalTrainerName { get { return _data.GetText( _offset + 20, 7 ); } }
 		public uint Mark { get { return _data[_offset + 27]; } }
-		public uint Checksum { get { return _data.GetShort( _offset + 28 ); } }
+		public uint Checksum
+		{
+			get { return _data.GetShort( _offset + 28 ); }
+			private set { _data.SetShort( _offset + 28, value ); }
+		}
 		public uint SecurityKey { get { return _specificXor.Key; } }
 
 		public uint Status
@@ -109,7 +113,18 @@ namespace PokeSave
 		}
 
 
-		public uint MonsterId { get { return _specificXor.Run( _data.GetShort( GrowthOffset ) ) & 0xffff; } }
+		public uint MonsterId
+		{
+			get { return _specificXor.Run( _data.GetShort( GrowthOffset ) ) & 0xffff; }
+			set
+			{
+				IsDirty = true;
+				_data.SetShort( GrowthOffset, _specificXor.Run( ( value & 0xffff ) ) );
+			}
+		}
+
+		public bool IsDirty { get; private set; }
+
 		public uint Item { get { return _specificXor.RunLower( _data.GetShort( GrowthOffset ) ) >> 16; } }
 		public uint XP { get { return _specificXor.Run( _data.GetInt( GrowthOffset + 4 ) ); } }
 		public uint PP { get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 0xff; } }
@@ -167,6 +182,16 @@ namespace PokeSave
 			}
 		}
 
+		public void Save()
+		{
+			if( IsDirty )
+			{
+				Checksum = CalculatedChecksum;
+				IsDirty = false;
+			}
+
+		}
+
 		public uint Unknown { get { return _data.GetShort( _offset + 30 ); } }
 
 		public bool Empty
@@ -189,7 +214,7 @@ namespace PokeSave
 			if( Shiny )
 				sb.Append( "shiny " );
 			sb.Append( Name );
-			var type = MonsterList.Get( MonsterId );
+			var type = NameList.Get( MonsterId );
 			if( Name != type )
 				sb.Append( " (" + type + ")" );
 			if( MonsterId >= 290 && MonsterId <= 294 )

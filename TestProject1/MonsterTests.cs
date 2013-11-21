@@ -20,10 +20,11 @@ namespace TestProject1
 				_saveA = new GameSave( fs );
 			}
 		}
+
 		[Test]
 		public void MonsterListParse()
 		{
-			Assert.AreEqual( "BULBASAUR", MonsterList.Get( 1 ) );
+			Assert.AreEqual( "BULBASAUR", NameList.Get( 1 ) );
 		}
 		[Test]
 		public void SaveHasTrainerData()
@@ -136,7 +137,6 @@ namespace TestProject1
 			Assert.AreEqual( uint.Parse( "FFFFFFFF", NumberStyles.HexNumber ), m.Personality );
 			Assert.AreEqual( 293, m.MonsterId );
 		}
-
 
 		[Test]
 		public void EntryChecksumCalculation()
