@@ -10,15 +10,27 @@ namespace PokeSave
 			_data = sections;
 		}
 
-		public override uint GetByte( int offset )
+		public override byte this[int index]
 		{
-			var currentsection = 0;
-			while( offset >= _data[currentsection].Length )
+			get
 			{
-				offset -= _data[currentsection++].Length;
+				var currentsection = 0;
+				while( index >= _data[currentsection].Length )
+				{
+					index -= _data[currentsection++].Length;
+				}
+				return _data[currentsection][index];
 			}
-			return _data[currentsection].GetByte( offset );
-		}
 
+			set
+			{
+				var currentsection = 0;
+				while( index >= _data[currentsection].Length )
+				{
+					index -= _data[currentsection++].Length;
+				}
+				_data[currentsection][index] = value;
+			}
+		}
 	}
 }

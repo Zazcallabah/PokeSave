@@ -123,6 +123,22 @@ namespace PokeSave
 
 		Cipher Xor { get; set; }
 
+		public uint SaveIndex
+		{
+			get
+			{
+				var index = _sections[0].SaveIndex;
+				foreach( var s in _sections )
+				{
+					if( s.SaveIndex != index )
+					{
+						throw new InvalidOperationException( "Differing save indexes" );
+					}
+				}
+				return index;
+			}
+		}
+
 		public GameType Type { get; private set; }
 		public MonsterEntry[] Team { get; private set; }
 		public MonsterEntry[] PcBuffer { get; private set; }
@@ -153,7 +169,7 @@ namespace PokeSave
 		{
 			get
 			{
-				return _sections[0].GetByte( _pointers[Type]["Gender"] ) == 0 ? "Boy" : "Girl";
+				return _sections[0][_pointers[Type]["Gender"]] == 0 ? "Boy" : "Girl";
 			}
 		}
 
@@ -178,9 +194,9 @@ namespace PokeSave
 			get
 			{
 				var h = _sections[0].GetShort( _pointers[Type]["TimeHours"] );
-				var m = _sections[0].GetByte( _pointers[Type]["TimeMinutes"] );
-				var s = _sections[0].GetByte( _pointers[Type]["TimeSeconds"] );
-				var f = _sections[0].GetByte( _pointers[Type]["TimeFrames"] );
+				var m = _sections[0][_pointers[Type]["TimeMinutes"]];
+				var s = _sections[0][_pointers[Type]["TimeSeconds"]];
+				var f = _sections[0][_pointers[Type]["TimeFrames"]];
 
 				return string.Format( "{0}h{1}m{2}s{3}f", h, m, s, f );
 			}
@@ -271,6 +287,14 @@ namespace PokeSave
 			return sb.ToString();
 
 
+		}
+
+		public void Save( Stream stream )
+		{
+			foreach( var s in _originalOrderSections )
+			{
+				s.Write( stream );
+			}
 		}
 	}
 }
