@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace PokeSave
 {
-	static class ItemList
+	public static class ItemList
 	{
 
 		#region #	Hex	Bag	Item	Pocket
@@ -394,7 +394,7 @@ namespace PokeSave
 				return;
 
 			_names = new Dictionary<uint, string>();
-			var lines = Datasource.Split( '\n' );
+			var lines = Datasource.Split( new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries );
 			foreach( var entry in lines )
 			{
 				var d = entry.Split( '\t' );

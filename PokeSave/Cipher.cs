@@ -23,5 +23,7 @@ namespace PokeSave
 		{
 			return ( _key & 0xffff ) ^ ( data & 0xffff );
 		}
+
+		public uint Key { get { return _key; } }
 	}
 }

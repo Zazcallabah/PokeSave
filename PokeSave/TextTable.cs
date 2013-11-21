@@ -30,7 +30,7 @@ namespace PokeSave
 			var sb = new StringBuilder();
 			for( int i = index; i < index + length; i++ )
 			{
-				sb.Append( _data[b.GetByte( i )] );
+				sb.Append( _data[b[i]] );
 			}
 			return sb.ToString();
 		}
@@ -40,7 +40,7 @@ namespace PokeSave
 			var sb = new StringBuilder();
 			for( int i = index; i < index + length; i++ )
 			{
-				var c = b.GetByte( i );
+				var c = b[i];
 				if( c == 255 )
 					break;
 				sb.Append( _data[c] );

@@ -103,7 +103,7 @@ namespace TestProject1
 			{
 				if( s.ID == 1 )
 				{
-					Assert.AreEqual( 6, s.GetByte( 0x34 ) );
+					Assert.AreEqual( 6, s[ 0x34] );
 				}
 			}
 		}
