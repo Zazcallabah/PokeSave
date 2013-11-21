@@ -27,6 +27,7 @@ namespace PokeSave
 		public GameSave A { get; private set; }
 		public GameSave B { get; private set; }
 
+		public GameSave Newest { get { return A.SaveIndex > B.SaveIndex ? A : B; } }
 
 		public override string ToString()
 		{
@@ -40,5 +41,13 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
+		public void Save( string file )
+		{
+			using( var fs = File.OpenWrite( file ) )
+			{
+				A.Save( fs );
+				B.Save( fs );
+			}
+		}
 	}
 }
