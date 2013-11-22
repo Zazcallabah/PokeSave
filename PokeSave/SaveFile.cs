@@ -8,11 +8,10 @@ namespace PokeSave
 {
 	public class SaveFile
 	{
-		public SaveFile( string name )
-			: this( File.OpenRead( name ) )
-		{ }
-
 		readonly byte[] _tail;
+
+		public SaveFile( string name )
+			: this( File.OpenRead( name ) ) { }
 
 		public SaveFile( Stream inputstream )
 		{
@@ -28,6 +27,14 @@ namespace PokeSave
 			{
 				inputstream.Close();
 			}
+		}
+
+		public GameSave A { get; private set; }
+		public GameSave B { get; private set; }
+
+		public GameSave Latest
+		{
+			get { return A.SaveIndex > B.SaveIndex ? A : B; }
 		}
 
 		byte[] GrabTail( Stream inputstream )
@@ -51,7 +58,7 @@ namespace PokeSave
 			}
 
 			var tail = new byte[tailbuffer.Sum( a => a.Length )];
-			var index = 0;
+			int index = 0;
 			foreach( var piece in tailbuffer )
 			{
 				Array.Copy( piece, 0, tail, index, piece.Length );
@@ -59,11 +66,6 @@ namespace PokeSave
 			}
 			return tail;
 		}
-
-		public GameSave A { get; private set; }
-		public GameSave B { get; private set; }
-
-		public GameSave Latest { get { return A.SaveIndex > B.SaveIndex ? A : B; } }
 
 		public override string ToString()
 		{
@@ -79,7 +81,7 @@ namespace PokeSave
 
 		public void Save( string file )
 		{
-			using( var fs = File.OpenWrite( file ) )
+			using( FileStream fs = File.OpenWrite( file ) )
 			{
 				A.Save( fs );
 				B.Save( fs );
