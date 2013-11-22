@@ -21,6 +21,24 @@ namespace TestProject1
 			Debug.WriteLine( _file );
 		}
 
+
+		[Test]
+		public void TeamCorrectMoveName()
+		{
+			_file = new SaveFile( "p4.sav" );
+			Assert.AreEqual( "Thundershock", _file.Latest.Team[0].Move1Name );
+		}
+
+		[Test]
+		public void TeamHasStatusAndPP()
+		{
+			_file = new SaveFile( "p4.sav" );
+			Debug.WriteLine( _file.Latest.Team[0].Full() );
+			Assert.IsTrue( _file.Latest.Team[0].Poisoned );
+			Assert.AreEqual( 28, _file.Latest.Team[0].PP1 );
+		}
+
+
 		[Test]
 		public void BothSaveFilesHasSameSecret()
 		{
@@ -57,6 +75,24 @@ namespace TestProject1
 			Assert.AreEqual( 277, _file.Latest.Team[0].MonsterId );
 			Assert.AreNotEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
 			_file.Save( "upd.sav" );
+			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
+
+		}
+
+		[Test]
+		public void MakeTeamStatusDifferent()
+		{
+
+			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
+			_file.Latest.Team[0].Poisoned = true;
+			_file.Latest.Team[1].Burned = true;
+			_file.Latest.Team[2].Frozen = true;
+			_file.Latest.Team[3].Paralyzed = true;
+			_file.Latest.Team[4].BadPoisoned = true;
+			_file.Latest.Team[5].Sleeping = 5;
+			Assert.IsTrue( _file.Latest.Team[0].Poisoned );
+			Assert.AreEqual( 5, _file.Latest.Team[5].Sleeping );
+			Assert.AreEqual( 8, _file.Latest.Team[0].StatusByte );
 			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
 
 		}

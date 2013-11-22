@@ -6,6 +6,365 @@ namespace TestProject1
 	[TestFixture]
 	public class SubstructureTests
 	{
+		byte[] _b;
+		GameSection _gs;
+		MonsterEntry _m;
+
+		[SetUp]
+		public void Setup()
+		{
+			_b = new byte[100];
+			_gs = new GameSection( _b );
+			_m = new MonsterEntry( _gs, 0, false );
+
+		}
+
+		[Test]
+		public void SettingHighWordSubsectionTriggersIsDirty()
+		{
+
+			Assert.IsFalse( _m.IsDirty );
+			_m.SetEncryptedWord( 0, true, 0 );
+			Assert.IsTrue( _m.IsDirty );
+		}
+		[Test]
+		public void SettingLowWordSubsectionTriggersIsDirty()
+		{
+
+			Assert.IsFalse( _m.IsDirty );
+			_m.SetEncryptedWord( 0, false, 0 );
+			Assert.IsTrue( _m.IsDirty );
+		}
+
+		[Test]
+		public void SettingDWordSubsectionTriggersIsDirty()
+		{
+
+			Assert.IsFalse( _m.IsDirty );
+			_m.SetEncryptedDWord( 0, 0 );
+			Assert.IsTrue( _m.IsDirty );
+		}
+
+		[Test]
+		public void CanGetByteDataFromSubstructure()
+		{
+
+			_b[3] = 0x1;
+			_b[2] = 0x2;
+			_b[1] = 0x3;
+			_b[0] = 0x4;
+
+			Assert.AreEqual( 0x01020304, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x1, _m.GetEncryptedByte( 0, 0 ) );
+			Assert.AreEqual( 0x2, _m.GetEncryptedByte( 0, 1 ) );
+			Assert.AreEqual( 0x3, _m.GetEncryptedByte( 0, 2 ) );
+			Assert.AreEqual( 0x4, _m.GetEncryptedByte( 0, 3 ) );
+		}
+
+		[Test]
+		public void CanGetByteDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x10, _m.GetEncryptedByte( 0, 0 ) );
+			Assert.AreEqual( 0x20, _m.GetEncryptedByte( 0, 1 ) );
+			Assert.AreEqual( 0x30, _m.GetEncryptedByte( 0, 2 ) );
+			Assert.AreEqual( 0x40, _m.GetEncryptedByte( 0, 3 ) );
+		}
+
+		[Test]
+		public void CanSetByteDataFromSubstructure()
+		{
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			_m.SetEncryptedByte( 0, 0, 0xa3 );
+			_m.SetEncryptedByte( 0, 1, 0xb3 );
+			_m.SetEncryptedByte( 0, 2, 0xc3 );
+			_m.SetEncryptedByte( 0, 3, 0xd3 );
+
+			Assert.AreEqual( 0xa3b3c3d3, _m.GetEncryptedDWord( 0 ) );
+
+		}
+
+		[Test]
+		public void CanSetByteDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			_m.SetEncryptedByte( 0, 0, 0xa3 );
+			_m.SetEncryptedByte( 0, 1, 0xb3 );
+			_m.SetEncryptedByte( 0, 2, 0xc3 );
+			_m.SetEncryptedByte( 0, 3, 0xd3 );
+
+			Assert.AreEqual( 0xa3b3c3d3, _m.GetEncryptedDWord( 0 ) );
+
+		}
+
+
+		[Test]
+		public void CanGetDWordDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+			Assert.AreEqual( 0x0706, (ushort) _m.SecurityKey );
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
+		}
+
+		[Test]
+		public void CanSetDWordDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+			Assert.AreEqual( 0x0706, (ushort) _m.SecurityKey );
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
+
+			_m.SetEncryptedDWord( 0, 0x11213141 );
+			Assert.AreEqual( 0x11213141, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x18, _b[3] );
+			Assert.AreEqual( 0x29, _b[2] );
+			Assert.AreEqual( 0x36, _b[1] );
+			Assert.AreEqual( 0x47, _b[0] );
+		}
+
+		[Test]
+		public void CanGetWordDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedWord( 0, true ) ); // a xor a = 0
+			Assert.AreEqual( 0, _m.GetEncryptedWord( 0, false ) ); // a xor a = 0
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x1020, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0x3040, _m.GetEncryptedWord( 0, false ) );
+		}
+
+
+		[Test]
+		public void CanSetHighWordDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
+
+			_m.SetEncryptedWord( 0, true, 0x1121 );
+			Assert.AreEqual( 0x11213040, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x1121, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0x18, _b[3] );
+			Assert.AreEqual( 0x29, _b[2] );
+			Assert.AreEqual( 0x37, _b[1] );
+			Assert.AreEqual( 0x46, _b[0] );
+		}
+
+		[Test]
+		public void CanSetLowWordDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
+
+			_m.SetEncryptedWord( 0, false, 0x3141 );
+			Assert.AreEqual( 0x10203141, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x3141, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x19, _b[3] );
+			Assert.AreEqual( 0x28, _b[2] );
+			Assert.AreEqual( 0x36, _b[1] );
+			Assert.AreEqual( 0x47, _b[0] );
+		}
+
+		[Test]
+		public void CanSetBothWordDataFromSubstructureWithEncryption()
+		{
+			_m.Personality = 0x09080706;
+			Assert.AreEqual( 0x09080706, _m.SecurityKey );
+			Assert.AreEqual( 0, _m.GetEncryptedDWord( 0 ) ); // a xor a = 0
+
+			_b[3] = 0x19;
+			_b[2] = 0x28;
+			_b[1] = 0x37;
+			_b[0] = 0x46;
+
+			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
+
+			_m.SetEncryptedWord( 0, true, 0x1121 );
+			_m.SetEncryptedWord( 0, false, 0x3141 );
+			Assert.AreEqual( 0x11213141, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x3141, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x36, _b[1] );
+			Assert.AreEqual( 0x47, _b[0] );
+			Assert.AreEqual( 0x1121, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0x18, _b[3] );
+			Assert.AreEqual( 0x29, _b[2] );
+		}
+		[Test]
+		public void CanGetDWordDataFromSubstructure()
+		{
+			_b[3] = 9;
+			_b[2] = 8;
+			_b[1] = 7;
+			_b[0] = 6;
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0x09080706, _m.GetEncryptedDWord( 0 ) );
+		}
+
+		[Test]
+		public void CanGetHighWordDataFromSubstructure()
+		{
+			_b[3] = 9;
+			_b[2] = 8;
+			_b[1] = 7;
+			_b[0] = 6;
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0x0908, _m.GetEncryptedWord( 0, true ) );
+		}
+		[Test]
+		public void CanGetLowWordDataFromSubstructure()
+		{
+			_b[3] = 9;
+			_b[2] = 8;
+			_b[1] = 7;
+			_b[0] = 6;
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0x0706, _m.GetEncryptedWord( 0, false ) );
+		}
+		[Test]
+		public void CanSetDWordDataIntoSubstructure()
+		{
+			_m.SetEncryptedDWord( 0, 0xABCD4567 );
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0xABCD4567, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xAB, _b[3] );
+			Assert.AreEqual( 0xCD, _b[2] );
+			Assert.AreEqual( 0x45, _b[1] );
+			Assert.AreEqual( 0x67, _b[0] );
+		}
+
+		[Test]
+		public void CanSetHighWordDataIntoSubstructure()
+		{
+			_m.SetEncryptedWord( 0, true, 0xABCD );
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0xABCD0000, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0xAB, _b[3] );
+			Assert.AreEqual( 0xCD, _b[2] );
+			Assert.AreEqual( 0, _b[1] );
+			Assert.AreEqual( 0, _b[0] );
+		}
+
+		[Test]
+		public void CanSetLowWordDataIntoSubstructure()
+		{
+			_m.SetEncryptedWord( 0, false, 0xABCD );
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0x0000ABCD, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x00, _b[3] );
+			Assert.AreEqual( 0x00, _b[2] );
+			Assert.AreEqual( 0xAB, _b[1] );
+			Assert.AreEqual( 0xCD, _b[0] );
+		}
+
+		[Test]
+		public void CanSetDWordDataIntoSubstructureWithExistingData()
+		{
+			_m.SetEncryptedDWord( 0, 0x32333435 );
+			_m.SetEncryptedDWord( 0, 0xABCD4567 );
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0xABCD4567, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xAB, _b[3] );
+			Assert.AreEqual( 0xCD, _b[2] );
+			Assert.AreEqual( 0x45, _b[1] );
+			Assert.AreEqual( 0x67, _b[0] );
+		}
+
+		[Test]
+		public void CanSetHighWordDataIntoSubstructureWithExistingData()
+		{
+			_m.SetEncryptedDWord( 0, 0x32333435 );
+			_m.SetEncryptedWord( 0, true, 0xABCD );
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0xABCD3435, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0xAB, _b[3] );
+			Assert.AreEqual( 0xCD, _b[2] );
+			Assert.AreEqual( 0x34, _b[1] );
+			Assert.AreEqual( 0x35, _b[0] );
+		}
+
+		[Test]
+		public void CanSetLowWordDataIntoSubstructureWithExistingData()
+		{
+			_m.SetEncryptedDWord( 0, 0x32333435 );
+			_m.SetEncryptedWord( 0, false, 0xABCD );
+
+			Assert.AreEqual( 0, _m.SecurityKey );
+			Assert.AreEqual( 0x3233ABCD, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x32, _b[3] );
+			Assert.AreEqual( 0x33, _b[2] );
+			Assert.AreEqual( 0xAB, _b[1] );
+			Assert.AreEqual( 0xCD, _b[0] );
+		}
+
 		/*
 		00. GAEM	 06. AGEM	 12. EGAM	 18. MGAE
 		01. GAME	 07. AGME	 13. EGMA	 19. MGEA
@@ -40,7 +399,7 @@ namespace TestProject1
 		[TestCase( 2, 23 )]
 		public void CanFindCorrectOffsetForAction( int expect, int index )
 		{
-			Assert.AreEqual( expect, SubstructureOffset.Action( (uint)index ) );
+			Assert.AreEqual( expect, SubstructureOffset.Action( (uint) index ) );
 		}
 
 
@@ -70,7 +429,7 @@ namespace TestProject1
 		[TestCase( 1, 23 )]
 		public void CanFindCorrectOffsetForEVs( int expect, int index )
 		{
-			Assert.AreEqual( expect, SubstructureOffset.EVs( (uint)index ) );
+			Assert.AreEqual( expect, SubstructureOffset.EVs( (uint) index ) );
 		}
 
 		[TestCase( 3, 0 )]
@@ -99,7 +458,7 @@ namespace TestProject1
 		[TestCase( 0, 23 )]
 		public void CanFindCorrectOffsetForMisc( int expect, int index )
 		{
-			Assert.AreEqual( expect, SubstructureOffset.Misc( (uint)index ) );
+			Assert.AreEqual( expect, SubstructureOffset.Misc( (uint) index ) );
 		}
 
 		[TestCase( 0, 0 )]
@@ -128,7 +487,7 @@ namespace TestProject1
 		[TestCase( 3, 23 )]
 		public void CanFindCorrectOffsetForGrowth( int expect, int index )
 		{
-			Assert.AreEqual( expect, SubstructureOffset.Growth((uint)index ) );
+			Assert.AreEqual( expect, SubstructureOffset.Growth( (uint) index ) );
 		}
 	}
 }

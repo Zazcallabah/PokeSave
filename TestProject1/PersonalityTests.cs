@@ -6,6 +6,61 @@ namespace TestProject1
 	[TestFixture]
 	public class PersonalityTests
 	{
+		[TestCase( 1 )]
+		[TestCase( 2 )]
+		[TestCase( 3 )]
+		[TestCase( 4 )]
+		[TestCase( 5 )]
+		[TestCase( 11 )]
+		[TestCase( 12 )]
+		[TestCase( 13 )]
+		public void GivenTypeCanDecideGenderFemale( int type )
+		{
+			var gd = new GenderDecision( MonsterGender.F, (uint) type );
+
+			var p = new PersonalityEngine { Gender = gd };
+			var g = p.Generate();
+
+			var t = MonsterList.Get( (uint) type );
+
+			Assert.IsTrue( ( g & 0xff ) < t.Gender );
+		}
+		[TestCase( 1 )]
+		[TestCase( 51 )]
+		[TestCase( 71 )]
+		[TestCase( 88 )]
+		[TestCase( 102 )]
+		[TestCase( 109 )]
+		[TestCase( 11 )]
+		public void GivenTypeCanDecideGenderMale( int type )
+		{
+			var gd = new GenderDecision( MonsterGender.M, (uint) type );
+
+			var p = new PersonalityEngine { Gender = gd };
+			var g = p.Generate();
+
+			var t = MonsterList.Get( (uint) type );
+
+			Assert.IsFalse( ( g & 0xff ) < t.Gender );
+		}
+		[Test]
+		public void GivenTypeGenderlessDecisionIsIgnored()
+		{
+			var gd = new GenderDecision( MonsterGender.M, 81 );
+
+			var p = new PersonalityEngine { Gender = gd };
+			var g = p.Generate();
+
+		}
+		[Test]
+		public void GivenTypeMOnlyDecisionIsIgnored()
+		{
+			var gd = new GenderDecision( MonsterGender.F, 32 );
+
+			var p = new PersonalityEngine { Gender = gd };
+			var g = p.Generate();
+
+		}
 		[Test]
 		public void GivenTrainerIdEngineCanMakeShiny()
 		{
@@ -29,8 +84,7 @@ namespace TestProject1
 		[Test]
 		public void GivenNatureEngineCanMakeNature()
 		{
-			uint nature = 9;
-			var p = new PersonalityEngine { Nature = nature };
+			var p = new PersonalityEngine { Nature = MonsterNature.Lax };
 			var g = p.Generate();
 			Assert.AreEqual( 9, g % 25 );
 		}
@@ -38,14 +92,15 @@ namespace TestProject1
 		[Test]
 		public void CanSpecifyShinyNatureAbilityEvolutionAtSameTime()
 		{
-			uint nature = 9;
 			uint tID = 87373;
-			var p = new PersonalityEngine(444)
+			var t = MonsterList.Get( 1 );
+			var p = new PersonalityEngine( 444 )
 			{
-				Nature = nature,
-				Ability = Ability.First,
+				Nature = MonsterNature.Lax,
+				Ability = AbilityIndex.First,
 				Evolution = EvolutionDirection.C,
-				OriginalTrainer = tID
+				OriginalTrainer = tID,
+				Gender = new GenderDecision( MonsterGender.F, 1 )
 			};
 			var g = p.Generate();
 
@@ -54,6 +109,7 @@ namespace TestProject1
 			Assert.IsTrue( ( ( r & 0xFFFF ) ^ ( r >> 16 ) ) < 8 );
 			Assert.AreEqual( 0, g % 2 );
 			Assert.IsFalse( ( g & 0xffff ) % 10 < 5 );
+			Assert.IsTrue( ( g & 0xff ) < t.Gender );
 		}
 	}
 }

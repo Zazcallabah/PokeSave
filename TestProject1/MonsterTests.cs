@@ -35,7 +35,41 @@ namespace TestProject1
 		[Test]
 		public void CanGetStatus()
 		{
-			Assert.AreEqual( 0, _saveA.Team[0].Status );
+			Assert.AreEqual( 0, _saveA.Team[0].StatusByte );
+			Debug.WriteLine( _saveA.Team[0].Full() );
+		}
+
+		[Test]
+		public void BaseStatsAreCorrect()
+		{
+			var t = MonsterList.Get( 1 );
+			Assert.AreEqual( 45, t.HP );
+			Assert.AreEqual( 49, t.Attack );
+			Assert.AreEqual( 49, t.Defense );
+			Assert.AreEqual( 65, t.SpAttack );
+			Assert.AreEqual( 65, t.SpDefense );
+			Assert.AreEqual( 45, t.Speed );
+
+			Assert.AreEqual( 70, t.BaseFriendship );
+			Assert.AreEqual( 45, t.CatchRate );
+			Assert.AreEqual( 20, t.StepsToHatch );
+			Assert.AreEqual( 64, t.BaseXpYield );
+			Assert.AreEqual( 65, t.Ability1 );
+		}
+
+		[Test]
+		public void FirstAbilityArntNull()
+		{
+			for( uint i = 1; i <= 251; i++ )
+			{
+				var type = MonsterList.Get( i );
+				Assert.AreNotEqual( 0, type.Ability1, i.ToString() );
+			}
+			for( uint i = 277; i <= 411; i++ )
+			{
+				var type = MonsterList.Get( i );
+				Assert.AreNotEqual( 0, type.Ability1, i.ToString() );
+			}
 		}
 
 		[Test]
@@ -74,12 +108,30 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void WeCanChangeOTIDYetPreserveShiny()
+		{
+			var m = TestSection();
+			m.Shiny = true;
+			Assert.IsTrue( m.Shiny );
+			m.OriginalTrainerId = 55;
+			Assert.IsTrue( m.Shiny );
+		}
+
+		[Test]
+		public void AfterSettingPersonalityChecksumsStillMatch()
+		{
+			var m = TestSection();
+			m.Shiny = true;
+			Assert.AreEqual( m.Checksum, m.CalculatedChecksum );
+		}
+
+		[Test]
 		public void WeCanCalculateFieldsFromPersonality()
 		{
 			var m = TestSection();
 			Assert.AreEqual( 0x9d, m.GenderByte );
-			Assert.AreEqual( Ability.Second, m.Ability );
-			Assert.AreEqual( 10, m.Nature );
+			Assert.AreEqual( AbilityIndex.Second, m.Ability );
+			Assert.AreEqual( MonsterNature.Timid, m.Nature );
 			Assert.AreEqual( EvolutionDirection.C, m.Evolution );
 
 		}
@@ -103,6 +155,17 @@ namespace TestProject1
 			Assert.AreEqual( 125, m.XP );
 		}
 
+		[Test]
+		public void WeCanSetGrowthData()
+		{
+			var m = TestSection();
+			m.MonsterId = 3;
+			m.Item = 44;
+			m.XP = 444;
+			Assert.AreEqual( 3, m.MonsterId );
+			Assert.AreEqual( 44, m.Item );
+			Assert.AreEqual( 444, m.XP );
+		}
 		[Test]
 		public void TestWritingOTid()
 		{
