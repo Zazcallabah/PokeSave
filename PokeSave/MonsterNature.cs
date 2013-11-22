@@ -2,7 +2,7 @@ namespace PokeSave
 {
 	public enum MonsterNature
 	{
-		Hardy,
+		Hardy = 0,
 		Lonely,
 		Brave,
 		Adamant,

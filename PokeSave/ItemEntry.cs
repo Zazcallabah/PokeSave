@@ -10,6 +10,7 @@ namespace PokeSave
 
 		public ItemEntry( GameSection data, int offset )
 			: this( data, offset, null ) { }
+
 		public ItemEntry( GameSection data, int offset, Cipher xor )
 		{
 			_data = data;
@@ -19,25 +20,19 @@ namespace PokeSave
 
 		public uint ID
 		{
-			get
-			{
-				return _data.GetShort( _offset );
-			}
+			get { return _data.GetShort( _offset ); }
 		}
 
 		public string Name
 		{
-			get
-			{
-				return ItemList.Get( ID );
-			}
+			get { return ItemList.Get( ID ); }
 		}
 
 		public uint Count
 		{
 			get
 			{
-				var data = _data.GetShort( _offset + 2 );
+				uint data = _data.GetShort( _offset + 2 );
 				return _xor == null ? data : _xor.RunLower( data );
 			}
 		}
@@ -47,7 +42,7 @@ namespace PokeSave
 			if( ID == 0 )
 				return string.Empty;
 			var sb = new StringBuilder();
-			sb.AppendLine( "\t(" + ID + Name + ") " + Count );
+			sb.Append( "(" + ID + Name + ") " + Count );
 			return sb.ToString();
 		}
 	}

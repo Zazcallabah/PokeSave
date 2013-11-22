@@ -1,4 +1,3 @@
-
 namespace PokeSave
 {
 	public class PcBuffer : GameSection
@@ -14,21 +13,17 @@ namespace PokeSave
 		{
 			get
 			{
-				var currentsection = 0;
+				int currentsection = 0;
 				while( index >= _data[currentsection].Length )
-				{
 					index -= _data[currentsection++].Length;
-				}
 				return _data[currentsection][index];
 			}
 
 			set
 			{
-				var currentsection = 0;
+				int currentsection = 0;
 				while( index >= _data[currentsection].Length )
-				{
 					index -= _data[currentsection++].Length;
-				}
 				_data[currentsection][index] = value;
 			}
 		}

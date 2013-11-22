@@ -1,14 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace PokeSave
+﻿namespace PokeSave
 {
-	class Program
+	internal class Program
 	{
-		static void Main( string[] args )
-		{
-		}
+		static void Main( string[] args ) { }
 	}
 }

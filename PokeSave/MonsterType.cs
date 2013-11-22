@@ -2,7 +2,7 @@ namespace PokeSave
 {
 	public enum MonsterType
 	{
-		Normal,
+		Normal = 0,
 		Fighting,
 		Flying,
 		Poison,
