@@ -4,6 +4,31 @@ namespace PokeSave
 {
 	public struct MonsterInfo
 	{
+		public byte Ability1;
+		public byte Ability2;
+		public byte Attack;
+		public byte BaseFriendship;
+		public byte BaseXpYield;
+		public byte CatchRate;
+		public byte Color;
+		public byte Defense;
+		public uint EffortYield;
+		public byte EggGroup1;
+		public byte EggGroup2;
+		public byte Gender;
+		public byte HP;
+		public uint Item1;
+		public uint Item2;
+		public byte LevelUpType;
+		public string Name;
+		public byte SafariRate;
+		public byte SpAttack;
+		public byte SpDefense;
+		public byte Speed;
+		public byte StepsToHatch; // *256
+		public MonsterType Type1;
+		public MonsterType Type2;
+
 		public MonsterInfo( byte[] source, uint index, uint offset )
 		{
 			Name = NameList.Get( index );
@@ -13,20 +38,24 @@ namespace PokeSave
 			Speed = source[offset + 3];
 			SpAttack = source[offset + 4];
 			SpDefense = source[offset + 5];
-			Type1 = source[offset + 6];
-			Type2 = source[offset + 7];
+			Type1 = (MonsterType) source[offset + 6];
+			Type2 = (MonsterType) source[offset + 7];
+			CatchRate = source[offset + 8];
+			BaseXpYield = source[offset + 9];
+			EffortYield = (uint) ( source[offset + 10] | ( source[offset + 11] << 8 ) );
+			Item1 = (uint) ( source[offset + 12] | ( source[offset + 13] << 8 ) );
+			Item2 = (uint) ( source[offset + 14] | ( source[offset + 15] << 8 ) );
 			Gender = source[offset + 16];
+			StepsToHatch = source[offset + 17];
+			BaseFriendship = source[offset + 18];
+			LevelUpType = source[offset + 19];
+			EggGroup1 = source[offset + 20];
+			EggGroup2 = source[offset + 21];
+			Ability1 = source[offset + 22];
+			Ability2 = source[offset + 23];
+			SafariRate = source[offset + 24];
+			Color = source[offset + 25];
 		}
-		public string Name;
-		public byte HP;
-		public byte Attack;
-		public byte Defense;
-		public byte Speed;
-		public byte SpAttack;
-		public byte SpDefense;
-		public byte Type1;
-		public byte Type2;
-		public byte Gender;
 
 		public override string ToString()
 		{
