@@ -7,7 +7,8 @@ namespace PokeSave
 	public class GameSection
 	{
 		#region Lookuptables
-		static readonly string[] Names = new[]{
+		static readonly string[] Names = new[]
+		{
 			"Trainer",
 			"Team",
 			"Unknown 1",
@@ -24,7 +25,8 @@ namespace PokeSave
 			"PC Buffer I"
 		};
 
-		static readonly int[] Sizes = new[]{
+		static readonly int[] Sizes = new[]
+		{
 			3884,
 			3968,
 			3968,
@@ -43,17 +45,28 @@ namespace PokeSave
 		#endregion
 
 		readonly byte[] _datasource;
+
+		protected GameSection()
+			: this( (byte[]) null )
+		{
+		}
+
+		public GameSection( byte[] data )
+		{
+			_datasource = data;
+			IsDirty = false;
+		}
+
+		public GameSection( Stream instream )
+		{
+			_datasource = new byte[4 * 1024];
+			int count = instream.Read( _datasource, 0, _datasource.Length );
+			if( count != _datasource.Length )
+				throw new ArgumentException( "file too short" );
+			IsDirty = false;
+		}
+
 		public bool IsDirty { get; private set; }
-
-		public string GetText( int offset, int count )
-		{
-			return TextTable.ConvertArray( this, offset, count );
-		}
-
-		public string GetTextRaw( int offset, int count )
-		{
-			return TextTable.ConvertArrayRaw( this, offset, count );
-		}
 
 		public virtual byte this[int index]
 		{
@@ -65,10 +78,60 @@ namespace PokeSave
 			}
 		}
 
+		public int Length
+		{
+			get { return Sizes[ID]; }
+		}
+
+		public string Name
+		{
+			get { return Names[ID]; }
+		}
+
+		public uint Checksum
+		{
+			get { return GetShort( 0xff6 ); }
+			set { SetShort( 0xff6, value ); }
+		}
+
+		public uint ID
+		{
+			get { return GetShort( 0xff4 ); }
+		}
+
+		public uint SaveIndex
+		{
+			get { return GetShort( 0xffc ); }
+		}
+
+		public uint CalculatedChecksum
+		{
+			get
+			{
+				uint chk = 0;
+				for( int i = 0; i < Length; i += 4 )
+					chk += GetInt( i );
+
+				uint upper = ( chk >> 16 ) & 0xFFFF;
+				uint lower = chk & 0xFFFF;
+				return ( upper + lower ) & 0xFFFF;
+			}
+		}
+
+		public string GetText( int offset, int count )
+		{
+			return TextTable.ConvertArray( this, offset, count );
+		}
+
+		public string GetTextRaw( int offset, int count )
+		{
+			return TextTable.ConvertArrayRaw( this, offset, count );
+		}
+
 		public uint GetInt( int offset )
 		{
 			return
-				  ( (uint) this[offset + 3] << 24 )
+				( (uint) this[offset + 3] << 24 )
 				| ( (uint) this[offset + 2] << 16 )
 				| ( (uint) this[offset + 1] << 8 )
 				| ( this[offset] );
@@ -91,47 +154,6 @@ namespace PokeSave
 		{
 			this[offset] = (byte) ( data & 0xff );
 			this[offset + 1] = (byte) ( ( data >> 8 ) & 0xff );
-		}
-
-		protected GameSection()
-		{
-			IsDirty = false;
-		}
-
-		public GameSection( byte[] data )
-		{
-			_datasource = data;
-		}
-
-		public GameSection( Stream instream )
-		{
-			_datasource = new byte[4 * 1024];
-			var count = instream.Read( _datasource, 0, _datasource.Length );
-			if( count != _datasource.Length )
-				throw new ArgumentException( "file too short" );
-			IsDirty = false;
-		}
-
-		public int Length { get { return Sizes[ID]; } }
-		public string Name { get { return Names[ID]; } }
-		public uint Checksum { get { return GetShort( 0xff6 ); } set { SetShort( 0xff6, value ); } }
-		public uint ID { get { return GetShort( 0xff4 ); } }
-		public uint SaveIndex { get { return GetShort( 0xffc ); } }
-
-		public uint CalculatedChecksum
-		{
-			get
-			{
-				uint chk = 0;
-				for( int i = 0; i < Length; i += 4 )
-				{
-					chk += GetInt( i );
-				}
-
-				uint upper = ( chk >> 16 ) & 0xFFFF;
-				uint lower = chk & 0xFFFF;
-				return ( upper + lower ) & 0xFFFF;
-			}
 		}
 
 		public void FixChecksum()

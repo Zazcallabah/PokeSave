@@ -8,45 +8,46 @@ namespace PokeSave
 {
 	public class GameSave
 	{
-		readonly List<GameSection> _sections;
 		readonly List<GameSection> _originalOrderSections;
 
 		readonly Dictionary<GameType, Dictionary<string, int>> _pointers = new Dictionary<GameType, Dictionary<string, int>>
+		{
 			{
-				{ GameType.FRLG, new Dictionary<string,int> {
-					{"Name",0},
-					{"Gender",8},
-					{"PublicId",0xA},
-					{"SecretId",0xC},
-					{"TimeHours",0xE},
-					{"TimeMinutes",0x10},
-					{"TimeSeconds",0x11},
-					{"TimeFrames",0x12},
-					{"GameCode",0xAC},
-					{"SecurityKey",0xAF8},
+				GameType.FRLG, new Dictionary<string, int>
+				{
+					{ "Name", 0 },
+					{ "Gender", 8 },
+					{ "PublicId", 0xA },
+					{ "SecretId", 0xC },
+					{ "TimeHours", 0xE },
+					{ "TimeMinutes", 0x10 },
+					{ "TimeSeconds", 0x11 },
+					{ "TimeFrames", 0x12 },
+					{ "GameCode", 0xAC },
+					{ "SecurityKey", 0xAF8 },
+					{ "TeamSize", 0x34 },
+					{ "TeamList", 0x38 },
+					{ "Money", 0x290 },
+					{ "PCItems", 0x298 },
+					{ "PCItemsLength", 30 },
+					{ "Items", 0x310 },
+					{ "ItemsLength", 42 },
+					{ "KeyItems", 0x3B8 },
+					{ "KeyItemsLength", 30 },
+					{ "BallPocket", 0x430 },
+					{ "BallPocketLength", 13 },
+					{ "TMCase", 0x464 },
+					{ "TMCaseLength", 58 },
+					{ "Berries", 0x54c },
+					{ "BerriesLength", 43 },
+					{ "Rival", 0xBCC },
+				}
+				},
+			{ GameType.E, new Dictionary<string, int> { } },
+			{ GameType.RS, new Dictionary<string, int> { } },
+		};
 
-					{"TeamSize",0x34},
-					{"TeamList",0x38},
-					{"Money",0x290},
-
-					{"PCItems",0x298},
-					{"PCItemsLength",30},
-					{"Items",0x310},
-					{"ItemsLength",42},
-					{"KeyItems",0x3B8},
-					{"KeyItemsLength",30},
-					{"BallPocket",0x430},
-					{"BallPocketLength",13},
-					{"TMCase",0x464},
-					{"TMCaseLength",58},
-					{"Berries",0x54c},
-					{"BerriesLength",43},
-
-					{"Rival",0xBCC},
-				}},
-				{ GameType.E, new Dictionary<string,int>{}},
-				{ GameType.RS, new Dictionary<string,int>{}},
-			};
+		readonly List<GameSection> _sections;
 
 		public GameSave( Stream instream )
 		{
@@ -66,13 +67,97 @@ namespace PokeSave
 			ExtractItems();
 		}
 
+		Cipher Xor { get; set; }
+
+		public uint SaveIndex
+		{
+			get
+			{
+				uint index = _sections[0].SaveIndex;
+				if( _sections.Any( s => s.SaveIndex != index ) )
+					throw new InvalidOperationException( "Differing save indexes" );
+				return index;
+			}
+		}
+
+		public GameType Type { get; private set; }
+		public MonsterEntry[] Team { get; private set; }
+		public MonsterEntry[] PcBuffer { get; private set; }
+		public ItemEntry[] PCItems { get; private set; }
+		public ItemEntry[] Items { get; private set; }
+		public ItemEntry[] KeyItems { get; private set; }
+		public ItemEntry[] BallPocket { get; private set; }
+		public ItemEntry[] TMCase { get; private set; }
+		public ItemEntry[] Berries { get; private set; }
+
+		public string Name
+		{
+			get { return _sections[0].GetText( _pointers[Type]["Name"], 8 ); }
+		}
+
+		public string Rival
+		{
+			get { return _sections[4].GetText( _pointers[Type]["Rival"], 8 ); }
+		}
+
+		public string Gender
+		{
+			get { return _sections[0][_pointers[Type]["Gender"]] == 0 ? "Boy" : "Girl"; }
+		}
+
+		public uint PublicId
+		{
+			get { return _sections[0].GetShort( _pointers[Type]["PublicId"] ); }
+		}
+
+		public uint SecretId
+		{
+			get { return _sections[0].GetShort( _pointers[Type]["SecretId"] ); }
+		}
+
+		public string TimePlayed
+		{
+			get
+			{
+				uint h = _sections[0].GetShort( _pointers[Type]["TimeHours"] );
+				byte m = _sections[0][_pointers[Type]["TimeMinutes"]];
+				byte s = _sections[0][_pointers[Type]["TimeSeconds"]];
+				byte f = _sections[0][_pointers[Type]["TimeFrames"]];
+
+				return string.Format( "{0}h{1}m{2}s{3}f", h, m, s, f );
+			}
+		}
+
+		public uint GameCode
+		{
+			get { return _sections[0].GetShort( _pointers[Type]["GameCode"] ); }
+		}
+
+		public uint SecurityKey
+		{
+			get { return _sections[0].GetInt( _pointers[Type]["SecurityKey"] ); }
+		}
+
+		public uint TeamSize
+		{
+			get { return _sections[1].GetInt( _pointers[Type]["TeamSize"] ); }
+		}
+
+		public uint Money
+		{
+			get { return Xor.Run( _sections[1].GetInt( _pointers[Type]["Money"] ) ); }
+		}
+
+		public uint TrainerId
+		{
+			get { return _sections[0].GetInt( _pointers[Type]["PublicId"] ); }
+		}
+
 		void ExtractTeam()
 		{
 			Team = new MonsterEntry[6];
 			for( int i = 0; i < Team.Length; i++ )
-			{
 				Team[i] = new MonsterEntry( _sections[1], _pointers[Type]["TeamList"] + ( i * 100 ), false );
-			}
 		}
 
 		void ExtractItems()
@@ -112,7 +197,7 @@ namespace PokeSave
 
 		void ExtractType()
 		{
-			var code = _sections[0].GetInt( 0xAC );
+			uint code = _sections[0].GetInt( 0xAC );
 			if( code == 0 )
 				Type = GameType.RS;
 			else if( code == 1 )
@@ -121,187 +206,69 @@ namespace PokeSave
 				Type = GameType.E;
 		}
 
-		Cipher Xor { get; set; }
-
-		public uint SaveIndex
-		{
-			get
-			{
-				var index = _sections[0].SaveIndex;
-				foreach( var s in _sections )
-				{
-					if( s.SaveIndex != index )
-					{
-						throw new InvalidOperationException( "Differing save indexes" );
-					}
-				}
-				return index;
-			}
-		}
-
-		public GameType Type { get; private set; }
-		public MonsterEntry[] Team { get; private set; }
-		public MonsterEntry[] PcBuffer { get; private set; }
-		public ItemEntry[] PCItems { get; private set; }
-		public ItemEntry[] Items { get; private set; }
-		public ItemEntry[] KeyItems { get; private set; }
-		public ItemEntry[] BallPocket { get; private set; }
-		public ItemEntry[] TMCase { get; private set; }
-		public ItemEntry[] Berries { get; private set; }
-
-		public string Name
-		{
-			get
-			{
-				return _sections[0].GetText( _pointers[Type]["Name"], 8 );
-			}
-		}
-
-		public string Rival
-		{
-			get
-			{
-				return _sections[4].GetText( _pointers[Type]["Rival"], 8 );
-			}
-		}
-
-		public string Gender
-		{
-			get
-			{
-				return _sections[0][_pointers[Type]["Gender"]] == 0 ? "Boy" : "Girl";
-			}
-		}
-
-		public uint PublicId
-		{
-			get
-			{
-				return _sections[0].GetShort( _pointers[Type]["PublicId"] );
-			}
-		}
-
-		public uint SecretId
-		{
-			get
-			{
-				return _sections[0].GetShort( _pointers[Type]["SecretId"] );
-			}
-		}
-
-		public string TimePlayed
-		{
-			get
-			{
-				var h = _sections[0].GetShort( _pointers[Type]["TimeHours"] );
-				var m = _sections[0][_pointers[Type]["TimeMinutes"]];
-				var s = _sections[0][_pointers[Type]["TimeSeconds"]];
-				var f = _sections[0][_pointers[Type]["TimeFrames"]];
-
-				return string.Format( "{0}h{1}m{2}s{3}f", h, m, s, f );
-			}
-		}
-
-		public uint GameCode
-		{
-			get
-			{
-				return _sections[0].GetShort( _pointers[Type]["GameCode"] );
-			}
-		}
-
-		public uint SecurityKey
-		{
-			get
-			{
-				return _sections[0].GetInt( _pointers[Type]["SecurityKey"] );
-			}
-		}
-
-		public uint TeamSize
-		{
-			get
-			{
-				return _sections[1].GetInt( _pointers[Type]["TeamSize"] );
-			}
-		}
-
-		public uint Money
-		{
-			get
-			{
-				return Xor.Run( _sections[1].GetInt( _pointers[Type]["Money"] ) );
-			}
-		}
-
-		public uint TrainerId { get { return _sections[0].GetInt( _pointers[Type]["PublicId"] ); } }
-
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
-			sb.AppendLine( "Type:\t" + Type );
-			sb.AppendLine( "\tName:\t" + Name );
-			sb.AppendLine( "\tGender:\t" + Gender );
-			sb.AppendLine( "\tPublic id:\t" + PublicId );
-			sb.AppendLine( "\tSecret:\t" + SecretId );
-			sb.AppendLine( "\tKey:\t" + SecurityKey );
-			sb.AppendLine( "\tTime:\t" + TimePlayed );
-			sb.AppendLine( "\tGamecode:\t" + GameCode );
-			sb.AppendLine( "\tMoney:\t" + Money );
-			sb.AppendLine( "\tRival:\t" + Rival );
+			sb.AppendLine( "     Type: " + Type );
+			sb.AppendLine( "SaveIndex: " + SaveIndex );
+			sb.AppendLine( "     Name: " + Name );
+			sb.AppendLine( "   Gender: " + Gender );
+			sb.AppendLine( "Public ID: " + PublicId );
+			sb.AppendLine( "Secret ID: " + SecretId );
+			sb.AppendLine( "      Key: " + SecurityKey );
+			sb.AppendLine( "     Time: " + TimePlayed );
+			sb.AppendLine( " Gamecode: " + GameCode );
+			sb.AppendLine( "    Money: " + Money );
+			sb.AppendLine( "    Rival: " + Rival );
 
 			sb.AppendLine( "Teamsize:\t" + TeamSize );
-			foreach( var m in Team )
-				sb.Append( m.ToString() );
+
+			for( int i = 0; i < Team.Length; i++ )
+				sb.AppendIfNotEmpty( Team[i].Brief(), i );
 
 			sb.AppendLine( "PC Items:" );
-			foreach( var m in PCItems )
-				sb.Append( m );
+			for( int i = 0; i < PCItems.Length; i++ )
+				sb.AppendIfNotEmpty( PCItems[i].ToString(), i );
 
 			sb.AppendLine( "Bag Items:" );
-			foreach( var m in Items )
-				sb.Append( m );
+			for( int i = 0; i < Items.Length; i++ )
+				sb.AppendIfNotEmpty( Items[i].ToString(), i );
 
 			sb.AppendLine( "Key Items:" );
-			foreach( var m in KeyItems )
-				sb.Append( m );
+			for( int i = 0; i < KeyItems.Length; i++ )
+				sb.AppendIfNotEmpty( KeyItems[i].ToString(), i );
 
 			sb.AppendLine( "Ball pocket:" );
-			foreach( var m in BallPocket )
-				sb.Append( m );
+			for( int i = 0; i < BallPocket.Length; i++ )
+				sb.AppendIfNotEmpty( BallPocket[i].ToString(), i );
+
 			sb.AppendLine( "TM case:" );
+			for( int i = 0; i < TMCase.Length; i++ )
+				sb.AppendIfNotEmpty( TMCase[i].ToString(), i );
 
-			foreach( var m in TMCase )
-				sb.Append( m );
 			sb.AppendLine( "Berries:" );
-
-			foreach( var m in Berries )
-				sb.Append( m );
-
+			for( int i = 0; i < Berries.Length; i++ )
+				sb.AppendIfNotEmpty( Berries[i].ToString(), i );
 
 			sb.AppendLine( "PC buffer:" );
 			for( int i = 0; i < PcBuffer.Length; i++ )
 			{
 				if( i % 30 == 0 )
 					sb.AppendLine( "PC Box #" + Math.Floor( i / 30.0 ) );
-				sb.Append( PcBuffer[i] );
+				sb.AppendIfNotEmpty( PcBuffer[i].ToString(), i );
 			}
 			return sb.ToString();
-
-
 		}
 
 		public void Save( Stream stream )
 		{
-			foreach( var p in Team )
+			foreach( MonsterEntry p in Team )
 				p.Save();
-			foreach( var p in PcBuffer )
+			foreach( MonsterEntry p in PcBuffer )
 				p.Save();
 
-			foreach( var s in _originalOrderSections )
-			{
+			foreach( GameSection s in _originalOrderSections )
 				s.Write( stream );
-			}
 		}
 	}
 }
