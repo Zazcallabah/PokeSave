@@ -29,7 +29,7 @@ namespace PokeSave
 			Nature = existing.Nature;
 			Ability = existing.Ability;
 			Evolution = existing.Evolution;
-			Gender = new GenderDecision( existing.Gender, existing.Type );
+			Gender = new GenderDecision( existing.Gender, existing.TypeInformation );
 		}
 
 		public uint? OriginalTrainer { get; set; }

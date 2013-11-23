@@ -43,7 +43,7 @@ namespace PokeSave
 
 		public Func<uint, uint> Selector( bool high )
 		{
-			return high ? (Func<uint, uint>) RunHigher : RunLower;
+			return high ? (Func<uint, uint>) RunLower : RunHigher;
 		}
 	}
 }

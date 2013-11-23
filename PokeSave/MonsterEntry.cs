@@ -121,72 +121,108 @@ namespace PokeSave
 		public uint Level
 		{
 			get { return _storage ? 0u : _data[84]; }
-			set { if( _storage ) _data[84] = (byte) value; }
+			set
+			{
+				if( _storage )
+					_data[84] = (byte) value;
+			}
 		}
 
 		public uint Virus
 		{
 			get { return _storage ? 0u : _data[85]; }
-			set { if( _storage ) _data[85] = (byte) value; }
+			set
+			{
+				if( _storage )
+					_data[85] = (byte) value;
+			}
 		}
 
 		public uint CurrentHP
 		{
 			get { return _storage ? 0u : _data.GetShort( 86 ); }
-			set { if( _storage ) _data.SetShort( 86, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 86, value );
+			}
 		}
 
 		public uint TotalHP
 		{
 			get { return _storage ? 0u : _data.GetShort( 88 ); }
-			set { if( _storage ) _data.SetShort( 88, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 88, value );
+			}
 		}
 
 		public uint CurrentAttack
 		{
 			get { return _storage ? 0u : _data.GetShort( 90 ); }
-			set { if( _storage ) _data.SetShort( 90, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 90, value );
+			}
 		}
 
 		public uint CurrentDefense
 		{
 			get { return _storage ? 0u : _data.GetShort( 92 ); }
-			set { if( _storage ) _data.SetShort( 92, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 92, value );
+			}
 		}
 
 		public uint CurrentSpeed
 		{
 			get { return _storage ? 0u : _data.GetShort( 94 ); }
-			set { if( _storage ) _data.SetShort( 94, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 94, value );
+			}
 		}
 
 		public uint CurrentSpAttack
 		{
 			get { return _storage ? 0u : _data.GetShort( 96 ); }
-			set { if( _storage ) _data.SetShort( 96, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 96, value );
+			}
 		}
 
 		public uint CurrentSpDefense
 		{
 			get { return _storage ? 0u : _data.GetShort( 98 ); }
-			set { if( _storage ) _data.SetShort( 98, value ); }
+			set
+			{
+				if( _storage )
+					_data.SetShort( 98, value );
+			}
 		}
 
 		public uint MonsterId
 		{
-			get { return GetEncryptedWord( GrowthOffset, false ); }
-			set { SetEncryptedWord( GrowthOffset, false, (ushort) value ); }
+			get { return GetEncryptedWord( GrowthOffset, true ); }
+			set { SetEncryptedWord( GrowthOffset, true, (ushort) value ); }
 		}
 
 		/// <summary>
-		/// will we need to recalculate subsection checksum before save
+		/// this property indicates if we need to recalculate subsection checksum before save
 		/// </summary>
 		public bool IsDirty { get; private set; }
 
 		public uint Item
 		{
-			get { return GetEncryptedWord( GrowthOffset, true ); }
-			set { SetEncryptedWord( GrowthOffset, true, (ushort) value ); }
+			get { return GetEncryptedWord( GrowthOffset, false ); }
+			set { SetEncryptedWord( GrowthOffset, false, (ushort) value ); }
 		}
 
 		public uint XP
@@ -197,8 +233,8 @@ namespace PokeSave
 
 		public uint Friendship
 		{
-			get { return GetEncryptedByte( GrowthOffset + 8, 2 ); }
-			set { SetEncryptedByte( GrowthOffset + 8, 2, (byte) value ); }
+			get { return GetEncryptedByte( GrowthOffset + 8, 1 ); }
+			set { SetEncryptedByte( GrowthOffset + 8, 1, (byte) value ); }
 		}
 
 		/// <summary>
@@ -211,7 +247,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// This is set using personalityengine
+		/// This is set using personalityengine or Gender property
 		/// </summary>
 		public uint GenderByte
 		{
@@ -221,16 +257,19 @@ namespace PokeSave
 		public AbilityIndex Ability
 		{
 			get { return ( Personality & 0x1 ) == 0x0 ? AbilityIndex.First : AbilityIndex.Second; }
+			set { SetPersonality( new PersonalityEngine( this ) { Ability = value } ); }
 		}
 
 		public MonsterNature Nature
 		{
 			get { return (MonsterNature) ( Personality % 25 ); }
+			set { SetPersonality( new PersonalityEngine( this ) { Nature = value } ); }
 		}
 
 		public EvolutionDirection Evolution
 		{
 			get { return ( Personality & 0xffff ) % 10 < 5 ? EvolutionDirection.S : EvolutionDirection.C; }
+			set { SetPersonality( new PersonalityEngine( this ) { Evolution = value } ); }
 		}
 
 		public int GrowthOffset
@@ -303,7 +342,8 @@ namespace PokeSave
 
 		public uint Move1
 		{
-			get { return _specificXor.Run( _data.GetInt( ActionOffset ) ) & 0xffff; }
+			get { return GetEncryptedWord( ActionOffset, true ); }
+			set { SetEncryptedWord( ActionOffset, true, (byte) value ); }
 		}
 
 		public string Move1Name
@@ -313,7 +353,8 @@ namespace PokeSave
 
 		public uint Move2
 		{
-			get { return ( _specificXor.Run( _data.GetInt( ActionOffset ) ) >> 16 ) & 0xffff; }
+			get { return GetEncryptedWord( ActionOffset, false ); }
+			set { SetEncryptedWord( ActionOffset, false, (byte) value ); }
 		}
 
 		public string Move2Name
@@ -321,9 +362,10 @@ namespace PokeSave
 			get { return MoveList.Get( Move2 ); }
 		}
 
-		public uint Move3
+		public uint Move4
 		{
-			get { return _specificXor.Run( _data.GetInt( ActionOffset + 4 ) ) & 0xffff; }
+			get { return GetEncryptedWord( ActionOffset + 4, false ); }
+			set { SetEncryptedWord( ActionOffset + 4, false, (byte) value ); }
 		}
 
 		public string Move3Name
@@ -331,9 +373,10 @@ namespace PokeSave
 			get { return MoveList.Get( Move3 ); }
 		}
 
-		public uint Move4
+		public uint Move3
 		{
-			get { return ( _specificXor.Run( _data.GetInt( ActionOffset + 4 ) ) >> 16 ) & 0xffff; }
+			get { return GetEncryptedWord( ActionOffset + 4, true ); }
+			set { SetEncryptedWord( ActionOffset + 4, true, (byte) value ); }
 		}
 
 		public string Move4Name
@@ -343,43 +386,120 @@ namespace PokeSave
 
 		public uint PP1
 		{
-			get { return _specificXor.Run( _data.GetInt( ActionOffset + 8 ) ) & 0xff; }
+			get { return GetEncryptedByte( ActionOffset + 8, 0 ); }
+			set { SetEncryptedByte( ActionOffset + 8, 3, (byte) value ); }
 		}
 
 		public uint PP2
 		{
-			get { return ( _specificXor.Run( _data.GetInt( ActionOffset + 8 ) ) >> 8 ) & 0xff; }
+			get { return GetEncryptedByte( ActionOffset + 8, 1 ); }
+			set { SetEncryptedByte( ActionOffset + 8, 2, (byte) value ); }
 		}
 
 		public uint PP3
 		{
-			get { return ( _specificXor.Run( _data.GetInt( ActionOffset + 8 ) ) >> 16 ) & 0xff; }
+			get { return GetEncryptedByte( ActionOffset + 8, 2 ); }
+			set { SetEncryptedByte( ActionOffset + 8, 1, (byte) value ); }
 		}
 
 		public uint PP4
 		{
-			get { return ( _specificXor.Run( _data.GetInt( ActionOffset + 8 ) ) >> 24 ) & 0xff; }
+			get { return GetEncryptedByte( ActionOffset + 8, 3 ); }
+			set { SetEncryptedByte( ActionOffset + 8, 0, (byte) value ); }
 		}
 
 		public uint PP1Bonus
 		{
-			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 3; }
+			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 3; }
 		}
 
 		public uint PP2Bonus
 		{
-			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 12; }
+			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 12; }
 		}
 
 		public uint PP3Bonus
 		{
-			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 48; }
+			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 48; }
 		}
 
 		public uint PP4Bonus
 		{
-			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 192; }
+			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 192; }
 		}
+
+		public uint HPEV
+		{
+			get { return GetEncryptedByte( EVsOffset, 0 ); }
+			set { SetEncryptedByte( EVsOffset, 0, (byte) value ); }
+		}
+
+		public uint AttackEV
+		{
+			get { return GetEncryptedByte( EVsOffset, 1 ); }
+			set { SetEncryptedByte( EVsOffset, 1, (byte) value ); }
+		}
+
+		public uint DefenseEV
+		{
+			get { return GetEncryptedByte( EVsOffset, 2 ); }
+			set { SetEncryptedByte( EVsOffset, 2, (byte) value ); }
+		}
+
+		public uint SpeedEV
+		{
+			get { return GetEncryptedByte( EVsOffset, 3 ); }
+			set { SetEncryptedByte( EVsOffset, 4, (byte) value ); }
+		}
+
+		public uint SpAttackEV
+		{
+			get { return GetEncryptedByte( EVsOffset + 4, 0 ); }
+			set { SetEncryptedByte( EVsOffset + 4, 0, (byte) value ); }
+		}
+
+		public uint SpDefenseEV
+		{
+			get { return GetEncryptedByte( EVsOffset + 4, 1 ); }
+			set { SetEncryptedByte( EVsOffset + 4, 1, (byte) value ); }
+		}
+
+		public uint Coolness
+		{
+			get { return GetEncryptedByte( EVsOffset + 4, 2 ); }
+			set { SetEncryptedByte( EVsOffset + 4, 2, (byte) value ); }
+		}
+
+		public uint Beauty
+		{
+			get { return GetEncryptedByte( EVsOffset + 4, 3 ); }
+			set { SetEncryptedByte( EVsOffset + 4, 3, (byte) value ); }
+		}
+
+		public uint Cuteness
+		{
+			get { return GetEncryptedByte( EVsOffset + 8, 0 ); }
+			set { SetEncryptedByte( EVsOffset + 8, 0, (byte) value ); }
+		}
+
+		public uint Smartness
+		{
+			get { return GetEncryptedByte( EVsOffset + 8, 1 ); }
+			set { SetEncryptedByte( EVsOffset + 8, 1, (byte) value ); }
+		}
+
+		public uint Toughness
+		{
+			get { return GetEncryptedByte( EVsOffset + 8, 2 ); }
+			set { SetEncryptedByte( EVsOffset + 8, 2, (byte) value ); }
+		}
+
+		public uint Feel
+		{
+			get { return GetEncryptedByte( EVsOffset + 8, 3 ); }
+			set { SetEncryptedByte( EVsOffset + 8, 3, (byte) value ); }
+		}
+
 
 		public uint UnownShape
 		{
@@ -399,9 +519,37 @@ namespace PokeSave
 			set { StatusByte = ( StatusByte & 0xF8 ) | ( value & 0x7 ); }
 		}
 
-		public MonsterGender Gender { get; set; }
+		public MonsterGender Gender
+		{
+			get
+			{
+				byte t = TypeInformation.Gender;
+				if( t == 0xFF )
+					return MonsterGender.None;
+				if( t == 0xFE )
+					return MonsterGender.F;
+				if( t == 0 )
+					return MonsterGender.M;
+				return GenderByte >= t ? MonsterGender.M : MonsterGender.F;
+			}
+			set
+			{
+				if( TypeInformation.Gender == 0xFF || value == MonsterGender.None )
+					throw new ArgumentException( "Cant set gender for genderless and vice verse" );
+				if( TypeInformation.Gender == 0xFE || TypeInformation.Gender == 0 )
+					throw new ArgumentException( "Cant set gender for this kind" );
 
-		public MonsterInfo Type
+				SetPersonality( new PersonalityEngine( this ) { Gender = new GenderDecision( value, TypeInformation ) } );
+			}
+		}
+
+		public uint Type
+		{
+			get { return MonsterId; }
+			set { MonsterId = value; }
+		}
+
+		public MonsterInfo TypeInformation
 		{
 			get { return MonsterList.Get( MonsterId ); }
 		}
@@ -419,36 +567,33 @@ namespace PokeSave
 
 		public uint GetEncryptedWord( int offset, bool high )
 		{
-			return _specificXor.Selector( high )( _data.GetShort( offset + ( high ? 2 : 0 ) ) ) & 0xffff;
+			return _specificXor.Selector( high )( _data.GetShort( offset + ( high ? 0 : 2 ) ) ) & 0xffff;
 		}
 
 		public void SetEncryptedWord( int offset, bool high, ushort data )
 		{
 			IsDirty = true;
-			_data.SetShort( offset + ( high ? 2 : 0 ), _specificXor.Selector( high )( data ) );
+			_data.SetShort( offset + ( high ? 0 : 2 ), _specificXor.Selector( high )( data ) );
 		}
 
 		public uint GetEncryptedByte( int offset, int index )
 		{
 			if( index < 0 || index > 3 )
 				throw new ArgumentException( "four bytes in a dword, index not in range" );
-			int byteOrderAdjustedIndex = 3 - index;
-			return _specificXor.RunByte( _data[offset + byteOrderAdjustedIndex], byteOrderAdjustedIndex );
+			return _specificXor.RunByte( _data[offset + index], index );
 		}
 
 		public void SetEncryptedByte( int offset, int index, byte data )
 		{
 			if( index < 0 || index > 3 )
 				throw new ArgumentException( "four bytes in a dword, index not in range" );
-			int byteOrderAdjustedIndex = 3 - index;
-			_data[offset + byteOrderAdjustedIndex] = (byte) _specificXor.RunByte( data, byteOrderAdjustedIndex );
+			_data[offset + index] = (byte) _specificXor.RunByte( data, index );
 		}
 
 		public void SetPersonality( PersonalityEngine engine )
 		{
 			Personality = engine.Generate();
 		}
-
 
 		/// <summary>
 		/// When personality or original trainer changes, subsections need to move and be re-encrypted with new key.
@@ -507,9 +652,9 @@ namespace PokeSave
 				return string.Empty;
 			var sb = new StringBuilder();
 
-			sb.AppendLine( Type.Name );
-			sb.AppendLine( Type.EggGroup2.ToString() );
-			MonsterInfo type = Type;
+			sb.AppendLine( TypeInformation.Name );
+			sb.AppendLine( TypeInformation.EggGroup2.ToString() );
+			MonsterInfo type = TypeInformation;
 
 			if( Shiny )
 				sb.AppendLine( "Shiny" );
