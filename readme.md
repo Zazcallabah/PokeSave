@@ -8,6 +8,8 @@ Todo
 * Missing tests for some properties.
 * How should we best parse time, is it even needed?
 * Should data be validated, or should that be left to the user?
+* Writable pp bonus
+* tests for evs and stats
 
 Testing and code coverage
 -------------------------
