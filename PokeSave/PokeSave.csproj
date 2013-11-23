@@ -56,8 +56,10 @@
     <Compile Include="AbilityIndex.cs" />
     <Compile Include="Cipher.cs" />
     <Compile Include="AbilityList.cs" />
+    <Compile Include="ConsoleReader.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenderDecision.cs" />
+    <Compile Include="IComms.cs" />
     <Compile Include="MonsterGender.cs" />
     <Compile Include="MoveList.cs" />
     <Compile Include="EvolutionDirection.cs" />
@@ -77,6 +79,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveFile.cs" />
+    <Compile Include="SimpleCommandLineClient.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="SubstructureOffset.cs" />
     <Compile Include="TextTable.cs" />
