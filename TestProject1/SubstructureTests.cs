@@ -55,10 +55,10 @@ namespace TestProject1
 			_b[0] = 0x4;
 
 			Assert.AreEqual( 0x01020304, _m.GetEncryptedDWord( 0 ) );
-			Assert.AreEqual( 0x1, _m.GetEncryptedByte( 0, 0 ) );
-			Assert.AreEqual( 0x2, _m.GetEncryptedByte( 0, 1 ) );
-			Assert.AreEqual( 0x3, _m.GetEncryptedByte( 0, 2 ) );
-			Assert.AreEqual( 0x4, _m.GetEncryptedByte( 0, 3 ) );
+			Assert.AreEqual( 0x1, _m.GetEncryptedByte( 0, 3 ) );
+			Assert.AreEqual( 0x2, _m.GetEncryptedByte( 0, 2 ) );
+			Assert.AreEqual( 0x3, _m.GetEncryptedByte( 0, 1 ) );
+			Assert.AreEqual( 0x4, _m.GetEncryptedByte( 0, 0 ) );
 		}
 
 		[Test]
@@ -74,10 +74,10 @@ namespace TestProject1
 			_b[0] = 0x46;
 
 			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
-			Assert.AreEqual( 0x10, _m.GetEncryptedByte( 0, 0 ) );
-			Assert.AreEqual( 0x20, _m.GetEncryptedByte( 0, 1 ) );
-			Assert.AreEqual( 0x30, _m.GetEncryptedByte( 0, 2 ) );
-			Assert.AreEqual( 0x40, _m.GetEncryptedByte( 0, 3 ) );
+			Assert.AreEqual( 0x10, _m.GetEncryptedByte( 0, 3 ) );
+			Assert.AreEqual( 0x20, _m.GetEncryptedByte( 0, 2 ) );
+			Assert.AreEqual( 0x30, _m.GetEncryptedByte( 0, 1 ) );
+			Assert.AreEqual( 0x40, _m.GetEncryptedByte( 0, 0 ) );
 		}
 
 		[Test]
@@ -88,10 +88,10 @@ namespace TestProject1
 			_b[1] = 0x37;
 			_b[0] = 0x46;
 
-			_m.SetEncryptedByte( 0, 0, 0xa3 );
-			_m.SetEncryptedByte( 0, 1, 0xb3 );
-			_m.SetEncryptedByte( 0, 2, 0xc3 );
-			_m.SetEncryptedByte( 0, 3, 0xd3 );
+			_m.SetEncryptedByte( 0, 3, 0xa3 );
+			_m.SetEncryptedByte( 0, 2, 0xb3 );
+			_m.SetEncryptedByte( 0, 1, 0xc3 );
+			_m.SetEncryptedByte( 0, 0, 0xd3 );
 
 			Assert.AreEqual( 0xa3b3c3d3, _m.GetEncryptedDWord( 0 ) );
 
@@ -109,10 +109,10 @@ namespace TestProject1
 			_b[1] = 0x37;
 			_b[0] = 0x46;
 
-			_m.SetEncryptedByte( 0, 0, 0xa3 );
-			_m.SetEncryptedByte( 0, 1, 0xb3 );
-			_m.SetEncryptedByte( 0, 2, 0xc3 );
-			_m.SetEncryptedByte( 0, 3, 0xd3 );
+			_m.SetEncryptedByte( 0, 3, 0xa3 );
+			_m.SetEncryptedByte( 0, 2, 0xb3 );
+			_m.SetEncryptedByte( 0, 1, 0xc3 );
+			_m.SetEncryptedByte( 0, 0, 0xd3 );
 
 			Assert.AreEqual( 0xa3b3c3d3, _m.GetEncryptedDWord( 0 ) );
 
@@ -171,8 +171,8 @@ namespace TestProject1
 			_b[1] = 0x37;
 			_b[0] = 0x46;
 
-			Assert.AreEqual( 0x1020, _m.GetEncryptedWord( 0, true ) );
-			Assert.AreEqual( 0x3040, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x1020, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x3040, _m.GetEncryptedWord( 0, true ) );
 		}
 
 
@@ -191,12 +191,12 @@ namespace TestProject1
 			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
 
 			_m.SetEncryptedWord( 0, true, 0x1121 );
-			Assert.AreEqual( 0x11213040, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x10201121, _m.GetEncryptedDWord( 0 ) );
 			Assert.AreEqual( 0x1121, _m.GetEncryptedWord( 0, true ) );
-			Assert.AreEqual( 0x18, _b[3] );
-			Assert.AreEqual( 0x29, _b[2] );
-			Assert.AreEqual( 0x37, _b[1] );
-			Assert.AreEqual( 0x46, _b[0] );
+			Assert.AreEqual( 0x19, _b[3] );
+			Assert.AreEqual( 0x28, _b[2] );
+			Assert.AreEqual( 0x16, _b[1] );
+			Assert.AreEqual( 0x27, _b[0] );
 		}
 
 		[Test]
@@ -214,12 +214,12 @@ namespace TestProject1
 			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
 
 			_m.SetEncryptedWord( 0, false, 0x3141 );
-			Assert.AreEqual( 0x10203141, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x31413040, _m.GetEncryptedDWord( 0 ) );
 			Assert.AreEqual( 0x3141, _m.GetEncryptedWord( 0, false ) );
-			Assert.AreEqual( 0x19, _b[3] );
-			Assert.AreEqual( 0x28, _b[2] );
-			Assert.AreEqual( 0x36, _b[1] );
-			Assert.AreEqual( 0x47, _b[0] );
+			Assert.AreEqual( 0x38, _b[3] );
+			Assert.AreEqual( 0x49, _b[2] );
+			Assert.AreEqual( 0x37, _b[1] );
+			Assert.AreEqual( 0x46, _b[0] );
 		}
 
 		[Test]
@@ -236,13 +236,13 @@ namespace TestProject1
 
 			Assert.AreEqual( 0x10203040, _m.GetEncryptedDWord( 0 ) );
 
-			_m.SetEncryptedWord( 0, true, 0x1121 );
-			_m.SetEncryptedWord( 0, false, 0x3141 );
+			_m.SetEncryptedWord( 0, false, 0x1121 );
+			_m.SetEncryptedWord( 0, true, 0x3141 );
 			Assert.AreEqual( 0x11213141, _m.GetEncryptedDWord( 0 ) );
-			Assert.AreEqual( 0x3141, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x3141, _m.GetEncryptedWord( 0, true ) );
 			Assert.AreEqual( 0x36, _b[1] );
 			Assert.AreEqual( 0x47, _b[0] );
-			Assert.AreEqual( 0x1121, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0x1121, _m.GetEncryptedWord( 0, false ) );
 			Assert.AreEqual( 0x18, _b[3] );
 			Assert.AreEqual( 0x29, _b[2] );
 		}
@@ -267,7 +267,7 @@ namespace TestProject1
 			_b[0] = 6;
 
 			Assert.AreEqual( 0, _m.SecurityKey );
-			Assert.AreEqual( 0x0908, _m.GetEncryptedWord( 0, true ) );
+			Assert.AreEqual( 0x0706, _m.GetEncryptedWord( 0, true ) );
 		}
 		[Test]
 		public void CanGetLowWordDataFromSubstructure()
@@ -278,8 +278,9 @@ namespace TestProject1
 			_b[0] = 6;
 
 			Assert.AreEqual( 0, _m.SecurityKey );
-			Assert.AreEqual( 0x0706, _m.GetEncryptedWord( 0, false ) );
+			Assert.AreEqual( 0x0908, _m.GetEncryptedWord( 0, false ) );
 		}
+
 		[Test]
 		public void CanSetDWordDataIntoSubstructure()
 		{
@@ -299,12 +300,12 @@ namespace TestProject1
 			_m.SetEncryptedWord( 0, true, 0xABCD );
 
 			Assert.AreEqual( 0, _m.SecurityKey );
-			Assert.AreEqual( 0xABCD0000, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x0000ABCD, _m.GetEncryptedDWord( 0 ) );
 			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, true ) );
-			Assert.AreEqual( 0xAB, _b[3] );
-			Assert.AreEqual( 0xCD, _b[2] );
-			Assert.AreEqual( 0, _b[1] );
-			Assert.AreEqual( 0, _b[0] );
+			Assert.AreEqual( 0xAB, _b[1] );
+			Assert.AreEqual( 0xCD, _b[0] );
+			Assert.AreEqual( 0, _b[2] );
+			Assert.AreEqual( 0, _b[3] );
 		}
 
 		[Test]
@@ -313,12 +314,12 @@ namespace TestProject1
 			_m.SetEncryptedWord( 0, false, 0xABCD );
 
 			Assert.AreEqual( 0, _m.SecurityKey );
-			Assert.AreEqual( 0x0000ABCD, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xABCD0000, _m.GetEncryptedDWord( 0 ) );
 			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, false ) );
-			Assert.AreEqual( 0x00, _b[3] );
-			Assert.AreEqual( 0x00, _b[2] );
-			Assert.AreEqual( 0xAB, _b[1] );
-			Assert.AreEqual( 0xCD, _b[0] );
+			Assert.AreEqual( 0xAB, _b[3] );
+			Assert.AreEqual( 0xCD, _b[2] );
+			Assert.AreEqual( 0x00, _b[1] );
+			Assert.AreEqual( 0x00, _b[0] );
 		}
 
 		[Test]
@@ -342,12 +343,12 @@ namespace TestProject1
 			_m.SetEncryptedWord( 0, true, 0xABCD );
 
 			Assert.AreEqual( 0, _m.SecurityKey );
-			Assert.AreEqual( 0xABCD3435, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0x3233ABCD, _m.GetEncryptedDWord( 0 ) );
 			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, true ) );
-			Assert.AreEqual( 0xAB, _b[3] );
-			Assert.AreEqual( 0xCD, _b[2] );
-			Assert.AreEqual( 0x34, _b[1] );
-			Assert.AreEqual( 0x35, _b[0] );
+			Assert.AreEqual( 0x32, _b[3] );
+			Assert.AreEqual( 0x33, _b[2] );
+			Assert.AreEqual( 0xAB, _b[1] );
+			Assert.AreEqual( 0xCD, _b[0] );
 		}
 
 		[Test]
@@ -357,12 +358,12 @@ namespace TestProject1
 			_m.SetEncryptedWord( 0, false, 0xABCD );
 
 			Assert.AreEqual( 0, _m.SecurityKey );
-			Assert.AreEqual( 0x3233ABCD, _m.GetEncryptedDWord( 0 ) );
+			Assert.AreEqual( 0xABCD3435, _m.GetEncryptedDWord( 0 ) );
 			Assert.AreEqual( 0xABCD, _m.GetEncryptedWord( 0, false ) );
-			Assert.AreEqual( 0x32, _b[3] );
-			Assert.AreEqual( 0x33, _b[2] );
-			Assert.AreEqual( 0xAB, _b[1] );
-			Assert.AreEqual( 0xCD, _b[0] );
+			Assert.AreEqual( 0x35, _b[0] );
+			Assert.AreEqual( 0x34, _b[1] );
+			Assert.AreEqual( 0xCD, _b[2] );
+			Assert.AreEqual( 0xAB, _b[3] );
 		}
 
 		/*

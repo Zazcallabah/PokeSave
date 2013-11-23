@@ -251,14 +251,78 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void EntryReturnsGenderCorrectlyForGenderlessType()
+		{
+			_file.A.Team[0].Personality = 0;
+			_file.A.Team[0].Type = 82;
+			_file.A.Team[1].Personality = 0xFF;
+			_file.A.Team[1].Type = 82;
+
+			Assert.AreEqual( MonsterGender.None, _file.A.Team[0].Gender );
+			Assert.AreEqual( MonsterGender.None, _file.A.Team[1].Gender );
+		}
+
+		[Test]
+		public void EntryReturnsGenderCorrectlyForMaleOnlyType()
+		{
+			_file.A.Team[0].Personality = 0;
+			_file.A.Team[0].Type = 32;
+			_file.A.Team[1].Personality = 0xFF;
+			_file.A.Team[1].Type = 32;
+
+			Assert.AreEqual( MonsterGender.M, _file.A.Team[0].Gender );
+			Assert.AreEqual( MonsterGender.M, _file.A.Team[1].Gender );
+		}
+		[Test]
+		public void EntryReturnsGenderCorrectlyForFemaleOnlyType()
+		{
+			_file.A.Team[0].Personality = 0;
+			_file.A.Team[0].Type = 30;
+			_file.A.Team[1].Personality = 0xFF;
+			_file.A.Team[1].Type = 30;
+			_file.A.Team[2].Personality = 0x55;
+			_file.A.Team[2].Type = 30;
+
+			Assert.AreEqual( MonsterGender.F, _file.A.Team[0].Gender );
+			Assert.AreEqual( MonsterGender.F, _file.A.Team[2].Gender );
+			Assert.AreEqual( MonsterGender.F, _file.A.Team[1].Gender );
+		}
+
+		[Test]
+		public void EntryReturnsGenderCorrectlyForType()
+		{
+			_file.A.Team[0].Personality = 0;
+			_file.A.Team[0].Type = 1;
+			_file.A.Team[1].Personality = 0xFF;
+			_file.A.Team[1].Type = 2;
+			_file.A.Team[2].Personality = 30;
+			_file.A.Team[2].Type = 2;
+			_file.A.Team[3].Personality = 31;
+			_file.A.Team[3].Type = 2;
+
+			Assert.AreEqual( MonsterGender.F, _file.A.Team[0].Gender );
+			Assert.AreEqual( MonsterGender.M, _file.A.Team[1].Gender );
+			Assert.AreEqual( MonsterGender.F, _file.A.Team[2].Gender );
+			Assert.AreEqual( MonsterGender.M, _file.A.Team[3].Gender );
+		}
+
+
+		[Test]
 		public void CanWritePCBuffm()
 		{
-			Assert.AreEqual( "PIDGEY", _file.Latest.PcBuffer[0].Type.Name );
+			Assert.AreEqual( "PIDGEY", _file.Latest.PcBuffer[0].TypeInformation.Name );
 			Assert.AreEqual( "PIDGEY", _file.Latest.PcBuffer[0].Name );
 
 			_file.Latest.PcBuffer[0].Name = "PID_GE";
 
 			Assert.AreEqual( "PID", _file.Latest.PcBuffer[0].Name );
+		}
+		[Test]
+		public void TeamHasCorrectMoves()
+		{
+			Assert.AreEqual( "Thundershock", _file.Latest.Team[0].Move1Name );
+			Assert.AreEqual( 30, _file.Latest.Team[0].PP1 );
+			Assert.AreEqual( 20, _file.Latest.Team[0].PP4 );
 		}
 		[Test]
 		public void MakeTeamShinyAndSaveFile()
@@ -271,6 +335,8 @@ namespace TestProject1
 					var engine = new PersonalityEngine() { OriginalTrainer = p.OriginalTrainerId };
 					p.SetPersonality( engine );
 					Assert.AreEqual( p.Checksum, p.CalculatedChecksum );
+					p.Item = 1;
+					Assert.AreNotEqual( p.Checksum, p.CalculatedChecksum );
 				}
 			}
 
