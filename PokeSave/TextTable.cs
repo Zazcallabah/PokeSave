@@ -24,10 +24,43 @@ namespace PokeSave
 			' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', '>', ' ', ' ', '+', '_'
 		};
 
-		public static string ConvertArrayRaw( GameSection b, int index, int length )
+		static byte IndexOf( char c )
+		{
+			for( int i = 0; i < _data.Length; i++ )
+			{
+				if( _data[i] == c )
+					return (byte) i;
+			}
+			return 0xFF;
+		}
+
+		public static void ConvertStringRaw( GameSection b, string data, int offset, int length )
+		{
+			for( int i = offset; i < offset + length; i++ )
+			{
+				if( i >= data.Length )
+					b[i] = 0xFF;
+				else
+					b[i] = IndexOf( data[i] );
+			}
+		}
+
+		public static void ConvertString( GameSection b, string data, int offset, int length )
+		{
+			for( int stringindex = 0; stringindex < length; stringindex++ )
+			{
+				var arrayindex = offset + stringindex;
+				if( stringindex >= data.Length || arrayindex == ( offset + length - 1 ) )
+					b[arrayindex] = 0xFF;
+				else
+					b[arrayindex] = IndexOf( data[stringindex] );
+			}
+		}
+
+		public static string ConvertArrayRaw( GameSection b, int offset, int length )
 		{
 			var sb = new StringBuilder();
-			for( int i = index; i < index + length; i++ )
+			for( int i = offset; i < offset + length; i++ )
 				sb.Append( _data[b[i]] );
 			return sb.ToString();
 		}
