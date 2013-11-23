@@ -37,21 +37,25 @@ namespace PokeSave
 		public string Name
 		{
 			get { return _data.GetText( _offset + 8, 10 ); }
+			set { _data.SetText( _offset + 8, 10, value ); }
 		}
 
 		public uint Language
 		{
 			get { return _data.GetShort( _offset + 18 ); }
+			set { _data.SetShort( _offset + 18, value ); }
 		}
 
 		public string OriginalTrainerName
 		{
 			get { return _data.GetText( _offset + 20, 7 ); }
+			set { _data.SetTextRaw( _offset + 20, 7, value ); }
 		}
 
 		public uint Mark
 		{
 			get { return _data[_offset + 27]; }
+			set { _data[_offset + 27] = (byte) value; }
 		}
 
 		/// <summary>
@@ -117,46 +121,55 @@ namespace PokeSave
 		public uint Level
 		{
 			get { return _storage ? 0u : _data[84]; }
+			set { if( _storage ) _data[84] = (byte) value; }
 		}
 
 		public uint Virus
 		{
 			get { return _storage ? 0u : _data[85]; }
+			set { if( _storage ) _data[85] = (byte) value; }
 		}
 
 		public uint CurrentHP
 		{
 			get { return _storage ? 0u : _data.GetShort( 86 ); }
+			set { if( _storage ) _data.SetShort( 86, value ); }
 		}
 
 		public uint TotalHP
 		{
 			get { return _storage ? 0u : _data.GetShort( 88 ); }
+			set { if( _storage ) _data.SetShort( 88, value ); }
 		}
 
 		public uint CurrentAttack
 		{
 			get { return _storage ? 0u : _data.GetShort( 90 ); }
+			set { if( _storage ) _data.SetShort( 90, value ); }
 		}
 
 		public uint CurrentDefense
 		{
 			get { return _storage ? 0u : _data.GetShort( 92 ); }
+			set { if( _storage ) _data.SetShort( 92, value ); }
 		}
 
 		public uint CurrentSpeed
 		{
 			get { return _storage ? 0u : _data.GetShort( 94 ); }
+			set { if( _storage ) _data.SetShort( 94, value ); }
 		}
 
 		public uint CurrentSpAttack
 		{
 			get { return _storage ? 0u : _data.GetShort( 96 ); }
+			set { if( _storage ) _data.SetShort( 96, value ); }
 		}
 
 		public uint CurrentSpDefense
 		{
 			get { return _storage ? 0u : _data.GetShort( 98 ); }
+			set { if( _storage ) _data.SetShort( 98, value ); }
 		}
 
 		public uint MonsterId
@@ -165,6 +178,9 @@ namespace PokeSave
 			set { SetEncryptedWord( GrowthOffset, false, (ushort) value ); }
 		}
 
+		/// <summary>
+		/// will we need to recalculate subsection checksum before save
+		/// </summary>
 		public bool IsDirty { get; private set; }
 
 		public uint Item
@@ -181,7 +197,8 @@ namespace PokeSave
 
 		public uint Friendship
 		{
-			get { return ( _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) >> 8 ) & 0xff; }
+			get { return GetEncryptedByte( GrowthOffset + 8, 2 ); }
+			set { SetEncryptedByte( GrowthOffset + 8, 2, (byte) value ); }
 		}
 
 		/// <summary>
@@ -190,10 +207,7 @@ namespace PokeSave
 		public bool Shiny
 		{
 			get { return ( ( SecurityKey & 0xFFFF ) ^ ( SecurityKey >> 16 ) ) < 8; }
-			set
-			{
-				SetPersonality( new PersonalityEngine( this ) { OriginalTrainer = value ? (uint?) OriginalTrainerId : null } );
-			}
+			set { SetPersonality( new PersonalityEngine( this ) { OriginalTrainer = value ? (uint?) OriginalTrainerId : null } ); }
 		}
 
 		/// <summary>
@@ -287,45 +301,6 @@ namespace PokeSave
 			}
 		}
 
-		public uint GetEncryptedDWord( int offset )
-		{
-			return _specificXor.Run( _data.GetInt( offset ) );
-		}
-
-		public void SetEncryptedDWord( int offset, uint data )
-		{
-			IsDirty = true;
-			_data.SetInt( offset, _specificXor.Run( data ) );
-		}
-
-		public uint GetEncryptedWord( int offset, bool high )
-		{
-			return _specificXor.Selector( high )( _data.GetShort( offset + ( high ? 2 : 0 ) ) ) & 0xffff;
-		}
-
-		public void SetEncryptedWord( int offset, bool high, ushort data )
-		{
-			IsDirty = true;
-			_data.SetShort( offset + ( high ? 2 : 0 ), _specificXor.Selector( high )( data ) );
-		}
-
-		public uint GetEncryptedByte( int offset, int index )
-		{
-			if( index < 0 || index > 3 )
-				throw new ArgumentException( "four bytes in a dword, index not in range" );
-			var byteOrderAdjustedIndex = 3 - index;
-			return _specificXor.RunByte( _data[offset + byteOrderAdjustedIndex], byteOrderAdjustedIndex );
-		}
-
-		public void SetEncryptedByte( int offset, int index, byte data )
-		{
-			if( index < 0 || index > 3 )
-				throw new ArgumentException( "four bytes in a dword, index not in range" );
-			var byteOrderAdjustedIndex = 3 - index;
-			_data[offset + byteOrderAdjustedIndex] = (byte) _specificXor.RunByte( (uint) data, byteOrderAdjustedIndex );
-
-		}
-
 		public uint Move1
 		{
 			get { return _specificXor.Run( _data.GetInt( ActionOffset ) ) & 0xffff; }
@@ -390,14 +365,17 @@ namespace PokeSave
 		{
 			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 3; }
 		}
+
 		public uint PP2Bonus
 		{
 			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 12; }
 		}
+
 		public uint PP3Bonus
 		{
 			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 48; }
 		}
+
 		public uint PP4Bonus
 		{
 			get { return _specificXor.Run( _data.GetInt( GrowthOffset + 8 ) ) & 192; }
@@ -421,10 +399,49 @@ namespace PokeSave
 			set { StatusByte = ( StatusByte & 0xF8 ) | ( value & 0x7 ); }
 		}
 
-		public MonsterGender Gender
+		public MonsterGender Gender { get; set; }
+
+		public MonsterInfo Type
 		{
-			get;
-			set;
+			get { return MonsterList.Get( MonsterId ); }
+		}
+
+		public uint GetEncryptedDWord( int offset )
+		{
+			return _specificXor.Run( _data.GetInt( offset ) );
+		}
+
+		public void SetEncryptedDWord( int offset, uint data )
+		{
+			IsDirty = true;
+			_data.SetInt( offset, _specificXor.Run( data ) );
+		}
+
+		public uint GetEncryptedWord( int offset, bool high )
+		{
+			return _specificXor.Selector( high )( _data.GetShort( offset + ( high ? 2 : 0 ) ) ) & 0xffff;
+		}
+
+		public void SetEncryptedWord( int offset, bool high, ushort data )
+		{
+			IsDirty = true;
+			_data.SetShort( offset + ( high ? 2 : 0 ), _specificXor.Selector( high )( data ) );
+		}
+
+		public uint GetEncryptedByte( int offset, int index )
+		{
+			if( index < 0 || index > 3 )
+				throw new ArgumentException( "four bytes in a dword, index not in range" );
+			int byteOrderAdjustedIndex = 3 - index;
+			return _specificXor.RunByte( _data[offset + byteOrderAdjustedIndex], byteOrderAdjustedIndex );
+		}
+
+		public void SetEncryptedByte( int offset, int index, byte data )
+		{
+			if( index < 0 || index > 3 )
+				throw new ArgumentException( "four bytes in a dword, index not in range" );
+			int byteOrderAdjustedIndex = 3 - index;
+			_data[offset + byteOrderAdjustedIndex] = (byte) _specificXor.RunByte( data, byteOrderAdjustedIndex );
 		}
 
 		public void SetPersonality( PersonalityEngine engine )
@@ -483,8 +500,6 @@ namespace PokeSave
 				IsDirty = false;
 			}
 		}
-
-		public MonsterInfo Type { get { return MonsterList.Get( MonsterId ); } }
 
 		public string Full()
 		{

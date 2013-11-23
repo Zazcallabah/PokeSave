@@ -21,6 +21,7 @@ namespace PokeSave
 		public uint ID
 		{
 			get { return _data.GetShort( _offset ); }
+			set { _data.SetShort( _offset, value ); }
 		}
 
 		public string Name
@@ -35,6 +36,7 @@ namespace PokeSave
 				uint data = _data.GetShort( _offset + 2 );
 				return _xor == null ? data : _xor.RunLower( data );
 			}
+			set { _data.SetShort( _offset + 2, ( _xor == null ) ? value : _xor.RunLower( value ) ); }
 		}
 
 		public override string ToString()
@@ -44,6 +46,11 @@ namespace PokeSave
 			var sb = new StringBuilder();
 			sb.Append( "(" + ID + Name + ") " + Count );
 			return sb.ToString();
+		}
+
+		public void Clear()
+		{
+			Count = ID = 0;
 		}
 	}
 }
