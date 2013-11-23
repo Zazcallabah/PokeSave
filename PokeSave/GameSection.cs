@@ -118,6 +118,15 @@ namespace PokeSave
 			}
 		}
 
+		public void SetText( int offset, int count, string data )
+		{
+			TextTable.ConvertString( this, data, offset, count );
+		}
+		public void SetTextRaw( int offset, int count, string data )
+		{
+			TextTable.ConvertStringRaw( this, data, offset, count );
+		}
+
 		public string GetText( int offset, int count )
 		{
 			return TextTable.ConvertArray( this, offset, count );
