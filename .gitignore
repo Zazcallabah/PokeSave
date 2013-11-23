@@ -16,3 +16,6 @@ _ReSharper*/
 test-results.xml
 *.exe
 *.gba
+TestResult.xml
+output-PS.xml
+testcoverage
