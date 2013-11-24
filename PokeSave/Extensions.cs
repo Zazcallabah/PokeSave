@@ -20,10 +20,16 @@ namespace PokeSave
 			return val & ~( 1U << pos );
 		}
 
-		public static void AppendIfNotEmpty( this StringBuilder sb, string line, int index )
+		public static bool AppendIfNotEmpty( this StringBuilder sb, string line, int index, string pre = "" )
 		{
 			if( !string.IsNullOrWhiteSpace( line ) )
-				sb.Append( "\t" + index + ": " + line + "\n" );
+			{
+				if( !string.IsNullOrEmpty( pre ) )
+					sb.AppendLine( pre );
+				sb.AppendLine( "\t" + index + ": " + line );
+				return true;
+			}
+			return false;
 		}
 	}
 }

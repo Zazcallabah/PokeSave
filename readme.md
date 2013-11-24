@@ -10,7 +10,7 @@ Todo
 * Should data be validated, or should that be left to the user?
 * Writable pp bonus
 * tests for evs and stats
-* dont print pc boxes if they are empty
+* fix monster origin
 
 Testing and code coverage
 -------------------------

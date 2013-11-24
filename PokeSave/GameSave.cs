@@ -317,7 +317,6 @@ namespace PokeSave
 			sb.AppendLine( "    Rival: " + Rival );
 
 			sb.AppendLine( "Teamsize:\t" + TeamSize );
-
 			for( int i = 0; i < Team.Length; i++ )
 				sb.AppendIfNotEmpty( Team[i].Brief(), i );
 
@@ -346,11 +345,15 @@ namespace PokeSave
 				sb.AppendIfNotEmpty( Berries[i].ToString(), i );
 
 			sb.AppendLine( "PC buffer:" );
+			var pre = string.Empty;
 			for( int i = 0; i < PcBuffer.Length; i++ )
 			{
 				if( i % 30 == 0 )
-					sb.AppendLine( "PC Box #" + Math.Floor( i / 30.0 ) );
-				sb.AppendIfNotEmpty( PcBuffer[i].Brief(), i );
+				{
+					pre = "PC Box #" + Math.Floor( i / 30.0 );
+				}
+				if( sb.AppendIfNotEmpty( PcBuffer[i].Brief(), i, pre ) )
+					pre = string.Empty;
 			}
 			return sb.ToString();
 		}
