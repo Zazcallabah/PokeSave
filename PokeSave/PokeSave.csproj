@@ -53,7 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AbilityIndex.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Cipher.cs" />
     <Compile Include="AbilityList.cs" />
     <Compile Include="CommandLineParser.cs" />
@@ -61,19 +61,14 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="GenderDecision.cs" />
     <Compile Include="IComms.cs" />
-    <Compile Include="MonsterGender.cs" />
     <Compile Include="MoveList.cs" />
-    <Compile Include="EvolutionDirection.cs" />
     <Compile Include="MonsterInfo.cs" />
     <Compile Include="MonsterList.cs" />
     <Compile Include="GameSave.cs" />
-    <Compile Include="GameType.cs" />
     <Compile Include="GameSection.cs" />
     <Compile Include="ItemEntry.cs" />
     <Compile Include="ItemList.cs" />
     <Compile Include="MonsterEntry.cs" />
-    <Compile Include="MonsterNature.cs" />
-    <Compile Include="MonsterType.cs" />
     <Compile Include="NameList.cs" />
     <Compile Include="PcBuffer.cs" />
     <Compile Include="PersonalityEngine.cs" />
