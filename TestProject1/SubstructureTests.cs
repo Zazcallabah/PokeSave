@@ -44,6 +44,14 @@ namespace TestProject1
 			_m.SetEncryptedDWord( 0, 0 );
 			Assert.IsTrue( _m.IsDirty );
 		}
+		[Test]
+		public void SettingByteSubsectionTriggersIsDirty()
+		{
+
+			Assert.IsFalse( _m.IsDirty );
+			_m.SetEncryptedByte( 0, 2, 0 );
+			Assert.IsTrue( _m.IsDirty );
+		}
 
 		[Test]
 		public void CanGetByteDataFromSubstructure()
