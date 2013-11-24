@@ -386,46 +386,57 @@ namespace PokeSave
 		public uint PP1
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 0 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 3, (byte) value ); }
+			set { SetEncryptedByte( ActionOffset + 8, 0, (byte) value ); }
 		}
 
 		public uint PP2
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 1 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 2, (byte) value ); }
+			set { SetEncryptedByte( ActionOffset + 8, 1, (byte) value ); }
 		}
 
 		public uint PP3
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 2 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 1, (byte) value ); }
+			set { SetEncryptedByte( ActionOffset + 8, 2, (byte) value ); }
 		}
 
 		public uint PP4
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 3 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 0, (byte) value ); }
+			set { SetEncryptedByte( ActionOffset + 8, 3, (byte) value ); }
 		}
 
-		public uint PP1Bonus
+		public uint PPBonus
 		{
-			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 3; }
+			get { return GetEncryptedByte( GrowthOffset + 8, 0 ); }
+			set { SetEncryptedByte( GrowthOffset + 8, 0, (byte) value ); }
 		}
 
-		public uint PP2Bonus
+		public uint PPBonus1
 		{
-			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 12; }
+			get { return PPBonus & 0x3; }
+			set { PPBonus = PPBonus.Mask( 0x3, value ); }
 		}
 
-		public uint PP3Bonus
+		public uint PPBonus2
 		{
-			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 48; }
+			get { return ( PPBonus & 0xc ) >> 2; }
+			set { PPBonus = PPBonus.Mask( 0xc, value << 2 ); }
 		}
 
-		public uint PP4Bonus
+		public uint PPBonus3
 		{
-			get { return GetEncryptedByte( ActionOffset + 8, 0 ) & 192; }
+			get { return ( PPBonus & 0x30 ) >> 4; }
+			set { PPBonus = PPBonus.Mask( 0x30, value << 4 ); }
 		}
+
+		public uint PPBonus4
+		{
+			get { return ( PPBonus & 0xc0 ) >> 6; }
+			set { PPBonus = PPBonus.Mask( 0xc0, value << 6 ); }
+		}
+
 
 		public uint HPEV
 		{
@@ -518,6 +529,72 @@ namespace PokeSave
 			set { StatusByte = ( StatusByte & 0xF8 ) | ( value & 0x7 ); }
 		}
 
+		public uint VirusStatus
+		{
+			get { return GetEncryptedByte( MiscOffset, 0 ); }
+			set { SetEncryptedByte( MiscOffset, 0, (byte) value ); }
+		}
+
+		public uint MetLocation
+		{
+			get { return GetEncryptedByte( MiscOffset, 1 ); }
+			set { SetEncryptedByte( MiscOffset, 1, (byte) value ); }
+		}
+
+		public uint OriginInfo
+		{
+			get { return GetEncryptedWord( MiscOffset, false ); }
+			set { SetEncryptedWord( MiscOffset, false, (byte) value ); }
+		}
+
+		public uint IVs
+		{
+			get { return GetEncryptedDWord( MiscOffset + 4 ); }
+			set { SetEncryptedDWord( MiscOffset + 4, value ); }
+		}
+
+		public uint Ribbons
+		{
+			get { return GetEncryptedDWord( MiscOffset + 8 ); }
+			set { SetEncryptedDWord( MiscOffset + 8, value ); }
+		}
+
+		public bool Immune
+		{
+			get { return ( VirusStatus & 0xf0 ) == 0; }
+			set { VirusStatus = VirusStatus.Mask( 0xF0, value ? 0x80u : 0u ); }
+		}
+
+		public uint VirusFade
+		{
+			get { return VirusStatus & 0xf; }
+			set { VirusStatus = VirusStatus.Mask( 0xF, value ); }
+		}
+
+		public string OriginalTrainerGender
+		{
+			get { return ( OriginInfo & 0x8000 ) == 0x8000 ? "Girl" : "Boy"; }
+			set { OriginInfo = OriginInfo.Mask( 0x8000, value == "Girl" ? 0x8000u : 0 ); }
+		}
+
+		public uint BallCaught
+		{
+			get { return OriginInfo & 0x7800 >> 11; }
+			set { OriginInfo = OriginInfo.Mask( 0x7800, value << 11 ); }
+		}
+
+		public uint GameOfOrigin
+		{
+			get { return OriginInfo & 0x780 >> 7; }
+			set { OriginInfo = OriginInfo.Mask( 0x780, value << 7 ); }
+		}
+
+		public uint LevelMet
+		{
+			get { return OriginInfo & 0x78; }
+			set { OriginInfo = OriginInfo.Mask( 0x78, value ); }
+		}
+
 		public MonsterGender Gender
 		{
 			get
@@ -586,6 +663,7 @@ namespace PokeSave
 		{
 			if( index < 0 || index > 3 )
 				throw new ArgumentException( "four bytes in a dword, index not in range" );
+			IsDirty = true;
 			_data[offset + index] = (byte) _specificXor.RunByte( data, index );
 		}
 
@@ -669,10 +747,10 @@ namespace PokeSave
 			sb.AppendLine( "XP: " + XP );
 			sb.AppendLine( "Friendship: " + Friendship + "/" + type.BaseFriendship );
 
-			sb.AppendLine( "Move 1: #" + Move1 + " " + Move1Name + " PP:" + PP1 + "+" + PP1Bonus );
-			sb.AppendLine( "Move 2: #" + Move2 + " " + Move2Name + " PP:" + PP2 + "+" + PP2Bonus );
-			sb.AppendLine( "Move 3: #" + Move3 + " " + Move3Name + " PP:" + PP3 + "+" + PP3Bonus );
-			sb.AppendLine( "Move 4: #" + Move4 + " " + Move4Name + " PP:" + PP4 + "+" + PP4Bonus );
+			sb.AppendLine( "Move 1: #" + Move1 + " " + Move1Name + " PP:" + PP1 + "+" + PPBonus1 );
+			sb.AppendLine( "Move 2: #" + Move2 + " " + Move2Name + " PP:" + PP2 + "+" + PPBonus2 );
+			sb.AppendLine( "Move 3: #" + Move3 + " " + Move3Name + " PP:" + PP3 + "+" + PPBonus3 );
+			sb.AppendLine( "Move 4: #" + Move4 + " " + Move4Name + " PP:" + PP4 + "+" + PPBonus4 );
 			if( type.Gender == 0xFF )
 				sb.AppendLine( "Genderless" );
 			else if( type.Gender == 0x00 )
