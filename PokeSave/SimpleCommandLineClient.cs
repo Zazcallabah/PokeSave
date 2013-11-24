@@ -15,6 +15,27 @@ namespace PokeSave
 			_parser = new CommandLineParser();
 		}
 
+		void SaveFileWithBackup( string name )
+		{
+			if( _current == null )
+			{
+				_com.WriteLine( "No file chosen" );
+				return;
+			}
+
+			if( File.Exists( name ) )
+			{
+				string tmp = name;
+				int i = 1;
+				while( File.Exists( tmp ) )
+				{
+					tmp = name + "." + ( i++ );
+				}
+				File.Move( name, tmp );
+			}
+			_current.Save( name );
+		}
+
 		public void Run( string[] args )
 		{
 			string lastresult = string.Empty;
@@ -41,16 +62,7 @@ namespace PokeSave
 					}
 				}
 				else if( input.StartsWith( "st" ) )
-					if( _current == null )
-						_com.WriteLine( "No file loaded" );
-					else
-					{
-						string name = input.Substring( 2 ).Trim();
-						if( File.Exists( name ) )
-							_com.WriteLine( "File already exists" );
-						else
-							_current.Save( name );
-					}
+					SaveFileWithBackup( input.Substring( 2 ).Trim() );
 				else if( input.StartsWith( "p" ) )
 					_com.WriteLine( _current == null ? "No file chosen" : _current.ToString() );
 				else if( input.StartsWith( "l" ) )

@@ -24,6 +24,25 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void WhenClientSavesExistingFileOldIsBackedUp()
+		{
+			if( File.Exists( "t.sav" ) )
+				File.Delete( "t.sav" );
+			File.Copy( "p.sav", "t.sav" );
+
+			var p = new SaveFile( "p.sav" );
+
+			Load( new[] { "ld t.sav", "w name test", "st t.sav", "q" } );
+			_c.Run( null );
+
+			var t2 = new SaveFile( "t.sav.1" );
+			var t3 = new SaveFile( "t.sav" );
+			Assert.AreEqual( p.Latest.Name, t2.Latest.Name );
+			Assert.AreEqual( "test", t3.Latest.Name );
+
+		}
+
+		[Test]
 		public void ClientCanSaveLastValue()
 		{
 
