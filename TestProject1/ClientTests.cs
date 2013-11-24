@@ -39,7 +39,7 @@ namespace TestProject1
 			var t3 = new SaveFile( "t.sav" );
 			Assert.AreEqual( p.Latest.Name, t2.Latest.Name );
 			Assert.AreEqual( "test", t3.Latest.Name );
-
+			File.Delete( "t.sav.1" );
 		}
 
 		[Test]
