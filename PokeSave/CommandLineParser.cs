@@ -1,5 +1,6 @@
 
 using System;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -8,54 +9,87 @@ namespace PokeSave
 {
 	public class CommandLineParser
 	{
+		public class PropertyCarrier
+		{
+			public object Parent { get; set; }
+			public PropertyInfo Property { get; set; }
+			public string Error { get; set; }
+			public int? Index { get; set; }
+		}
+
 		static readonly Regex ExtractIndex = new Regex( @"(?<property>\w+)\[(?<index>\d+)\]", RegexOptions.Compiled );
+
 		public string Read( SaveFile sf, string line )
 		{
-			var commandchain = line.Trim().Split( '.' );
+			var carry = GetPropertyForString( sf, line );
+			if( !string.IsNullOrEmpty( carry.Error ) )
+				return carry.Error;
+			if( carry.Property == null )
+				return carry.Parent.ToString();
 
-			object current = sf.Latest;
+			var target = carry.Property.GetValue( carry.Parent, null );
+
+			if( !( target is Array ) )
+				return target.ToString();
+
+			var sb = new StringBuilder();
+			foreach( var entry in (Array) target )
+				sb.AppendLine( entry.ToString() );
+			sb.AppendLine( "index into array using []" );
+			return sb.ToString();
+		}
+
+		public string[] ExtractCommands( string line )
+		{
+			line = line.Trim();
+			var ignorelist = new[] { "A", "B", "LATEST" };
+			if( ignorelist.All( ignore =>
+					!line.StartsWith( ignore, StringComparison.InvariantCultureIgnoreCase )
+					&& !line.StartsWith( ignore, StringComparison.InvariantCultureIgnoreCase ) ) )
+				line = "latest." + line;
+			return line.Split( new[] { '.' }, StringSplitOptions.RemoveEmptyEntries );
+		}
+
+		public void SetCurrentParentFromProperty( PropertyCarrier carrier )
+		{
+			if( carrier.Property != null )
+			{
+				carrier.Parent = carrier.Property.GetValue( carrier.Parent, null );
+				if( carrier.Parent is Array && carrier.Index.HasValue )
+					carrier.Parent = ( (Array) carrier.Parent ).GetValue( carrier.Index.Value );
+			}
+		}
+
+		public PropertyCarrier GetPropertyForString( SaveFile savefile, string line )
+		{
+			var commandchain = ExtractCommands( line );
+			var current = new PropertyCarrier() { Parent = savefile };
+
 			foreach( var command in commandchain )
 			{
-				if( "A".Equals( command, StringComparison.InvariantCultureIgnoreCase ) )
-				{
-					current = sf.A;
-					continue;
-				}
-				if( "B".Equals( command, StringComparison.InvariantCultureIgnoreCase ) )
-				{
-					current = sf.B;
-					continue;
-				}
+				SetCurrentParentFromProperty( current );
 
-				var t = current.GetType();
+				var t = current.Parent.GetType();
 				var match = ExtractIndex.Match( command );
+				var propertyname = command;
 				if( match.Success )
 				{
-					var propertyname = match.Groups["property"].Captures[0].Value;
+					propertyname = match.Groups["property"].Captures[0].Value;
 					var indexstring = match.Groups["index"].Captures[0].Value;
-					int index;
-					if( !Int32.TryParse( indexstring, out index ) )
-					{
-						return "not valid index";
-					}
-					var p = t.GetProperty( propertyname, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
-					if( !p.PropertyType.IsArray )
-						return "Property isnt an array, dont index into it";
-					var arr = (Array) p.GetValue( current, null );
-					current = arr.GetValue( index );
-					continue;
+					int index = Int32.Parse( indexstring );
+					current.Index = index;
 				}
+				else
+					current.Index = null;
 
-				var prop = t.GetProperty( command, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
-				if( prop == null )
-					return "Not valid property";
-				if( prop.PropertyType.IsArray )
-					return "Property is array, index into it using []";
-				if( prop.PropertyType == typeof( string ) )
-					return (string) prop.GetValue( current, null );
-				current = prop.GetValue( current, null );
+				current.Property = t.GetProperty( propertyname, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
+				if( current.Property == null )
+				{
+					current.Error = "Not valid property";
+					return current;
+				}
 			}
-			return current.ToString();
+			return current;
 		}
 
 		public string Write( SaveFile sf, string line )
@@ -63,129 +97,65 @@ namespace PokeSave
 			var parts = line.Split( new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries );
 			if( parts.Length < 2 )
 				return "not enough arguments";
-			var commandchain = parts[0].Split( '.' );
-			var value = parts[1];
+			object value = parts[1];
+			var carry = GetPropertyForString( sf, parts[0] );
+			if( !string.IsNullOrEmpty( carry.Error ) )
+				return carry.Error;
+			if( carry.Property == null )
+				return "you cant set root property";
 
-			object current = sf.Latest;
-			foreach( var command in commandchain )
+			if( !carry.Property.CanWrite )
+				return "property is readonly";
+
+			var propertyType = carry.Property.PropertyType;
+
+			if( propertyType.IsArray )
+				return "you cant set array";
+
+			try
 			{
-				if( "A".Equals( command, StringComparison.InvariantCultureIgnoreCase ) )
-				{
-					current = sf.A;
-					continue;
-				}
-				if( "B".Equals( command, StringComparison.InvariantCultureIgnoreCase ) )
-				{
-					current = sf.B;
-					continue;
-				}
+				if( propertyType == typeof( uint ) )
+					value = UInt32.Parse( (string) value );
+				else if( propertyType == typeof( bool ) )
+					value = Boolean.Parse( (string) value );
+				else if( propertyType.IsEnum )
+					value = Enum.IsDefined( propertyType, value )
+						? Enum.Parse( propertyType, (string) value )
+						: UInt32.Parse( (string) value );
 
-				var t = current.GetType();
-				var match = ExtractIndex.Match( command );
-				if( match.Success )
-				{
-					var propertyname = match.Groups["property"].Captures[0].Value;
-					var indexstring = match.Groups["index"].Captures[0].Value;
-					int index;
-					if( !Int32.TryParse( indexstring, out index ) )
-					{
-						return "not valid index";
-					}
-					var p = t.GetProperty( propertyname, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
-					if( !p.PropertyType.IsArray )
-						return "Property isnt an array, dont index into it";
-					var arr = (Array) p.GetValue( current, null );
-					current = arr.GetValue( index );
-					continue;
-				}
-
-				var prop = t.GetProperty( command, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
-				if( prop == null )
-					return "Not valid property";
-				if( prop.PropertyType.IsArray )
-					return "Property is array, index into it using []";
-				if( !prop.CanWrite )
-					return "Property is readonly";
-				if( prop.PropertyType == typeof( string ) )
-				{
-					prop.SetValue( current, value, null );
-					return "Ok string " + value;
-				}
-				if( prop.PropertyType == typeof( uint ) )
-				{
-					uint uintval;
-					if( !UInt32.TryParse( value, out uintval ) )
-					{
-						return "not valid number";
-					}
-
-					prop.SetValue( current, uintval, null );
-					return "Ok uint " + uintval;
-				}
-				if( prop.PropertyType == typeof( bool ) )
-				{
-					var boolval = "true".Equals( value, StringComparison.InvariantCultureIgnoreCase );
-					prop.SetValue( current, boolval, null );
-					return "Ok bool " + boolval;
-				}
-				current = prop.GetValue( current, null );
+				carry.Property.SetValue( carry.Parent, value, null );
+				return "OK, set " + value;
 			}
-			return "Strange type found, couldnt write";
+			catch( ArgumentException )
+			{
+				return "bad argument value";
+			}
 		}
 
-		public string List( SaveFile sf, string line )
+		public string ConstructPropertyListFromType( Type type )
 		{
-			var commandchain = line.Trim().Split( '.' );
-
-			object current = sf.Latest;
-			foreach( var command in commandchain )
-			{
-				if( "A".Equals( command, StringComparison.InvariantCultureIgnoreCase ) )
-				{
-					current = sf.A;
-					continue;
-				}
-				if( "B".Equals( command, StringComparison.InvariantCultureIgnoreCase ) )
-				{
-					current = sf.B;
-					continue;
-				}
-
-				var t = current.GetType();
-				var match = ExtractIndex.Match( command );
-				if( match.Success )
-				{
-					var propertyname = match.Groups["property"].Captures[0].Value;
-					var indexstring = match.Groups["index"].Captures[0].Value;
-					int index;
-					if( !Int32.TryParse( indexstring, out index ) )
-					{
-						return "not valid index";
-					}
-					var p = t.GetProperty( propertyname, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
-					if( !p.PropertyType.IsArray )
-						return "Property isnt an array, dont index into it";
-					var arr = (Array) p.GetValue( current, null );
-					current = arr.GetValue( index );
-					continue;
-				}
-				if( string.IsNullOrEmpty( command ) )
-					break;
-				var prop = t.GetProperty( command, BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance );
-				if( prop == null )
-					return "Not valid property";
-				if( prop.PropertyType.IsArray )
-					return "Property is array, index into it using []";
-				current = prop.GetValue( current, null );
-			}
-
-			var type = current.GetType();
 			var sb = new StringBuilder();
 			foreach( var p in type.GetProperties( BindingFlags.IgnoreCase | BindingFlags.Public | BindingFlags.Instance ) )
 			{
-				sb.AppendLine( string.Format( "{0} ({1})", p.Name, p.PropertyType ) );
+				sb.AppendLine( string.Format( "{0} ({1})", p.Name, p.PropertyType.Name ) );
 			}
 			return sb.ToString();
+		}
+
+
+		public string List( SaveFile sf, string line )
+		{
+			var carry = GetPropertyForString( sf, line );
+			if( !string.IsNullOrEmpty( carry.Error ) )
+				return carry.Error;
+
+			if( carry.Property == null )
+				return ConstructPropertyListFromType( carry.Parent.GetType() );
+
+			if( carry.Property.PropertyType.IsArray )
+				return ConstructPropertyListFromType( carry.Property.PropertyType.GetElementType() );
+
+			return ConstructPropertyListFromType( carry.Property.PropertyType );
 		}
 	}
 }
