@@ -17,6 +17,7 @@ namespace PokeSave
 
 		public void Run( string[] args )
 		{
+			string lastresult = string.Empty;
 			while( true )
 			{
 				_com.Write( "\nld, st, l, r, w, p\n> " );
@@ -55,9 +56,12 @@ namespace PokeSave
 				else if( input.StartsWith( "l" ) )
 					_com.WriteLine( _current == null ? "No file chosen" : _parser.List( _current, input.Substring( 1 ).Trim() ) );
 				else if( input.StartsWith( "r" ) )
-					_com.WriteLine( _current == null ? "No file chosen" : _parser.Read( _current, input.Substring( 1 ).Trim() ) );
+				{
+					lastresult = _parser.Read( _current, input.Substring( 1 ).Trim() );
+					_com.WriteLine( _current == null ? "No file chosen" : lastresult );
+				}
 				else if( input.StartsWith( "w" ) )
-					_com.WriteLine( _current == null ? "No file chosen" : _parser.Write( _current, input.Substring( 1 ).Trim() ) );
+					_com.WriteLine( _current == null ? "No file chosen" : _parser.Write( _current, input.Substring( 1 ).Replace( "{}", lastresult ).Trim() ) );
 			}
 		}
 	}
