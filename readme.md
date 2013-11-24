@@ -3,10 +3,10 @@ PokeSave
 
 Todo
 ----
-* Mainer is missing, so some sort of read line - execute command needs to be done. Possibly a GUI?
+* Possibly a GUI?
 * There are still some substructures not fully mapped.
 * Missing tests for some properties.
-* How should we best parse time, is it even needed?
+* How should we best parse time? Is it even needed?
 * Should data be validated, or should that be left to the user?
 * Writable pp bonus
 * tests for evs and stats
