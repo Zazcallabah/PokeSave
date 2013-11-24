@@ -38,7 +38,6 @@ namespace TestProject1
 			Assert.AreEqual( 0, _saveA.Team[0].StatusByte );
 			Debug.WriteLine( _saveA.Team[0].Full() );
 		}
-
 		[Test]
 		public void BaseStatsAreCorrect()
 		{

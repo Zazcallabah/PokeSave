@@ -35,8 +35,30 @@ namespace TestProject1
 			Assert.AreEqual( MonsterGender.F, _file.Latest.Team[0].Gender );
 			_file.Latest.Team[0].Gender = MonsterGender.M;
 			Assert.AreEqual( MonsterGender.M, _file.Latest.Team[0].Gender );
-
 		}
+
+		[Test]
+		public void CanGetOrigin()
+		{
+			Assert.AreNotEqual( _file.Latest.Team[0].OriginInfo, _file.Latest.Team[1].OriginInfo );
+		}
+
+		[Test]
+		public void CanSetPPBonus()
+		{
+			_file.Latest.Team[0].PPBonus1 = 3;
+			_file.Latest.Team[0].PPBonus2 = 2;
+			_file.Latest.Team[0].PPBonus3 = 1;
+			_file.Latest.Team[0].PPBonus4 = 0;
+			Assert.IsTrue( _file.Latest.Team[0].IsDirty );
+			_file.Save( "tmp.sav" );
+			Assert.IsFalse( _file.Latest.Team[0].IsDirty );
+			Assert.AreEqual( 0, _file.Latest.Team[0].PPBonus4 );
+			Assert.AreEqual( 1, _file.Latest.Team[0].PPBonus3 );
+			Assert.AreEqual( 2, _file.Latest.Team[0].PPBonus2 );
+			Assert.AreEqual( 3, _file.Latest.Team[0].PPBonus1 );
+		}
+
 
 		[Test]
 		public void TeamHasStatusAndPP()
