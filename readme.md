@@ -10,7 +10,6 @@ Todo
 * Should data be validated, or should that be left to the user?
 * Writable pp bonus
 * tests for evs and stats
-* print should only print latest game save
 * dont print pc boxes if they are empty
 
 Testing and code coverage

@@ -142,7 +142,6 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
-
 		public string List( SaveFile sf, string line )
 		{
 			var carry = GetPropertyForString( sf, line );

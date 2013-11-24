@@ -10,7 +10,6 @@ namespace PokeSave
 		readonly bool _storage;
 		Cipher _specificXor;
 
-
 		public MonsterEntry( GameSection data, int offset, bool storage )
 		{
 			_data = data;
