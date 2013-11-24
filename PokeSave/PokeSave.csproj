@@ -56,6 +56,7 @@
     <Compile Include="AbilityIndex.cs" />
     <Compile Include="Cipher.cs" />
     <Compile Include="AbilityList.cs" />
+    <Compile Include="CommandLineParser.cs" />
     <Compile Include="ConsoleReader.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenderDecision.cs" />

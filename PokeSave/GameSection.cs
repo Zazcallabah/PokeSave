@@ -120,21 +120,21 @@ namespace PokeSave
 
 		public void SetText( int offset, int count, string data )
 		{
-			TextTable.ConvertString( this, data, offset, count );
+			TextTable.WriteString( this, data, offset, count );
 		}
 		public void SetTextRaw( int offset, int count, string data )
 		{
-			TextTable.ConvertStringRaw( this, data, offset, count );
+			TextTable.WriteStringRaw( this, data, offset, count );
 		}
 
 		public string GetText( int offset, int count )
 		{
-			return TextTable.ConvertArray( this, offset, count );
+			return TextTable.ReadString( this, offset, count );
 		}
 
 		public string GetTextRaw( int offset, int count )
 		{
-			return TextTable.ConvertArrayRaw( this, offset, count );
+			return TextTable.ReadStringRaw( this, offset, count );
 		}
 
 		public uint GetInt( int offset )

@@ -752,7 +752,7 @@ namespace PokeSave
 
 		public override string ToString()
 		{
-			return Brief();
+			return Full();
 		}
 	}
 }

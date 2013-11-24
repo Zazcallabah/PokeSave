@@ -143,6 +143,19 @@ namespace PokeSave
 			}
 		}
 
+		/// <summary>
+		/// Checks subsection save indexes and checksums.
+		/// This will be false if save file has been changed without calling FixChecksum()
+		/// </summary>
+		public bool Valid
+		{
+			get
+			{
+				return _sections.All( s => s.Checksum == s.CalculatedChecksum )
+					&& _sections.All( s => s.SaveIndex == _sections[0].SaveIndex );
+			}
+		}
+
 		public GameType Type { get; private set; }
 		public MonsterEntry[] Team { get; private set; }
 		public MonsterEntry[] PcBuffer { get; private set; }
@@ -337,7 +350,7 @@ namespace PokeSave
 			{
 				if( i % 30 == 0 )
 					sb.AppendLine( "PC Box #" + Math.Floor( i / 30.0 ) );
-				sb.AppendIfNotEmpty( PcBuffer[i].ToString(), i );
+				sb.AppendIfNotEmpty( PcBuffer[i].Brief(), i );
 			}
 			return sb.ToString();
 		}

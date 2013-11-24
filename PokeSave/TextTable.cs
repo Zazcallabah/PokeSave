@@ -34,7 +34,7 @@ namespace PokeSave
 			return 0xFF;
 		}
 
-		public static void ConvertStringRaw( GameSection b, string data, int offset, int length )
+		public static void WriteStringRaw( GameSection b, string data, int offset, int length )
 		{
 			for( int i = offset; i < offset + length; i++ )
 			{
@@ -45,7 +45,7 @@ namespace PokeSave
 			}
 		}
 
-		public static void ConvertString( GameSection b, string data, int offset, int length )
+		public static void WriteString( GameSection b, string data, int offset, int length )
 		{
 			for( int stringindex = 0; stringindex < length; stringindex++ )
 			{
@@ -57,7 +57,7 @@ namespace PokeSave
 			}
 		}
 
-		public static string ConvertArrayRaw( GameSection b, int offset, int length )
+		public static string ReadStringRaw( GameSection b, int offset, int length )
 		{
 			var sb = new StringBuilder();
 			for( int i = offset; i < offset + length; i++ )
@@ -65,7 +65,7 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
-		public static string ConvertArray( GameSection b, int index, int length )
+		public static string ReadString( GameSection b, int index, int length )
 		{
 			var sb = new StringBuilder();
 			for( int i = index; i < index + length; i++ )

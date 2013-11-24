@@ -19,3 +19,5 @@ IF NOT EXIST bin\ReportGenerator.exe (
 bin\OpenCover.Console.exe -register:user -target:bin\nunit-console.exe -targetargs:"/noshadow TestProject1\bin\Debug\TestProject1.dll" -filter:+[*]* -output:output-PS.xml
 
 bin\ReportGenerator.exe -reports:output-PS.xml -targetdir:testcoverage
+
+testcoverage\index.htm
