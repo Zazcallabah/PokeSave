@@ -30,6 +30,15 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void CanSetGender()
+		{
+			Assert.AreEqual( MonsterGender.F, _file.Latest.Team[0].Gender );
+			_file.Latest.Team[0].Gender = MonsterGender.M;
+			Assert.AreEqual( MonsterGender.M, _file.Latest.Team[0].Gender );
+
+		}
+
+		[Test]
 		public void TeamHasStatusAndPP()
 		{
 			_file = new SaveFile( "p4.sav" );
