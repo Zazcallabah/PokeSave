@@ -32,6 +32,9 @@ namespace PokeSave
 			if( !( target is Array ) )
 				return target.ToString();
 
+			if( carry.Index != null )
+				return ( (Array) target ).GetValue( carry.Index.Value ).ToString();
+
 			var sb = new StringBuilder();
 			foreach( var entry in (Array) target )
 				sb.AppendLine( entry.ToString() );
@@ -120,11 +123,15 @@ namespace PokeSave
 					value = Boolean.Parse( (string) value );
 				else if( propertyType.IsEnum )
 					value = Enum.IsDefined( propertyType, value )
-						? Enum.Parse( propertyType, (string) value )
-						: UInt32.Parse( (string) value );
+						? Enum.Parse( propertyType, (string) value, true )
+						: Enum.ToObject( propertyType, UInt32.Parse( (string) value ) );
 
 				carry.Property.SetValue( carry.Parent, value, null );
 				return "OK, set " + value;
+			}
+			catch( FormatException )
+			{
+				return "bad argument value";
 			}
 			catch( ArgumentException )
 			{
@@ -142,6 +149,16 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
+		public string ConstructEnumValuesList( Type type )
+		{
+			var sb = new StringBuilder();
+			foreach( var n in type.GetEnumNames() )
+			{
+				sb.AppendLine( n );
+			}
+			return sb.ToString();
+		}
+
 		public string List( SaveFile sf, string line )
 		{
 			var carry = GetPropertyForString( sf, line );
@@ -153,6 +170,9 @@ namespace PokeSave
 
 			if( carry.Property.PropertyType.IsArray )
 				return ConstructPropertyListFromType( carry.Property.PropertyType.GetElementType() );
+
+			if( carry.Property.PropertyType.IsEnum )
+				return ConstructEnumValuesList( carry.Property.PropertyType );
 
 			return ConstructPropertyListFromType( carry.Property.PropertyType );
 		}
