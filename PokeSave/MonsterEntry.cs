@@ -119,91 +119,91 @@ namespace PokeSave
 
 		public uint Level
 		{
-			get { return _storage ? 0u : _data[84]; }
+			get { return _storage ? 0u : _data[_offset + 84]; }
 			set
 			{
-				if( _storage )
-					_data[84] = (byte) value;
+				if( !_storage )
+					_data[_offset + 84] = (byte) value;
 			}
 		}
 
 		public uint Virus
 		{
-			get { return _storage ? 0u : _data[85]; }
+			get { return _storage ? 0u : _data[_offset + 85]; }
 			set
 			{
-				if( _storage )
-					_data[85] = (byte) value;
+				if( !_storage )
+					_data[_offset + 85] = (byte) value;
 			}
 		}
 
 		public uint CurrentHP
 		{
-			get { return _storage ? 0u : _data.GetShort( 86 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 86 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 86, value );
+				if( !_storage )
+					_data.SetShort( _offset + 86, value );
 			}
 		}
 
 		public uint TotalHP
 		{
-			get { return _storage ? 0u : _data.GetShort( 88 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 88 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 88, value );
+				if( !_storage )
+					_data.SetShort( _offset + 88, value );
 			}
 		}
 
 		public uint CurrentAttack
 		{
-			get { return _storage ? 0u : _data.GetShort( 90 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 90 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 90, value );
+				if( !_storage )
+					_data.SetShort( _offset + 90, value );
 			}
 		}
 
 		public uint CurrentDefense
 		{
-			get { return _storage ? 0u : _data.GetShort( 92 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 92 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 92, value );
+				if( !_storage )
+					_data.SetShort( _offset + 92, value );
 			}
 		}
 
 		public uint CurrentSpeed
 		{
-			get { return _storage ? 0u : _data.GetShort( 94 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 94 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 94, value );
+				if( !_storage )
+					_data.SetShort( _offset + 94, value );
 			}
 		}
 
 		public uint CurrentSpAttack
 		{
-			get { return _storage ? 0u : _data.GetShort( 96 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 96 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 96, value );
+				if( !_storage )
+					_data.SetShort( _offset + 96, value );
 			}
 		}
 
 		public uint CurrentSpDefense
 		{
-			get { return _storage ? 0u : _data.GetShort( 98 ); }
+			get { return _storage ? 0u : _data.GetShort( _offset + 98 ); }
 			set
 			{
-				if( _storage )
-					_data.SetShort( 98, value );
+				if( !_storage )
+					_data.SetShort( _offset + 98, value );
 			}
 		}
 
@@ -459,7 +459,7 @@ namespace PokeSave
 		public uint SpeedEV
 		{
 			get { return GetEncryptedByte( EVsOffset, 3 ); }
-			set { SetEncryptedByte( EVsOffset, 4, (byte) value ); }
+			set { SetEncryptedByte( EVsOffset, 3, (byte) value ); }
 		}
 
 		public uint SpAttackEV
@@ -516,10 +516,10 @@ namespace PokeSave
 			get
 			{
 				uint p = Personality;
-				return ( ( p & 0x3 ) |
-					( ( p >> 8 ) & 12 ) |
-						( ( p >> 16 ) & 48 ) |
-							( ( p >> 24 ) & 192 ) ) % 28;
+				return ( ( p & 3 ) |
+					( ( p >> 6 ) & 12 ) |
+						( ( p >> 12 ) & 48 ) |
+							( ( p >> 18 ) & 192 ) ) % 28;
 			}
 		}
 
@@ -544,7 +544,7 @@ namespace PokeSave
 		public uint OriginInfo
 		{
 			get { return GetEncryptedWord( MiscOffset, false ); }
-			set { SetEncryptedWord( MiscOffset, false, (byte) value ); }
+			set { SetEncryptedWord( MiscOffset, false, (ushort) value ); }
 		}
 
 		public uint IVs
@@ -559,12 +559,37 @@ namespace PokeSave
 			set { SetEncryptedDWord( MiscOffset + 8, value ); }
 		}
 
-		public bool Immune
+		/// <summary>
+		/// 0 is possible but illegitimate
+		/// 1-15 valid
+		/// </summary>
+		public void AssignVirusStrain( byte strain )
 		{
-			get { return ( VirusStatus & 0xf0 ) == 0; }
-			set { VirusStatus = VirusStatus.Mask( 0xF0, value ? 0x80u : 0u ); }
+			VirusStrain = strain;
+			VirusFade = (uint) ( strain % 4 ) + 1;
 		}
 
+		/// <summary>
+		/// Immune if already has virus
+		/// </summary>
+		public bool Immune
+		{
+			get { return VirusStrain != 0; }
+			set { VirusStrain = value ? 7u : 0; }
+		}
+
+		/// <summary>
+		/// 0 is no virus, 1-15 is valid
+		/// </summary>
+		public uint VirusStrain
+		{
+			get { return ( VirusStatus & 0xf0 ) >> 4; }
+			set { VirusStatus = VirusStatus.Mask( 0xF0, value << 4 ); }
+		}
+
+		/// <summary>
+		/// Decreases 1 every midnight, valid values are 0-4, initial is strain mod 4 + 1
+		/// </summary>
 		public uint VirusFade
 		{
 			get { return VirusStatus & 0xf; }
@@ -579,13 +604,13 @@ namespace PokeSave
 
 		public uint BallCaught
 		{
-			get { return OriginInfo & 0x7800 >> 11; }
+			get { return ( OriginInfo & 0x7800 ) >> 11; }
 			set { OriginInfo = OriginInfo.Mask( 0x7800, value << 11 ); }
 		}
 
 		public uint GameOfOrigin
 		{
-			get { return OriginInfo & 0x780 >> 7; }
+			get { return ( OriginInfo & 0x780 ) >> 7; }
 			set { OriginInfo = OriginInfo.Mask( 0x780, value << 7 ); }
 		}
 
@@ -824,6 +849,7 @@ namespace PokeSave
 				sb.Append( " s:" + CurrentAttack );
 				sb.Append( "," + CurrentDefense );
 			}
+			sb.Append( " o:" + OriginInfo.ToString( "X" ) );
 			return sb.ToString();
 		}
 

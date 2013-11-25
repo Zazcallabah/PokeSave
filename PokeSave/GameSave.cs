@@ -190,7 +190,7 @@ namespace PokeSave
 		public uint PublicId
 		{
 			get { return _sections[0].GetShort( _pointers[Type]["PublicId"] ); }
-			set { _sections[0].SetShort( _pointers[Type]["PublicId"], value ); }
+			private set { _sections[0].SetShort( _pointers[Type]["PublicId"], value ); }
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace PokeSave
 		public uint SecretId
 		{
 			get { return _sections[0].GetShort( _pointers[Type]["SecretId"] ); }
-			set { _sections[0].SetShort( _pointers[Type]["SecretId"], value ); }
+			private set { _sections[0].SetShort( _pointers[Type]["SecretId"], value ); }
 		}
 
 		public string TimePlayed
