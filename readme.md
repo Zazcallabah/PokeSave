@@ -11,6 +11,14 @@ Todo
 * Writable pp bonus
 * tests for evs and stats
 * fix monster origin
+* commands
+* help command
+* remove extra newlines from output
+* remove redundant help string
+* test virus field interaction
+* autocomplete on tab
+* command that sets whole team to own (if id not matching, say)
+   * set otid, otname (sometimes?), gameoforigin, otgender
 
 Testing and code coverage
 -------------------------
