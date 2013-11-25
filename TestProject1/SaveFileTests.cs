@@ -59,6 +59,17 @@ namespace TestProject1
 			Assert.AreEqual( 3, _file.Latest.Team[0].PPBonus1 );
 		}
 
+		[Test]
+		public void CanSetBall()
+		{
+			Debug.WriteLine( _file.Latest.ToString() );
+			Assert.AreEqual( 4, _file.Latest.Team[0].BallCaught );
+			Assert.IsFalse( _file.Latest.Team[0].IsDirty );
+			_file.Latest.Team[0].BallCaught = 1;
+			Assert.IsTrue( _file.Latest.Team[0].IsDirty );
+			Assert.AreEqual( 1, _file.Latest.Team[0].BallCaught );
+		}
+
 
 		[Test]
 		public void TeamHasStatusAndPP()
@@ -197,6 +208,202 @@ namespace TestProject1
 			_file.Save( "upd.sav" );
 			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
 		}
+
+		[Test]
+		public void AddMarksToTeamWorks()
+		{
+			foreach( var t in _file.Latest.Team )
+			{
+				Assert.AreEqual( 0, t.Mark );
+				Assert.IsFalse( t.IsDirty );
+			}
+
+			for( int i = 0; i < _file.Latest.Team.Length; i++ )
+				_file.Latest.Team[i].Mark = (uint) i;
+			foreach( var t in _file.Latest.Team )
+			{
+				Assert.IsFalse( t.IsDirty );
+			}
+			_file.Save( "tmp.sav" );
+			for( int i = 0; i < _file.Latest.Team.Length; i++ )
+			{
+				Assert.AreEqual( i, _file.Latest.Team[i].Mark );
+				Assert.IsFalse( _file.Latest.Team[i].IsDirty );
+			}
+		}
+
+		[Test]
+		public void TestsForNonSubsectionVirusFields()
+		{
+			// not part of subsection
+			// cleared in buffer
+			Assert.AreEqual( 255, _file.Latest.Team[0].Virus );
+			Assert.AreEqual( 0, _file.Latest.PcBuffer[0].Virus );
+
+			_file.Latest.Team[0].Virus = 9;
+			_file.Latest.PcBuffer[0].Virus = 9;
+			Assert.AreEqual( 9, _file.Latest.Team[0].Virus );
+			Assert.AreEqual( 0, _file.Latest.PcBuffer[0].Virus );
+		}
+
+		[Test]
+		public void SettingImmuneAffectsStrainAndViceVerse()
+		{
+			Assert.AreEqual( false, _file.Latest.Team[0].Immune );
+			_file.Latest.Team[0].Immune = true;
+			Assert.AreEqual( true, _file.Latest.Team[0].Immune );
+			Assert.AreEqual( 7, _file.Latest.Team[0].VirusStrain );
+		}
+
+		[Test]
+		public void TestsForSubsectionVirusFields()
+		{
+			// this depends on strain value
+			Assert.AreEqual( false, _file.Latest.Team[0].Immune );
+
+			Assert.AreEqual( 0, _file.Latest.Team[0].VirusStrain );
+			Assert.AreEqual( 0, _file.Latest.Team[0].VirusFade );
+
+			//this is the combination of the above two values
+			Assert.AreEqual( 0x00000000, _file.Latest.Team[0].VirusStatus );
+
+			_file.Latest.Team[0].VirusFade = 1;
+			_file.Latest.Team[0].VirusStrain = 9;
+			Assert.AreEqual( 9, _file.Latest.Team[0].VirusStrain );
+			Assert.AreEqual( 1, _file.Latest.Team[0].VirusFade );
+			Assert.AreEqual( 0x91, _file.Latest.Team[0].VirusStatus );
+		}
+
+
+		[Test]
+		public void TestAssignVirusStrain()
+		{
+			_file.Latest.Team[0].AssignVirusStrain( 10 );
+			Assert.AreEqual( 10, _file.Latest.Team[0].VirusStrain );
+			Assert.AreEqual( 3, _file.Latest.Team[0].VirusFade );
+		}
+
+		[Test]
+		public void CanSetLevelForTeamMember()
+		{
+			Assert.AreEqual( 14, _file.Latest.Team[0].Level );
+			_file.Latest.Team[0].Level = 9;
+			Assert.AreEqual( 9, _file.Latest.Team[0].Level );
+		}
+
+		[TestCase( "Virus", 255, 6 )]
+		[TestCase( "CurrentHP", 35, 66 )]
+		[TestCase( "TotalHP", 35, 99 )]
+		[TestCase( "CurrentAttack", 20, 97 )]
+		[TestCase( "CurrentDefense", 18, 13 )]
+		[TestCase( "CurrentSpeed", 33, 43 )]
+		[TestCase( "CurrentSpAttack", 23, 26 )]
+		[TestCase( "CurrentSpDefense", 18, 40 )]
+		[TestCase( "AttackEV", 3, 60 )]
+		[TestCase( "HPEV", 5, 6 )]
+		[TestCase( "DefenseEV", 13, 3 )]
+		[TestCase( "SpeedEV", 30, 7 )]
+		[TestCase( "SpAttackEV", 1, 105 )]
+		[TestCase( "SpDefenseEV", 0, 64 )]
+		[TestCase( "Coolness", 0, 16 )]
+		[TestCase( "Beauty", 0, 24 )]
+		[TestCase( "Cuteness", 0, 12 )]
+		[TestCase( "Smartness", 0, 0 )]
+		[TestCase( "Toughness", 0, 55 )]
+		[TestCase( "Feel", 0, 99 )]
+		public void CanSetMostFields( string name, int e, int n )
+		{
+			var existingvalue = (uint) e;
+			var newvalue = (uint) n;
+			var info = _file.Latest.Team[0].GetType();
+			var prop = info.GetProperty( name );
+
+			Assert.AreEqual( existingvalue, prop.GetValue( _file.Latest.Team[0], null ) );
+			prop.SetValue( _file.Latest.Team[0], newvalue, null );
+			Assert.AreEqual( newvalue, prop.GetValue( _file.Latest.Team[0], null ) );
+		}
+
+		[Test]
+		public void CanSetEnums()
+		{
+			Assert.AreEqual( AbilityIndex.Second, _file.Latest.Team[0].Ability );
+			Assert.AreEqual( MonsterNature.Quirky, _file.Latest.Team[0].Nature );
+			Assert.AreEqual( EvolutionDirection.C, _file.Latest.Team[0].Evolution );
+			Assert.AreEqual( "Static", _file.Latest.Team[0].AbilityName );
+			_file.Latest.Team[0].Ability = AbilityIndex.First;
+			_file.Latest.Team[0].Nature = MonsterNature.Lax;
+			_file.Latest.Team[0].Evolution = EvolutionDirection.S;
+			Assert.AreEqual( AbilityIndex.First, _file.Latest.Team[0].Ability );
+			Assert.AreEqual( MonsterNature.Lax, _file.Latest.Team[0].Nature );
+			Assert.AreEqual( EvolutionDirection.S, _file.Latest.Team[0].Evolution );
+			// Only has one ability
+			Assert.AreEqual( "Static", _file.Latest.Team[0].AbilityName );
+		}
+
+		[Test]
+		public void CanSetAbility()
+		{
+			Assert.AreEqual( AbilityIndex.Second, _file.Latest.Team[3].Ability );
+			Assert.AreEqual( "Sturdy", _file.Latest.Team[3].AbilityName );
+			_file.Latest.Team[3].Ability = AbilityIndex.First;
+			Assert.AreEqual( AbilityIndex.First, _file.Latest.Team[3].Ability );
+			Assert.AreEqual( "Rock Head", _file.Latest.Team[3].AbilityName );
+		}
+
+
+		[Test]
+		public void CanSetMoves()
+		{
+			Assert.AreEqual( "Thundershock", _file.Latest.Team[0].Move1Name );
+			Assert.AreEqual( "Growl", _file.Latest.Team[1].Move2Name );
+			Assert.AreEqual( "Encore", _file.Latest.Team[2].Move3Name );
+			Assert.AreEqual( "Rock Throw", _file.Latest.Team[3].Move4Name );
+			_file.Latest.Team[0].Move1 = 88;
+			_file.Latest.Team[1].Move2 = 1;
+			_file.Latest.Team[2].Move3 = 100;
+			_file.Latest.Team[3].Move4 = 0;
+			Assert.IsTrue( _file.Latest.Team[0].IsDirty );
+			Assert.IsTrue( _file.Latest.Team[1].IsDirty );
+			Assert.IsTrue( _file.Latest.Team[2].IsDirty );
+			Assert.IsTrue( _file.Latest.Team[3].IsDirty );
+			Assert.IsFalse( _file.Latest.Team[4].IsDirty );
+			Assert.AreEqual( "Rock Throw", _file.Latest.Team[0].Move1Name );
+			Assert.AreEqual( "Pound", _file.Latest.Team[1].Move2Name );
+			Assert.AreEqual( "Teleport", _file.Latest.Team[2].Move3Name );
+			Assert.AreEqual( "Empty Move", _file.Latest.Team[3].Move4Name );
+		}
+
+
+		[Test]
+		public void CanSetCurrentPP()
+		{
+			Assert.AreEqual( 30, _file.Latest.Team[0].PP1 );
+			Assert.AreEqual( 40, _file.Latest.Team[1].PP2 );
+			Assert.AreEqual( 5, _file.Latest.Team[2].PP3 );
+			Assert.AreEqual( 15, _file.Latest.Team[3].PP4 );
+			_file.Latest.Team[0].PP1 = 88;
+			_file.Latest.Team[1].PP2 = 1;
+			_file.Latest.Team[2].PP3 = 100;
+			_file.Latest.Team[3].PP4 = 0;
+			Assert.IsTrue( _file.Latest.Team[0].IsDirty );
+			Assert.IsTrue( _file.Latest.Team[1].IsDirty );
+			Assert.IsTrue( _file.Latest.Team[2].IsDirty );
+			Assert.IsTrue( _file.Latest.Team[3].IsDirty );
+			Assert.IsFalse( _file.Latest.Team[4].IsDirty );
+			Assert.AreEqual( 88, _file.Latest.Team[0].PP1 );
+			Assert.AreEqual( 1, _file.Latest.Team[1].PP2 );
+			Assert.AreEqual( 100, _file.Latest.Team[2].PP3 );
+			Assert.AreEqual( 0, _file.Latest.Team[3].PP4 );
+		}
+		[Test]
+		public void LevelIs0ForStoredEntries()
+		{
+			Assert.AreEqual( 0, _file.Latest.PcBuffer[0].Level );
+			_file.Latest.PcBuffer[0].Level = 9;
+			Assert.AreEqual( 0, _file.Latest.PcBuffer[0].Level );
+		}
+
+
 
 		[Test]
 		public void MakeTeamStatusDifferent()

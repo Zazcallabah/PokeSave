@@ -27,6 +27,12 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void PrintContainsChecksum()
+		{
+			Assert.IsTrue( _savesA[0].ToString().Contains( _savesA[0].Checksum.ToString() ) );
+		}
+
+		[Test]
 		public void AllSectionsHaveSameSaveIndex()
 		{
 			foreach( var s in _savesA )
@@ -103,7 +109,7 @@ namespace TestProject1
 			{
 				if( s.ID == 1 )
 				{
-					Assert.AreEqual( 6, s[ 0x34] );
+					Assert.AreEqual( 6, s[0x34] );
 				}
 			}
 		}

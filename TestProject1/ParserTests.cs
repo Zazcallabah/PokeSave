@@ -125,6 +125,12 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void CanReadItemToString()
+		{
+			Assert.AreEqual( "(13Potion) 1", _c.Read( _sf, "pcitems[0]" ) );
+		}
+
+		[Test]
 		public void CanReadUint()
 		{
 			Assert.AreEqual( "1", _c.Read( _sf, "pcitems[0].count" ) );
@@ -171,6 +177,14 @@ namespace TestProject1
 		{
 			Assert.AreEqual( "ID (UInt32)\r\nName (String)\r\nCount (UInt32)\r\n",
 				_c.List( _sf, "pcitems[0]" ) );
+		}
+
+
+		[Test]
+		public void CanListEnumValues()
+		{
+			Assert.AreEqual( "First\r\nSecond\r\n",
+				_c.List( _sf, "team[0].ability" ) );
 		}
 
 		[Test]

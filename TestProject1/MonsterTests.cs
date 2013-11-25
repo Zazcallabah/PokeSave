@@ -72,6 +72,13 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void CanPrintMonsterInfo()
+		{
+			var ml = MonsterList.Get( 1 );
+			Assert.IsTrue( ml.ToString().Contains( "BULBASAUR" ) );
+		}
+
+		[Test]
 		public void EmptyMonsterIsEmpty()
 		{
 			Assert.IsTrue( _saveA.PcBuffer[419].Empty );
@@ -144,7 +151,12 @@ namespace TestProject1
 			Assert.AreEqual( 56, m.MiscOffset );
 			Assert.AreEqual( 293, m.MonsterId );
 		}
-
+		[Test]
+		public void TypeReturnsMonsterId()
+		{
+			var m = TestSection();
+			Assert.AreEqual( m.MonsterId, m.Type );
+		}
 		[Test]
 		public void WeCanFetchGrowthData()
 		{
@@ -165,6 +177,34 @@ namespace TestProject1
 			Assert.AreEqual( 44, m.Item );
 			Assert.AreEqual( 444, m.XP );
 		}
+
+		[Test]
+		public void WeCanSetLanguageData()
+		{
+			var m = TestSection();
+			Assert.AreEqual( 0x0202, m.Language );
+			m.Language = 0x205;
+			Assert.AreEqual( 0x205, m.Language );
+		}
+
+		[Test]
+		public void WeCanSetOTName()
+		{
+			var m = TestSection();
+			Assert.AreEqual( "Ken", m.OriginalTrainerName );
+			m.OriginalTrainerName = "RRR_hide";
+			Assert.AreEqual( "RRR", m.OriginalTrainerName );
+		}
+
+		[Test]
+		public void CanGetUnown()
+		{
+			var m = TestSection();
+			Assert.AreEqual( 0x11, m.UnownShape );
+		}
+
+
+
 		[Test]
 		public void TestWritingOTid()
 		{

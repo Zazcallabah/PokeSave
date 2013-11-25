@@ -22,9 +22,9 @@ namespace TestProject1
 		}
 
 		[Test]
-		public void PcBufferHasCurrentPcBox()
+		public void BufferCanIndexIntoSplitBetweenSections()
 		{
-			Assert.AreEqual( "GREEN", _buffer.GetText(5968,8) );
+			Assert.AreEqual( "GREEN", _buffer.GetText( 5968, 8 ) );
 		}
 	}
 }
