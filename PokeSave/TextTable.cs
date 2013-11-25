@@ -36,24 +36,24 @@ namespace PokeSave
 
 		public static void WriteStringRaw( GameSection b, string data, int offset, int length )
 		{
-			for( int i = offset; i < offset + length; i++ )
-			{
-				if( i >= data.Length )
-					b[i] = 0xFF;
-				else
-					b[i] = IndexOf( data[i] );
-			}
+			WriteStringInternal( b, data, offset, length, false );
 		}
 
 		public static void WriteString( GameSection b, string data, int offset, int length )
 		{
+			WriteStringInternal( b, data, offset, length, true );
+		}
+
+		static void WriteStringInternal( GameSection b, string data, int offset, int length, bool guard )
+		{
 			for( int stringindex = 0; stringindex < length; stringindex++ )
 			{
 				var arrayindex = offset + stringindex;
-				if( stringindex >= data.Length || arrayindex == ( offset + length - 1 ) )
+				if( stringindex >= data.Length || ( guard && arrayindex == ( offset + length - 1 ) ) )
 					b[arrayindex] = 0xFF;
 				else
 					b[arrayindex] = IndexOf( data[stringindex] );
+
 			}
 		}
 
