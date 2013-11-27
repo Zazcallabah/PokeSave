@@ -1,4 +1,5 @@
-namespace PokeSave
+
+namespace PokeSave.Client
 {
 	public interface IComms
 	{

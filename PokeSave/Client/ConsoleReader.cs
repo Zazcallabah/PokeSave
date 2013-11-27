@@ -1,9 +1,8 @@
-﻿
-using System;
+﻿using System;
 
-namespace PokeSave
+namespace PokeSave.Client
 {
-	class ConsoleReader : IComms
+	internal class ConsoleReader : IComms
 	{
 		public string ReadLine()
 		{

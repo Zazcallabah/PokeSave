@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>PokeSave</RootNamespace>
     <AssemblyName>PokeSave</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -44,23 +44,28 @@
     <Optimize>true</Optimize>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>.\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Client\Command.cs" />
+    <Compile Include="Client\CommandHandler.cs" />
+    <Compile Include="Client\InjectionQueueCommunicator.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Cipher.cs" />
     <Compile Include="AbilityList.cs" />
-    <Compile Include="CommandLineParser.cs" />
-    <Compile Include="ConsoleReader.cs" />
+    <Compile Include="Client\CommandLineParser.cs" />
+    <Compile Include="Client\ConsoleReader.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="GenderDecision.cs" />
-    <Compile Include="IComms.cs" />
+    <Compile Include="Client\IComms.cs" />
     <Compile Include="MoveList.cs" />
     <Compile Include="MonsterInfo.cs" />
     <Compile Include="MonsterList.cs" />
@@ -75,13 +80,16 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveFile.cs" />
-    <Compile Include="SimpleCommandLineClient.cs" />
+    <Compile Include="Client\SimpleCommandLineClient.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="SubstructureOffset.cs" />
     <Compile Include="TextTable.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="abilities.bin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="commands.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="dex.bin">

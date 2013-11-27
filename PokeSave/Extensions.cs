@@ -33,7 +33,7 @@ namespace PokeSave
 
 		public static bool AppendIfNotEmpty( this StringBuilder sb, string line, int index, string pre = "" )
 		{
-			if( !string.IsNullOrWhiteSpace( line ) )
+			if( !string.IsNullOrEmpty( line ) )
 			{
 				if( !string.IsNullOrEmpty( pre ) )
 					sb.AppendLine( pre );

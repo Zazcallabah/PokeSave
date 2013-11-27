@@ -1,18 +1,27 @@
 using System.IO;
 
-namespace PokeSave
+namespace PokeSave.Client
 {
 	public class SimpleCommandLineClient
 	{
-		readonly IComms _com;
+		readonly InjectionQueueCommunicator _com;
 		readonly CommandLineParser _parser;
+		readonly CommandHandler _handler;
+
 		SaveFile _current;
 
-		public SimpleCommandLineClient( IComms com )
+
+		public SimpleCommandLineClient( InjectionQueueCommunicator com, string commandsfile )
+			: this( com, new CommandHandler( commandsfile ) )
+		{
+		}
+
+		public SimpleCommandLineClient( InjectionQueueCommunicator com, CommandHandler commandsfile )
 		{
 			_com = com;
 			_current = null;
 			_parser = new CommandLineParser();
+			_handler = commandsfile;
 		}
 
 		void SaveFileWithBackup( string name )
@@ -61,6 +70,21 @@ namespace PokeSave
 						_current == null
 							? "No file chosen"
 							: _parser.Write( _current, input.Substring( 1 ).Replace( "{}", lastresult ).Trim() ) );
+				else if( input.StartsWith( "cl" ) )
+				{
+					foreach( var c in _handler.All() )
+					{
+						_com.WriteLine( c.ToString() );
+					}
+				}
+				else if( input.StartsWith( "c" ) )
+				{
+					var lines = _handler.Get( input.Substring( 1 ).Trim() );
+					if( lines == null )
+						_com.WriteLine( "not valid command name" );
+					else
+						_com.Inject( lines.Actions );
+				}
 			}
 		}
 

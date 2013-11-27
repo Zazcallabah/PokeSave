@@ -1,11 +1,10 @@
-
 using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace PokeSave
+namespace PokeSave.Client
 {
 	public class CommandLineParser
 	{
@@ -152,7 +151,7 @@ namespace PokeSave
 		public string ConstructEnumValuesList( Type type )
 		{
 			var sb = new StringBuilder();
-			foreach( var n in type.GetEnumNames() )
+			foreach( var n in System.Enum.GetNames( type ) )
 			{
 				sb.AppendLine( n );
 			}

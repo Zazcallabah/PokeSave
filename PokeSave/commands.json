@@ -1,0 +1,10 @@
+﻿[{"Name":"Reassign owner","Description":"Makes the first member of the team have the same owner as the one that is first in the PcBuffer","Trigger":"makemine","Lines":[
+"r pcbuffer[0].originaltrainerid",
+"w team[0].originaltrainerid {}",
+"r pcbuffer[0].gameoforigin",
+"w team[0].gameoforigin {}",
+"r pcbuffer[0].originaltrainergender",
+"w team[0].originaltrainergender {}",
+"r pcbuffer[0].originaltrainername",
+"w team[0].originaltrainername {}"
+]}]
