@@ -8,17 +8,13 @@ Todo
 * Missing tests for some properties.
 * How should we best parse time? Is it even needed?
 * Should data be validated, or should that be left to the user?
-* Writable pp bonus
 * tests for evs and stats
-* fix monster origin
-* commands
 * help command
 * remove extra newlines from output
 * remove redundant help string
 * test virus field interaction
 * autocomplete on tab
-* command that sets whole team to own (if id not matching, say)
-   * set otid, otname (sometimes?), gameoforigin, otgender
+* ivs not mapped out fully
 
 Testing and code coverage
 -------------------------

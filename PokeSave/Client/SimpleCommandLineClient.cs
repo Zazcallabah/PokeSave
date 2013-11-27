@@ -45,10 +45,11 @@ namespace PokeSave.Client
 
 		public void Run( string[] args )
 		{
+			_com.WriteLine( "ld, st, l, r, w, p" );
 			string lastresult = string.Empty;
 			while( true )
 			{
-				_com.Write( "\nld, st, l, r, w, p\n> " );
+				_com.Write( "> " );
 				string input = _com.ReadLine();
 				if( input == "q" )
 					return;
