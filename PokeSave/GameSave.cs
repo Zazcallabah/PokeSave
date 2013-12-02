@@ -170,19 +170,47 @@ namespace PokeSave
 		public string Name
 		{
 			get { return _sections[0].GetText( _pointers[Type]["Name"], 8 ); }
-			set { _sections[0].SetText( _pointers[Type]["Name"], 8, value ); }
+			set
+			{
+				if( Name != value )
+				{
+					_sections[0].SetText( _pointers[Type]["Name"], 8, value );
+					InvokePropertyChanged( "Name" );
+				}
+			}
 		}
 
 		public string Rival
 		{
 			get { return _sections[4].GetText( _pointers[Type]["Rival"], 8 ); }
-			set { _sections[4].SetText( _pointers[Type]["Rival"], 8, value ); }
+			set
+			{
+				if( Rival != value )
+				{
+					_sections[4].SetText( _pointers[Type]["Rival"], 8, value );
+					InvokePropertyChanged( "Rival" );
+				}
+			}
 		}
 
 		public string Gender
 		{
-			get { return _sections[0][_pointers[Type]["Gender"]] == 0 ? "Boy" : "Girl"; }
-			set { _sections[0][_pointers[Type]["Gender"]] = (byte) ( "Boy" == value ? 0 : 1 ); }
+			get { return GenderByte == 0 ? "Boy" : "Girl"; }
+			set { GenderByte = (byte) ( "Boy" == value ? 0 : 1 ); }
+		}
+
+		public byte GenderByte
+		{
+			get { return _sections[0][_pointers[Type]["Gender"]]; }
+			set
+			{
+				if( GenderByte != value )
+				{
+					_sections[0][_pointers[Type]["Gender"]] = value;
+					InvokePropertyChanged( "Gender" );
+					InvokePropertyChanged( "GenderByte" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -219,25 +247,39 @@ namespace PokeSave
 		public uint GameCode
 		{
 			get { return _sections[0].GetShort( _pointers[Type]["GameCode"] ); }
-			set { _sections[0].SetShort( _pointers[Type]["GameCode"], value ); }
+			private set { _sections[0].SetShort( _pointers[Type]["GameCode"], value ); }
 		}
 
 		public uint SecurityKey
 		{
 			get { return _sections[0].GetInt( _pointers[Type]["SecurityKey"] ); }
-			set { _sections[0].SetInt( _pointers[Type]["SecurityKey"], value ); }
+			private set { _sections[0].SetInt( _pointers[Type]["SecurityKey"], value ); }
 		}
 
 		public uint TeamSize
 		{
 			get { return _sections[1].GetInt( _pointers[Type]["TeamSize"] ); }
-			set { _sections[1].SetInt( _pointers[Type]["TeamSize"], value ); }
+			set
+			{
+				if( value != TeamSize )
+				{
+					_sections[1].SetInt( _pointers[Type]["TeamSize"], value );
+					InvokePropertyChanged( "TeamSize" );
+				}
+			}
 		}
 
 		public uint Money
 		{
 			get { return Xor.Run( _sections[1].GetInt( _pointers[Type]["Money"] ) ); }
-			set { _sections[1].SetInt( _pointers[Type]["Money"], Xor.Run( value ) ); }
+			set
+			{
+				if( value != Money )
+				{
+					_sections[1].SetInt( _pointers[Type]["Money"], Xor.Run( value ) );
+					InvokePropertyChanged( "Money" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -246,12 +288,13 @@ namespace PokeSave
 		public uint TrainerId
 		{
 			get { return _sections[0].GetInt( _pointers[Type]["PublicId"] ); }
-			set { _sections[0].SetInt( _pointers[Type]["PublicId"], value ); }
+			private set { _sections[0].SetInt( _pointers[Type]["PublicId"], value ); }
 		}
 
 		void ExtractTeam()
 		{
 			Team = new BindingList<MonsterEntry>();
+			Team.ListChanged += ( a, e ) => InvokePropertyChanged( "Team" );
 			for( int i = 0; i < 6; i++ )
 				Team.Add( new MonsterEntry( _sections[1], _pointers[Type]["TeamList"] + ( i * 100 ), false ) );
 		}
