@@ -218,14 +218,14 @@ namespace TestProject1
 				Assert.IsFalse( t.IsDirty );
 			}
 
-			for( int i = 0; i < _file.Latest.Team.Length; i++ )
+			for( int i = 0; i < _file.Latest.Team.Count; i++ )
 				_file.Latest.Team[i].Mark = (uint) i;
 			foreach( var t in _file.Latest.Team )
 			{
 				Assert.IsFalse( t.IsDirty );
 			}
 			_file.Save( "tmp.sav" );
-			for( int i = 0; i < _file.Latest.Team.Length; i++ )
+			for( int i = 0; i < _file.Latest.Team.Count; i++ )
 			{
 				Assert.AreEqual( i, _file.Latest.Team[i].Mark );
 				Assert.IsFalse( _file.Latest.Team[i].IsDirty );

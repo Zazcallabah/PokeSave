@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace PokeSave
 {
-	public class GameSave
+	public class GameSave : INotifyPropertyChanged
 	{
 		readonly List<GameSection> _originalOrderSections;
 
@@ -157,14 +158,14 @@ namespace PokeSave
 		}
 
 		public GameType Type { get; private set; }
-		public MonsterEntry[] Team { get; private set; }
-		public MonsterEntry[] PcBuffer { get; private set; }
-		public ItemEntry[] PCItems { get; private set; }
-		public ItemEntry[] Items { get; private set; }
-		public ItemEntry[] KeyItems { get; private set; }
-		public ItemEntry[] BallPocket { get; private set; }
-		public ItemEntry[] TMCase { get; private set; }
-		public ItemEntry[] Berries { get; private set; }
+		public BindingList<MonsterEntry> Team { get; private set; }
+		public BindingList<MonsterEntry> PcBuffer { get; private set; }
+		public BindingList<ItemEntry> PCItems { get; private set; }
+		public BindingList<ItemEntry> Items { get; private set; }
+		public BindingList<ItemEntry> KeyItems { get; private set; }
+		public BindingList<ItemEntry> BallPocket { get; private set; }
+		public BindingList<ItemEntry> TMCase { get; private set; }
+		public BindingList<ItemEntry> Berries { get; private set; }
 
 		public string Name
 		{
@@ -250,44 +251,44 @@ namespace PokeSave
 
 		void ExtractTeam()
 		{
-			Team = new MonsterEntry[6];
-			for( int i = 0; i < Team.Length; i++ )
-				Team[i] = new MonsterEntry( _sections[1], _pointers[Type]["TeamList"] + ( i * 100 ), false );
+			Team = new BindingList<MonsterEntry>();
+			for( int i = 0; i < 6; i++ )
+				Team.Add( new MonsterEntry( _sections[1], _pointers[Type]["TeamList"] + ( i * 100 ), false ) );
 		}
 
 		void ExtractItems()
 		{
-			PCItems = new ItemEntry[_pointers[Type]["PCItemsLength"]];
-			for( int i = 0; i < PCItems.Length; i++ )
-				PCItems[i] = new ItemEntry( _sections[1], _pointers[Type]["PCItems"] + ( i * 4 ) );
+			PCItems = new BindingList<ItemEntry>();
+			for( int i = 0; i < _pointers[Type]["PCItemsLength"]; i++ )
+				PCItems.Add( new ItemEntry( _sections[1], _pointers[Type]["PCItems"] + ( i * 4 ) ) );
 
-			Items = new ItemEntry[_pointers[Type]["ItemsLength"]];
-			for( int i = 0; i < Items.Length; i++ )
-				Items[i] = new ItemEntry( _sections[1], _pointers[Type]["Items"] + ( i * 4 ), Xor );
+			Items = new BindingList<ItemEntry>();
+			for( int i = 0; i < _pointers[Type]["ItemsLength"]; i++ )
+				Items.Add( new ItemEntry( _sections[1], _pointers[Type]["Items"] + ( i * 4 ), Xor ) );
 
-			KeyItems = new ItemEntry[_pointers[Type]["KeyItemsLength"]];
-			for( int i = 0; i < KeyItems.Length; i++ )
-				KeyItems[i] = new ItemEntry( _sections[1], _pointers[Type]["KeyItems"] + ( i * 4 ), Xor );
+			KeyItems = new BindingList<ItemEntry>();
+			for( int i = 0; i < _pointers[Type]["KeyItemsLength"]; i++ )
+				KeyItems.Add( new ItemEntry( _sections[1], _pointers[Type]["KeyItems"] + ( i * 4 ), Xor ) );
 
-			BallPocket = new ItemEntry[_pointers[Type]["BallPocketLength"]];
-			for( int i = 0; i < BallPocket.Length; i++ )
-				BallPocket[i] = new ItemEntry( _sections[1], _pointers[Type]["BallPocket"] + ( i * 4 ), Xor );
+			BallPocket = new BindingList<ItemEntry>();
+			for( int i = 0; i < _pointers[Type]["BallPocketLength"]; i++ )
+				BallPocket.Add( new ItemEntry( _sections[1], _pointers[Type]["BallPocket"] + ( i * 4 ), Xor ) );
 
-			TMCase = new ItemEntry[_pointers[Type]["TMCaseLength"]];
-			for( int i = 0; i < TMCase.Length; i++ )
-				TMCase[i] = new ItemEntry( _sections[1], _pointers[Type]["TMCase"] + ( i * 4 ), Xor );
+			TMCase = new BindingList<ItemEntry>();
+			for( int i = 0; i < _pointers[Type]["TMCaseLength"]; i++ )
+				TMCase.Add( new ItemEntry( _sections[1], _pointers[Type]["TMCase"] + ( i * 4 ), Xor ) );
 
-			Berries = new ItemEntry[_pointers[Type]["BerriesLength"]];
-			for( int i = 0; i < Berries.Length; i++ )
-				Berries[i] = new ItemEntry( _sections[1], _pointers[Type]["Berries"] + ( i * 4 ), Xor );
+			Berries = new BindingList<ItemEntry>();
+			for( int i = 0; i < _pointers[Type]["BerriesLength"]; i++ )
+				Berries.Add( new ItemEntry( _sections[1], _pointers[Type]["Berries"] + ( i * 4 ), Xor ) );
 		}
 
 		void ExtractPcBuffer()
 		{
 			var buffer = new PcBuffer( _sections.Skip( 5 ).ToArray() );
-			PcBuffer = new MonsterEntry[420];
-			for( int i = 0; i < PcBuffer.Length; i++ )
-				PcBuffer[i] = new MonsterEntry( buffer, 4 + ( 80 * i ), true );
+			PcBuffer = new BindingList<MonsterEntry>();
+			for( int i = 0; i < 420; i++ )
+				PcBuffer.Add( new MonsterEntry( buffer, 4 + ( 80 * i ), true ) );
 		}
 
 		void ExtractType()
@@ -317,36 +318,36 @@ namespace PokeSave
 			sb.AppendLine( "    Rival: " + Rival );
 
 			sb.AppendLine( "Teamsize:\t" + TeamSize );
-			for( int i = 0; i < Team.Length; i++ )
+			for( int i = 0; i < Team.Count; i++ )
 				sb.AppendIfNotEmpty( Team[i].Brief(), i );
 
 			sb.AppendLine( "PC Items:" );
-			for( int i = 0; i < PCItems.Length; i++ )
+			for( int i = 0; i < PCItems.Count; i++ )
 				sb.AppendIfNotEmpty( PCItems[i].ToString(), i );
 
 			sb.AppendLine( "Bag Items:" );
-			for( int i = 0; i < Items.Length; i++ )
+			for( int i = 0; i < Items.Count; i++ )
 				sb.AppendIfNotEmpty( Items[i].ToString(), i );
 
 			sb.AppendLine( "Key Items:" );
-			for( int i = 0; i < KeyItems.Length; i++ )
+			for( int i = 0; i < KeyItems.Count; i++ )
 				sb.AppendIfNotEmpty( KeyItems[i].ToString(), i );
 
 			sb.AppendLine( "Ball pocket:" );
-			for( int i = 0; i < BallPocket.Length; i++ )
+			for( int i = 0; i < BallPocket.Count; i++ )
 				sb.AppendIfNotEmpty( BallPocket[i].ToString(), i );
 
 			sb.AppendLine( "TM case:" );
-			for( int i = 0; i < TMCase.Length; i++ )
+			for( int i = 0; i < TMCase.Count; i++ )
 				sb.AppendIfNotEmpty( TMCase[i].ToString(), i );
 
 			sb.AppendLine( "Berries:" );
-			for( int i = 0; i < Berries.Length; i++ )
+			for( int i = 0; i < Berries.Count; i++ )
 				sb.AppendIfNotEmpty( Berries[i].ToString(), i );
 
 			sb.AppendLine( "PC buffer:" );
 			var pre = string.Empty;
-			for( int i = 0; i < PcBuffer.Length; i++ )
+			for( int i = 0; i < PcBuffer.Count; i++ )
 			{
 				if( i % 30 == 0 )
 				{
@@ -367,6 +368,14 @@ namespace PokeSave
 
 			foreach( GameSection s in _originalOrderSections )
 				s.Write( stream );
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public void InvokePropertyChanged( string e )
+		{
+			if( PropertyChanged != null )
+				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
 		}
 	}
 }

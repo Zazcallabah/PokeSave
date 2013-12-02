@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
 
 namespace PokeSave
 {
-	public class SaveFile
+	public class SaveFile : INotifyPropertyChanged
 	{
 		readonly byte[] _tail;
 
@@ -27,6 +28,7 @@ namespace PokeSave
 			{
 				inputstream.Close();
 			}
+			Latest.PropertyChanged += ( a, e ) => InvokePropertyChanged( "Latest" );
 		}
 
 		public GameSave A { get; private set; }
@@ -87,6 +89,14 @@ namespace PokeSave
 				B.Save( fs );
 				fs.Write( _tail, 0, _tail.Length );
 			}
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public void InvokePropertyChanged( string e )
+		{
+			if( PropertyChanged != null )
+				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
 		}
 	}
 }

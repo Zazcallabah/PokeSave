@@ -1,4 +1,6 @@
 using System;
+using System.Collections;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -29,14 +31,14 @@ namespace PokeConsoleClient
 
 			var target = carry.Property.GetValue( carry.Parent, null );
 
-			if( !( target is Array ) )
+			if( !( target is IList ) )
 				return target.ToString();
 
 			if( carry.Index != null )
-				return ( (Array) target ).GetValue( carry.Index.Value ).ToString();
+				return ( (IList) target )[carry.Index.Value].ToString();
 
 			var sb = new StringBuilder();
-			foreach( var entry in (Array) target )
+			foreach( var entry in (IList) target )
 				sb.AppendLine( entry.ToString() );
 			sb.AppendLine( "index into array using []" );
 			return sb.ToString();
@@ -58,8 +60,8 @@ namespace PokeConsoleClient
 			if( carrier.Property != null )
 			{
 				carrier.Parent = carrier.Property.GetValue( carrier.Parent, null );
-				if( carrier.Parent is Array && carrier.Index.HasValue )
-					carrier.Parent = ( (Array) carrier.Parent ).GetValue( carrier.Index.Value );
+				if( carrier.Parent is IList && carrier.Index.HasValue )
+					carrier.Parent = ( (IList) carrier.Parent )[carrier.Index.Value];
 			}
 		}
 
@@ -112,7 +114,7 @@ namespace PokeConsoleClient
 
 			var propertyType = carry.Property.PropertyType;
 
-			if( propertyType.IsArray )
+			if( carry.Property.PropertyType.IsGenericType && carry.Property.PropertyType.GetGenericTypeDefinition() == typeof( BindingList<> ) )
 				return "you cant set array";
 
 			try
@@ -168,8 +170,8 @@ namespace PokeConsoleClient
 			if( carry.Property == null )
 				return ConstructPropertyListFromType( carry.Parent.GetType() );
 
-			if( carry.Property.PropertyType.IsArray )
-				return ConstructPropertyListFromType( carry.Property.PropertyType.GetElementType() );
+			if( carry.Property.PropertyType.IsGenericType && carry.Property.PropertyType.GetGenericTypeDefinition() == typeof( BindingList<> ) )
+				return ConstructPropertyListFromType( carry.Property.PropertyType.GetGenericArguments()[0] );
 
 			if( carry.Property.PropertyType.IsEnum )
 				return ConstructEnumValuesList( carry.Property.PropertyType );
