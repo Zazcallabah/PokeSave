@@ -302,26 +302,32 @@ namespace PokeSave
 		void ExtractItems()
 		{
 			PCItems = new BindingList<ItemEntry>();
+			PCItems.ListChanged += ( a, e ) => InvokePropertyChanged( "PCItems" );
 			for( int i = 0; i < _pointers[Type]["PCItemsLength"]; i++ )
 				PCItems.Add( new ItemEntry( _sections[1], _pointers[Type]["PCItems"] + ( i * 4 ) ) );
 
 			Items = new BindingList<ItemEntry>();
+			Items.ListChanged += ( a, e ) => InvokePropertyChanged( "Items" );
 			for( int i = 0; i < _pointers[Type]["ItemsLength"]; i++ )
 				Items.Add( new ItemEntry( _sections[1], _pointers[Type]["Items"] + ( i * 4 ), Xor ) );
 
 			KeyItems = new BindingList<ItemEntry>();
+			KeyItems.ListChanged += ( a, e ) => InvokePropertyChanged( "KeyItems" );
 			for( int i = 0; i < _pointers[Type]["KeyItemsLength"]; i++ )
 				KeyItems.Add( new ItemEntry( _sections[1], _pointers[Type]["KeyItems"] + ( i * 4 ), Xor ) );
 
 			BallPocket = new BindingList<ItemEntry>();
+			BallPocket.ListChanged += ( a, e ) => InvokePropertyChanged( "BallPocket" );
 			for( int i = 0; i < _pointers[Type]["BallPocketLength"]; i++ )
 				BallPocket.Add( new ItemEntry( _sections[1], _pointers[Type]["BallPocket"] + ( i * 4 ), Xor ) );
 
 			TMCase = new BindingList<ItemEntry>();
+			TMCase.ListChanged += ( a, e ) => InvokePropertyChanged( "TMCase" );
 			for( int i = 0; i < _pointers[Type]["TMCaseLength"]; i++ )
 				TMCase.Add( new ItemEntry( _sections[1], _pointers[Type]["TMCase"] + ( i * 4 ), Xor ) );
 
 			Berries = new BindingList<ItemEntry>();
+			Berries.ListChanged += ( a, e ) => InvokePropertyChanged( "Berries" );
 			for( int i = 0; i < _pointers[Type]["BerriesLength"]; i++ )
 				Berries.Add( new ItemEntry( _sections[1], _pointers[Type]["Berries"] + ( i * 4 ), Xor ) );
 		}
@@ -330,6 +336,7 @@ namespace PokeSave
 		{
 			var buffer = new PcBuffer( _sections.Skip( 5 ).ToArray() );
 			PcBuffer = new BindingList<MonsterEntry>();
+			PcBuffer.ListChanged += ( a, e ) => InvokePropertyChanged( "PcBuffer" );
 			for( int i = 0; i < 420; i++ )
 				PcBuffer.Add( new MonsterEntry( buffer, 4 + ( 80 * i ), true ) );
 		}

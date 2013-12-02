@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -230,6 +232,16 @@ namespace TestProject1
 				Assert.AreEqual( i, _file.Latest.Team[i].Mark );
 				Assert.IsFalse( _file.Latest.Team[i].IsDirty );
 			}
+		}
+
+		[Test]
+		public void ChangingItemCountTriggersChange()
+		{
+			int count = 0;
+			_file.PropertyChanged += ( a, e ) => count++;
+			_file.Latest.Items[0].Count = 44;
+
+			Assert.AreEqual( 1, count );
 		}
 
 		[Test]
