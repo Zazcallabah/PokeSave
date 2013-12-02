@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
+using PokeConsoleClient;
 using PokeSave;
-using PokeSave.Client;
 
 namespace TestProject1
 {

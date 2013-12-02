@@ -1,6 +1,7 @@
 using System.IO;
+using PokeSave;
 
-namespace PokeSave.Client
+namespace PokeConsoleClient
 {
 	public class SimpleCommandLineClient
 	{

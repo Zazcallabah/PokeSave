@@ -1,5 +1,5 @@
 
-namespace PokeSave.Client
+namespace PokeConsoleClient
 {
 	public class Command
 	{

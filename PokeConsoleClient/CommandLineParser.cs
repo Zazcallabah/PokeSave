@@ -3,8 +3,9 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using PokeSave;
 
-namespace PokeSave.Client
+namespace PokeConsoleClient
 {
 	public class CommandLineParser
 	{

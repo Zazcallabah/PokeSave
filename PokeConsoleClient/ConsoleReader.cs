@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PokeSave.Client
+namespace PokeConsoleClient
 {
 	internal class ConsoleReader : IComms
 	{

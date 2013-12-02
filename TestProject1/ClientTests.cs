@@ -3,8 +3,8 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 using NUnit.Framework;
+using PokeConsoleClient;
 using PokeSave;
-using PokeSave.Client;
 
 namespace TestProject1
 {

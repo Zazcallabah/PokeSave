@@ -1,6 +1,5 @@
-﻿using PokeSave.Client;
-
-namespace PokeSave
+﻿
+namespace PokeConsoleClient
 {
 	internal class Program
 	{

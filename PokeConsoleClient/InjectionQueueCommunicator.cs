@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PokeSave.Client
+namespace PokeConsoleClient
 {
 	public class InjectionQueueCommunicator
 	{

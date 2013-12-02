@@ -5,6 +5,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeSave", "PokeSave\PokeSa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{24CCAE02-4831-4BBF-801D-81FFC7353E27}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeEdit", "PokeEdit\PokeEdit.csproj", "{FF5416E3-C843-48D5-BAD5-AC02782BC241}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PokeConsoleClient", "PokeConsoleClient\PokeConsoleClient.csproj", "{96C9322B-F642-4C99-8A2C-E31C9BBD35AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +23,14 @@ Global
 		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24CCAE02-4831-4BBF-801D-81FFC7353E27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF5416E3-C843-48D5-BAD5-AC02782BC241}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF5416E3-C843-48D5-BAD5-AC02782BC241}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF5416E3-C843-48D5-BAD5-AC02782BC241}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF5416E3-C843-48D5-BAD5-AC02782BC241}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96C9322B-F642-4C99-8A2C-E31C9BBD35AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96C9322B-F642-4C99-8A2C-E31C9BBD35AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96C9322B-F642-4C99-8A2C-E31C9BBD35AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96C9322B-F642-4C99-8A2C-E31C9BBD35AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

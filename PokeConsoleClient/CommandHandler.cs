@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace PokeSave.Client
+namespace PokeConsoleClient
 {
 	public class CommandHandler
 	{
