@@ -25,25 +25,6 @@ namespace PokeConsoleClient
 			_handler = commandsfile;
 		}
 
-		void SaveFileWithBackup( string name )
-		{
-			if( _current == null )
-			{
-				_com.WriteLine( "No file chosen" );
-				return;
-			}
-
-			if( File.Exists( name ) )
-			{
-				string tmp = name;
-				int i = 1;
-				while( File.Exists( tmp ) )
-					tmp = name + "." + ( i++ );
-				File.Move( name, tmp );
-			}
-			_current.Save( name );
-		}
-
 		public void Run( string[] args )
 		{
 			_com.WriteLine( "ld, st, l, r, w, p" );
@@ -57,7 +38,7 @@ namespace PokeConsoleClient
 				if( input.StartsWith( "ld" ) )
 					LoadFile( input );
 				else if( input.StartsWith( "st" ) )
-					SaveFileWithBackup( input.Substring( 2 ).Trim() );
+					SaveFile( input.Substring( 2 ).Trim() );
 				else if( input.StartsWith( "p" ) )
 					_com.WriteLine( _current == null ? "No file chosen" : _current.Latest.ToString() );
 				else if( input.StartsWith( "l" ) )
@@ -88,6 +69,16 @@ namespace PokeConsoleClient
 						_com.Inject( lines.Actions );
 				}
 			}
+		}
+
+		void SaveFile( string name )
+		{
+			if( _current == null )
+			{
+				_com.WriteLine( "No file chosen" );
+				return;
+			}
+			_current.SaveAs( name );
 		}
 
 		void LoadFile( string input )

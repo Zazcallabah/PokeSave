@@ -10,12 +10,13 @@ namespace PokeSave
 	public class SaveFile : INotifyPropertyChanged
 	{
 		readonly byte[] _tail;
+		readonly string _originalFileName;
 
 		public SaveFile( string name )
-			: this( File.OpenRead( name ) ) { }
-
-		public SaveFile( Stream inputstream )
 		{
+			_originalFileName = name;
+			var inputstream = File.OpenRead( name );
+
 			try
 			{
 				A = new GameSave( inputstream );
@@ -81,15 +82,35 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
-		public void Save( string file )
+		void SaveFileWithBackup( string name )
 		{
-			using( FileStream fs = File.OpenWrite( file ) )
+			if( File.Exists( name ) )
+			{
+				string tmp = name;
+				int i = 1;
+				while( File.Exists( tmp ) )
+					tmp = name + "." + ( i++ );
+				File.Move( name, tmp );
+			}
+
+			using( FileStream fs = File.OpenWrite( name ) )
 			{
 				A.Save( fs );
 				B.Save( fs );
 				fs.Write( _tail, 0, _tail.Length );
 			}
 		}
+
+		public void Save()
+		{
+			SaveFileWithBackup( _originalFileName );
+		}
+
+		public void SaveAs( string name )
+		{
+			SaveFileWithBackup( name );
+		}
+
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
