@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Text;
 
 namespace PokeSave
@@ -28,6 +29,13 @@ namespace PokeSave
 				{
 					Recrypt( value, OriginalTrainerId );
 					InvokePropertyChanged( "Personality" );
+					InvokePropertyChanged( "Shiny" );
+					InvokePropertyChanged( "Gender" );
+					InvokePropertyChanged( "GenderByte" );
+					InvokePropertyChanged( "Ability" );
+					InvokePropertyChanged( "AbilityName" );
+					InvokePropertyChanged( "Nature" );
+					InvokePropertyChanged( "Evolution" );
 				}
 			}
 		}
@@ -59,25 +67,53 @@ namespace PokeSave
 		public string Name
 		{
 			get { return _data.GetText( _offset + 8, 10 ); }
-			set { _data.SetText( _offset + 8, 10, value ); }
+			set
+			{
+				if( Name != value )
+				{
+					_data.SetText( _offset + 8, 10, value );
+					InvokePropertyChanged( "Name" );
+				}
+			}
 		}
 
 		public uint Language
 		{
 			get { return _data.GetShort( _offset + 18 ); }
-			set { _data.SetShort( _offset + 18, value ); }
+			set
+			{
+				if( Language != value )
+				{
+					_data.SetShort( _offset + 18, value );
+					InvokePropertyChanged( "Language" );
+				}
+			}
 		}
 
 		public string OriginalTrainerName
 		{
 			get { return _data.GetText( _offset + 20, 7 ); }
-			set { _data.SetTextRaw( _offset + 20, 7, value ); }
+			set
+			{
+				if( OriginalTrainerName != value )
+				{
+					_data.SetTextRaw( _offset + 20, 7, value );
+					InvokePropertyChanged( "OriginalTrainerName" );
+				}
+			}
 		}
 
 		public uint Mark
 		{
 			get { return _data[_offset + 27]; }
-			set { _data[_offset + 27] = (byte) value; }
+			set
+			{
+				if( Mark != value )
+				{
+					_data[_offset + 27] = (byte) value;
+					InvokePropertyChanged( "Mark" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -105,8 +141,17 @@ namespace PokeSave
 			get { return _storage ? (byte) 0 : (byte) ( _data.GetInt( _offset + 80 ) & 0xFF ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && StatusByte != value )
+				{
 					_data[_offset + 80] = (byte) ( value & 0xff );
+					InvokePropertyChanged( "StatusByte" );
+					InvokePropertyChanged( "Poisoned" );
+					InvokePropertyChanged( "Burned" );
+					InvokePropertyChanged( "Frozen" );
+					InvokePropertyChanged( "Paralyzed" );
+					InvokePropertyChanged( "BadPoisoned" );
+					InvokePropertyChanged( "Sleeping" );
+				}
 			}
 		}
 
@@ -145,8 +190,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data[_offset + 84]; }
 			set
 			{
-				if( !_storage )
+				if( !_storage && Level != value )
+				{
 					_data[_offset + 84] = (byte) value;
+					InvokePropertyChanged( "Level" );
+				}
 			}
 		}
 
@@ -155,8 +203,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data[_offset + 85]; }
 			set
 			{
-				if( !_storage )
+				if( !_storage && Virus != value )
+				{
 					_data[_offset + 85] = (byte) value;
+					InvokePropertyChanged( "Virus" );
+				}
 			}
 		}
 
@@ -165,8 +216,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 86 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && CurrentHP != value )
+				{
 					_data.SetShort( _offset + 86, value );
+					InvokePropertyChanged( "CurrentHP" );
+				}
 			}
 		}
 
@@ -175,8 +229,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 88 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && TotalHP != value )
+				{
 					_data.SetShort( _offset + 88, value );
+					InvokePropertyChanged( "TotalHP" );
+				}
 			}
 		}
 
@@ -185,8 +242,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 90 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && CurrentAttack != value )
+				{
 					_data.SetShort( _offset + 90, value );
+					InvokePropertyChanged( "CurrentAttack" );
+				}
 			}
 		}
 
@@ -195,8 +255,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 92 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && CurrentDefense != value )
+				{
 					_data.SetShort( _offset + 92, value );
+					InvokePropertyChanged( "CurrentDefense" );
+				}
 			}
 		}
 
@@ -205,8 +268,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 94 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && CurrentSpeed != value )
+				{
 					_data.SetShort( _offset + 94, value );
+					InvokePropertyChanged( "CurrentSpeed" );
+				}
 			}
 		}
 
@@ -215,8 +281,11 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 96 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && CurrentSpAttack != value )
+				{
 					_data.SetShort( _offset + 96, value );
+					InvokePropertyChanged( "CurrentSpAttack" );
+				}
 			}
 		}
 
@@ -225,16 +294,28 @@ namespace PokeSave
 			get { return _storage ? 0u : _data.GetShort( _offset + 98 ); }
 			set
 			{
-				if( !_storage )
+				if( !_storage && CurrentSpDefense != value )
+				{
 					_data.SetShort( _offset + 98, value );
+					InvokePropertyChanged( "CurrentSpDefense" );
+				}
 			}
 		}
 
-		//trigger empty
 		public uint MonsterId
 		{
 			get { return GetEncryptedWord( GrowthOffset, true ); }
-			set { SetEncryptedWord( GrowthOffset, true, (ushort) value ); }
+			set
+			{
+				if( MonsterId != value )
+				{
+					SetEncryptedWord( GrowthOffset, true, (ushort) value );
+					InvokePropertyChanged( "Empty" );
+					InvokePropertyChanged( "MonsterId" );
+					InvokePropertyChanged( "Type" );
+					InvokePropertyChanged( "TypeInformation" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -245,19 +326,40 @@ namespace PokeSave
 		public uint Item
 		{
 			get { return GetEncryptedWord( GrowthOffset, false ); }
-			set { SetEncryptedWord( GrowthOffset, false, (ushort) value ); }
+			set
+			{
+				if( Item != value )
+				{
+					SetEncryptedWord( GrowthOffset, false, (ushort) value );
+					InvokePropertyChanged( "Item" );
+				}
+			}
 		}
 
 		public uint XP
 		{
 			get { return GetEncryptedDWord( GrowthOffset + 4 ); }
-			set { SetEncryptedDWord( GrowthOffset + 4, value ); }
+			set
+			{
+				if( XP != value )
+				{
+					SetEncryptedDWord( GrowthOffset + 4, value );
+					InvokePropertyChanged( "XP" );
+				}
+			}
 		}
 
 		public uint Friendship
 		{
 			get { return GetEncryptedByte( GrowthOffset + 8, 1 ); }
-			set { SetEncryptedByte( GrowthOffset + 8, 1, (byte) value ); }
+			set
+			{
+				if( Friendship != value )
+				{
+					SetEncryptedByte( GrowthOffset + 8, 1, (byte) value );
+					InvokePropertyChanged( "Friendship" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -366,7 +468,15 @@ namespace PokeSave
 		public uint Move1
 		{
 			get { return GetEncryptedWord( ActionOffset, true ); }
-			set { SetEncryptedWord( ActionOffset, true, (byte) value ); }
+			set
+			{
+				if( Move1 != value )
+				{
+					SetEncryptedWord( ActionOffset, true, (byte) value );
+					InvokePropertyChanged( "Move1" );
+					InvokePropertyChanged( "Move1Name" );
+				}
+			}
 		}
 
 		public string Move1Name
@@ -377,7 +487,15 @@ namespace PokeSave
 		public uint Move2
 		{
 			get { return GetEncryptedWord( ActionOffset, false ); }
-			set { SetEncryptedWord( ActionOffset, false, (byte) value ); }
+			set
+			{
+				if( Move2 != value )
+				{
+					SetEncryptedWord( ActionOffset, false, (byte) value );
+					InvokePropertyChanged( "Move2" );
+					InvokePropertyChanged( "Move2Name" );
+				}
+			}
 		}
 
 		public string Move2Name
@@ -385,21 +503,38 @@ namespace PokeSave
 			get { return MoveList.Get( Move2 ); }
 		}
 
-		public uint Move4
+		public uint Move3
 		{
-			get { return GetEncryptedWord( ActionOffset + 4, false ); }
-			set { SetEncryptedWord( ActionOffset + 4, false, (byte) value ); }
-		}
+			get { return GetEncryptedWord( ActionOffset + 4, true ); }
+			set
+			{
 
+				if( Move3 != value )
+				{
+					SetEncryptedWord( ActionOffset + 4, true, (byte) value );
+					InvokePropertyChanged( "Move3" );
+					InvokePropertyChanged( "Move3Name" );
+				}
+			}
+		}
 		public string Move3Name
 		{
 			get { return MoveList.Get( Move3 ); }
 		}
 
-		public uint Move3
+		public uint Move4
 		{
-			get { return GetEncryptedWord( ActionOffset + 4, true ); }
-			set { SetEncryptedWord( ActionOffset + 4, true, (byte) value ); }
+			get { return GetEncryptedWord( ActionOffset + 4, false ); }
+			set
+			{
+
+				if( Move4 != value )
+				{
+					SetEncryptedWord( ActionOffset + 4, false, (byte) value );
+					InvokePropertyChanged( "Move4" );
+					InvokePropertyChanged( "Move4Name" );
+				}
+			}
 		}
 
 		public string Move4Name
@@ -410,31 +545,70 @@ namespace PokeSave
 		public uint PP1
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 0 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 0, (byte) value ); }
+			set
+			{
+				if( PP1 != value )
+				{
+					SetEncryptedByte( ActionOffset + 8, 0, (byte) value );
+					InvokePropertyChanged( "PP1" );
+				}
+			}
 		}
 
 		public uint PP2
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 1 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 1, (byte) value ); }
+			set
+			{
+				if( PP2 != value )
+				{
+					SetEncryptedByte( ActionOffset + 8, 1, (byte) value );
+					InvokePropertyChanged( "PP2" );
+				}
+			}
 		}
 
 		public uint PP3
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 2 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 2, (byte) value ); }
+			set
+			{
+				if( PP3 != value )
+				{
+					SetEncryptedByte( ActionOffset + 8, 2, (byte) value );
+					InvokePropertyChanged( "PP3" );
+				}
+			}
 		}
 
 		public uint PP4
 		{
 			get { return GetEncryptedByte( ActionOffset + 8, 3 ); }
-			set { SetEncryptedByte( ActionOffset + 8, 3, (byte) value ); }
+			set
+			{
+				if( PP4 != value )
+				{
+					SetEncryptedByte( ActionOffset + 8, 3, (byte) value );
+					InvokePropertyChanged( "PP4" );
+				}
+			}
 		}
 
 		public uint PPBonus
 		{
 			get { return GetEncryptedByte( GrowthOffset + 8, 0 ); }
-			set { SetEncryptedByte( GrowthOffset + 8, 0, (byte) value ); }
+			set
+			{
+				if( PPBonus != value )
+				{
+					SetEncryptedByte( GrowthOffset + 8, 0, (byte) value );
+					InvokePropertyChanged( "PPBonus" );
+					InvokePropertyChanged( "PPBonus1" );
+					InvokePropertyChanged( "PPBonus2" );
+					InvokePropertyChanged( "PPBonus3" );
+					InvokePropertyChanged( "PPBonus4" );
+				}
+			}
 		}
 
 		public uint PPBonus1
@@ -465,75 +639,158 @@ namespace PokeSave
 		public uint HPEV
 		{
 			get { return GetEncryptedByte( EVsOffset, 0 ); }
-			set { SetEncryptedByte( EVsOffset, 0, (byte) value ); }
+			set
+			{
+				if( HPEV != value )
+				{
+					SetEncryptedByte( EVsOffset, 0, (byte) value );
+					InvokePropertyChanged( "HPEV" );
+				}
+			}
 		}
 
 		public uint AttackEV
 		{
 			get { return GetEncryptedByte( EVsOffset, 1 ); }
-			set { SetEncryptedByte( EVsOffset, 1, (byte) value ); }
+			set
+			{
+				if( AttackEV != value )
+				{
+					SetEncryptedByte( EVsOffset, 1, (byte) value );
+					InvokePropertyChanged( "AttackEV" );
+				}
+			}
 		}
 
 		public uint DefenseEV
 		{
 			get { return GetEncryptedByte( EVsOffset, 2 ); }
-			set { SetEncryptedByte( EVsOffset, 2, (byte) value ); }
+			set
+			{
+				if( DefenseEV != value )
+				{
+					SetEncryptedByte( EVsOffset, 2, (byte) value );
+					InvokePropertyChanged( "DefenseEV" );
+				}
+			}
 		}
 
 		public uint SpeedEV
 		{
 			get { return GetEncryptedByte( EVsOffset, 3 ); }
-			set { SetEncryptedByte( EVsOffset, 3, (byte) value ); }
+			set
+			{
+				if( SpeedEV != value )
+				{
+					SetEncryptedByte( EVsOffset, 3, (byte) value );
+					InvokePropertyChanged( "SpeedEV" );
+				}
+			}
 		}
 
 		public uint SpAttackEV
 		{
 			get { return GetEncryptedByte( EVsOffset + 4, 0 ); }
-			set { SetEncryptedByte( EVsOffset + 4, 0, (byte) value ); }
+			set
+			{
+				if( SpAttackEV != value )
+				{
+					SetEncryptedByte( EVsOffset + 4, 0, (byte) value );
+					InvokePropertyChanged( "SpAttackEV" );
+				}
+			}
 		}
 
 		public uint SpDefenseEV
 		{
 			get { return GetEncryptedByte( EVsOffset + 4, 1 ); }
-			set { SetEncryptedByte( EVsOffset + 4, 1, (byte) value ); }
+			set
+			{
+				if( SpDefenseEV != value )
+				{
+					SetEncryptedByte( EVsOffset + 4, 1, (byte) value );
+					InvokePropertyChanged( "SpDefenseEV" );
+				}
+			}
 		}
 
 		public uint Coolness
 		{
 			get { return GetEncryptedByte( EVsOffset + 4, 2 ); }
-			set { SetEncryptedByte( EVsOffset + 4, 2, (byte) value ); }
+			set
+			{
+				if( Coolness != value )
+				{
+					SetEncryptedByte( EVsOffset + 4, 2, (byte) value );
+					InvokePropertyChanged( "Coolness" );
+				}
+			}
 		}
 
 		public uint Beauty
 		{
 			get { return GetEncryptedByte( EVsOffset + 4, 3 ); }
-			set { SetEncryptedByte( EVsOffset + 4, 3, (byte) value ); }
+			set
+			{
+				if( Beauty != value )
+				{
+					SetEncryptedByte( EVsOffset + 4, 3, (byte) value );
+					InvokePropertyChanged( "Beauty" );
+				}
+			}
 		}
 
 		public uint Cuteness
 		{
 			get { return GetEncryptedByte( EVsOffset + 8, 0 ); }
-			set { SetEncryptedByte( EVsOffset + 8, 0, (byte) value ); }
+			set
+			{
+				if( Cuteness != value )
+				{
+					SetEncryptedByte( EVsOffset + 8, 0, (byte) value );
+					InvokePropertyChanged( "Cuteness" );
+				}
+			}
 		}
 
 		public uint Smartness
 		{
 			get { return GetEncryptedByte( EVsOffset + 8, 1 ); }
-			set { SetEncryptedByte( EVsOffset + 8, 1, (byte) value ); }
+			set
+			{
+				if( Smartness != value )
+				{
+					SetEncryptedByte( EVsOffset + 8, 1, (byte) value );
+					InvokePropertyChanged( "Smartness" );
+				}
+			}
 		}
 
 		public uint Toughness
 		{
 			get { return GetEncryptedByte( EVsOffset + 8, 2 ); }
-			set { SetEncryptedByte( EVsOffset + 8, 2, (byte) value ); }
+			set
+			{
+				if( Toughness != value )
+				{
+					SetEncryptedByte( EVsOffset + 8, 2, (byte) value );
+					InvokePropertyChanged( "Toughness" );
+				}
+			}
 		}
 
 		public uint Feel
 		{
 			get { return GetEncryptedByte( EVsOffset + 8, 3 ); }
-			set { SetEncryptedByte( EVsOffset + 8, 3, (byte) value ); }
+			set
+			{
+				if( Feel != value )
+				{
+					SetEncryptedByte( EVsOffset + 8, 3, (byte) value );
+					InvokePropertyChanged( "Feel" );
+				}
+			}
 		}
-
 
 		public uint UnownShape
 		{
@@ -556,31 +813,73 @@ namespace PokeSave
 		public uint VirusStatus
 		{
 			get { return GetEncryptedByte( MiscOffset, 0 ); }
-			set { SetEncryptedByte( MiscOffset, 0, (byte) value ); }
+			set
+			{
+				if( VirusStatus != value )
+				{
+					SetEncryptedByte( MiscOffset, 0, (byte) value );
+					InvokePropertyChanged( "VirusStatus" );
+					InvokePropertyChanged( "Immune" );
+					InvokePropertyChanged( "VirusStrain" );
+					InvokePropertyChanged( "VirusFade" );
+				}
+			}
 		}
 
 		public uint MetLocation
 		{
 			get { return GetEncryptedByte( MiscOffset, 1 ); }
-			set { SetEncryptedByte( MiscOffset, 1, (byte) value ); }
+			set
+			{
+				if( MetLocation != value )
+				{
+					SetEncryptedByte( MiscOffset, 1, (byte) value );
+					InvokePropertyChanged( "MetLocation" );
+				}
+			}
 		}
 
 		public uint OriginInfo
 		{
 			get { return GetEncryptedWord( MiscOffset, false ); }
-			set { SetEncryptedWord( MiscOffset, false, (ushort) value ); }
+			set
+			{
+				if( OriginInfo != value )
+				{
+					SetEncryptedWord( MiscOffset, false, (ushort) value );
+					InvokePropertyChanged( "OriginInfo" );
+					InvokePropertyChanged( "OriginalTrainerGender" );
+					InvokePropertyChanged( "BallCaught" );
+					InvokePropertyChanged( "GameOfOrigin" );
+					InvokePropertyChanged( "LevelMet" );
+				}
+			}
 		}
 
 		public uint IVs
 		{
 			get { return GetEncryptedDWord( MiscOffset + 4 ); }
-			set { SetEncryptedDWord( MiscOffset + 4, value ); }
+			set
+			{
+				if( IVs != value )
+				{
+					SetEncryptedDWord( MiscOffset + 4, value );
+					InvokePropertyChanged( "IVs" );
+				}
+			}
 		}
 
 		public uint Ribbons
 		{
 			get { return GetEncryptedDWord( MiscOffset + 8 ); }
-			set { SetEncryptedDWord( MiscOffset + 8, value ); }
+			set
+			{
+				if( Ribbons != value )
+				{
+					SetEncryptedDWord( MiscOffset + 8, value );
+					InvokePropertyChanged( "Ribbons" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -716,6 +1015,12 @@ namespace PokeSave
 					CurrentSpAttack = SpAttackEV;
 					CurrentSpDefense = SpDefenseEV;
 					CurrentSpeed = SpeedEV;
+				}
+
+				foreach( var prop in GetType().GetProperties() )
+				{
+					InvokePropertyChanged( prop.Name );
+					Debug.WriteLine( prop.Name );
 				}
 			}
 		}
