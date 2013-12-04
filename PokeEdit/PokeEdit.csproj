@@ -70,6 +70,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="MonsterEntryPanel.xaml.cs">
+      <DependentUpon>MonsterEntryPanel.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MonsterListPanel.xaml.cs">
+      <DependentUpon>MonsterListPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ItemListPanel.xaml.cs">
       <DependentUpon>ItemListPanel.xaml</DependentUpon>
     </Compile>
@@ -82,6 +89,14 @@
     <Compile Include="SaveControl.xaml.cs">
       <DependentUpon>SaveControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="MonsterEntryPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="MonsterListPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="ItemListPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

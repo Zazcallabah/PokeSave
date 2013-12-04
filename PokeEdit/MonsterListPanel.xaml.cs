@@ -5,9 +5,9 @@ using PokeSave;
 
 namespace PokeEdit
 {
-	public partial class ItemListPanel : UserControl
+	public partial class MonsterListPanel : UserControl
 	{
-		public ItemListPanel()
+		public MonsterListPanel()
 		{
 			InitializeComponent();
 		}
@@ -20,11 +20,11 @@ namespace PokeEdit
 
 		void ActivateNextClicked( object sender, RoutedEventArgs e )
 		{
-			foreach( var item in (BindingList<ItemEntry>) DataContext )
+			foreach( var entry in (BindingList<MonsterEntry>) DataContext )
 			{
-				if( item.Empty )
+				if( entry.Empty )
 				{
-					item.ID = 13;
+					entry.MonsterId = 1;
 					return;
 				}
 			}

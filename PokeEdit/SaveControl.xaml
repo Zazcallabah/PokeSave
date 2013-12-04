@@ -20,11 +20,13 @@
 		<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding Latest}" />
 		<PokeEdit:ReadOnlyPropertyPanel PropertyName="GameCode" DataContext="{Binding Latest}" />
 		<PokeEdit:ReadOnlyPropertyPanel PropertyName="SaveIndex" DataContext="{Binding Latest}" />
+		<PokeEdit:MonsterListPanel Header="Team" DataContext="{Binding Latest.Team,Mode=OneWay}" />
 		<PokeEdit:ItemListPanel Header="Items" DataContext="{Binding Latest.Items,Mode=OneWay}" />
 		<PokeEdit:ItemListPanel Header="Key Items" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
 		<PokeEdit:ItemListPanel Header="TM Case" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
 		<PokeEdit:ItemListPanel Header="Ball Pocket" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
 		<PokeEdit:ItemListPanel Header="Berries" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
 		<PokeEdit:ItemListPanel Header="PC Items" DataContext="{Binding Latest.PcItems,Mode=OneWay}" />
+		<PokeEdit:MonsterListPanel Header="PC Buffer" DataContext="{Binding Latest.PcBuffer,Mode=OneWay}" />
 	</StackPanel>
 </UserControl>

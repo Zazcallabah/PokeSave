@@ -230,6 +230,7 @@ namespace PokeSave
 			}
 		}
 
+		//trigger empty
 		public uint MonsterId
 		{
 			get { return GetEncryptedWord( GrowthOffset, true ); }
@@ -681,6 +682,7 @@ namespace PokeSave
 		/// <summary>
 		/// Writing to team from pc buffer requires you to deposit and withdraw from pc ingame to get correct values.
 		/// </summary>
+		// trigger empty
 		public byte[] RawData
 		{
 			get
@@ -927,6 +929,19 @@ namespace PokeSave
 		{
 			if( PropertyChanged != null )
 				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
+		}
+
+		public void MakeOwn( GameSave save )
+		{
+			OriginalTrainerId = save.TrainerId;
+			OriginalTrainerGender = save.Gender;
+			OriginalTrainerName = save.Name;
+			GameOfOrigin = save.GameCode; // NOT CORRECT
+		}
+
+		public void Clear()
+		{
+			RawData = new byte[100];
 		}
 	}
 }
