@@ -19,6 +19,11 @@ namespace PokeSave
 			_xor = xor;
 		}
 
+		public bool Empty
+		{
+			get { return ID == 0 && Count == 0; }
+		}
+
 		public uint ID
 		{
 			get { return _data.GetShort( _offset ); }
@@ -29,14 +34,20 @@ namespace PokeSave
 					_data.SetShort( _offset, value );
 					InvokePropertyChanged( "ID" );
 					InvokePropertyChanged( "Name" );
+					InvokePropertyChanged( "Empty" );
 				}
 			}
 		}
 
+		public string[] Names
+		{
+			get { return ItemList.All(); }
+		}
 
 		public string Name
 		{
 			get { return ItemList.Get( ID ); }
+			set { ID = ItemList.Set( value ); }
 		}
 
 		public uint Count
@@ -52,6 +63,7 @@ namespace PokeSave
 				{
 					_data.SetShort( _offset + 2, ( _xor == null ) ? value : _xor.RunLower( value ) );
 					InvokePropertyChanged( "Count" );
+					InvokePropertyChanged( "Empty" );
 				}
 			}
 		}

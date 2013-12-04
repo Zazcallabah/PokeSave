@@ -176,7 +176,7 @@ namespace TestProject1
 		[Test]
 		public void CanListPossibleValues()
 		{
-			Assert.AreEqual( "ID (UInt32)\r\nName (String)\r\nCount (UInt32)\r\n",
+			Assert.AreEqual( "Empty (Boolean)\r\nID (UInt32)\r\nNames (String[])\r\nName (String)\r\nCount (UInt32)\r\n",
 				_c.List( _sf, "pcitems[0]" ) );
 		}
 

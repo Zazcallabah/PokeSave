@@ -22,10 +22,19 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void CanReadMonsterRawData()
+		{
+			var b = _saveA.Team[0].RawData;
+		}
+
+
+
+		[Test]
 		public void MonsterListParse()
 		{
 			Assert.AreEqual( "BULBASAUR", NameList.Get( 1 ) );
 		}
+
 		[Test]
 		public void SaveHasTrainerData()
 		{
@@ -38,6 +47,7 @@ namespace TestProject1
 			Assert.AreEqual( 0, _saveA.Team[0].StatusByte );
 			Debug.WriteLine( _saveA.Team[0].Full() );
 		}
+
 		[Test]
 		public void BaseStatsAreCorrect()
 		{

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -23,6 +21,15 @@ namespace TestProject1
 			Debug.WriteLine( _file );
 		}
 
+
+
+		[Test]
+		public void CanReadMonsterRawData()
+		{
+			_file.Latest.Team[0].RawData = _file.Latest.PcBuffer[0].RawData;
+			Assert.AreEqual( "PIDGEY", _file.Latest.Team[0].Name );
+			_file.SaveAs( "tmp.sav" );
+		}
 
 		[Test]
 		public void TeamCorrectMoveName()
@@ -53,7 +60,7 @@ namespace TestProject1
 			_file.Latest.Team[0].PPBonus3 = 1;
 			_file.Latest.Team[0].PPBonus4 = 0;
 			Assert.IsTrue( _file.Latest.Team[0].IsDirty );
-			_file.Save( "tmp.sav" );
+			_file.SaveAs( "tmp.sav" );
 			Assert.IsFalse( _file.Latest.Team[0].IsDirty );
 			Assert.AreEqual( 0, _file.Latest.Team[0].PPBonus4 );
 			Assert.AreEqual( 1, _file.Latest.Team[0].PPBonus3 );
@@ -207,7 +214,7 @@ namespace TestProject1
 			_file.Latest.Team[0].MonsterId = 277;
 			Assert.AreEqual( 277, _file.Latest.Team[0].MonsterId );
 			Assert.AreNotEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
-			_file.Save( "upd.sav" );
+			_file.SaveAs( "upd.sav" );
 			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
 		}
 
@@ -226,7 +233,7 @@ namespace TestProject1
 			{
 				Assert.IsFalse( t.IsDirty );
 			}
-			_file.Save( "tmp.sav" );
+			_file.SaveAs( "tmp.sav" );
 			for( int i = 0; i < _file.Latest.Team.Count; i++ )
 			{
 				Assert.AreEqual( i, _file.Latest.Team[i].Mark );
@@ -241,7 +248,7 @@ namespace TestProject1
 			_file.PropertyChanged += ( a, e ) => count++;
 			_file.Latest.Items[0].Count = 44;
 
-			Assert.AreEqual( 1, count );
+			Assert.AreEqual( 2, count );
 		}
 
 		[Test]
@@ -495,7 +502,7 @@ namespace TestProject1
 		public void AfterSaveFileHasSameSize()
 		{
 			var f = new SaveFile( "p.sav" );
-			f.Save( "tmp.sav" );
+			f.SaveAs( "tmp.sav" );
 
 			Assert.AreEqual( new FileInfo( "p.sav" ).Length, new FileInfo( "tmp.sav" ).Length );
 		}
@@ -590,7 +597,7 @@ namespace TestProject1
 				}
 			}
 
-			_file.Save( "outtmp.sav" );
+			_file.SaveAs( "outtmp.sav" );
 			var f2 = new SaveFile( "outtmp.sav" );
 			foreach( var p in f2.Latest.Team )
 			{
