@@ -1,9 +1,10 @@
 using System;
+using System.ComponentModel;
 using System.Text;
 
 namespace PokeSave
 {
-	public class MonsterEntry
+	public class MonsterEntry : INotifyPropertyChanged
 	{
 		readonly GameSection _data;
 		readonly int _offset;
@@ -21,7 +22,14 @@ namespace PokeSave
 		public uint Personality
 		{
 			get { return _data.GetInt( _offset ); }
-			set { Recrypt( value, OriginalTrainerId ); }
+			set
+			{
+				if( Personality != value )
+				{
+					Recrypt( value, OriginalTrainerId );
+					InvokePropertyChanged( "Personality" );
+				}
+			}
 		}
 
 		/// <summary>
@@ -30,7 +38,22 @@ namespace PokeSave
 		public uint OriginalTrainerId
 		{
 			get { return _data.GetInt( _offset + 4 ); }
-			set { Recrypt( Shiny ? new PersonalityEngine( this ) { OriginalTrainer = value }.Generate() : Personality, value ); }
+			set
+			{
+				if( OriginalTrainerId != value )
+				{
+					if( Shiny )
+					{
+						Recrypt( new PersonalityEngine( this ) { OriginalTrainer = value }.Generate(), value );
+						InvokePropertyChanged( "Personality" );
+					}
+					else
+					{
+						Recrypt( Personality, value );
+					}
+					InvokePropertyChanged( "OriginalTrainerId" );
+				}
+			}
 		}
 
 		public string Name
@@ -655,6 +678,46 @@ namespace PokeSave
 			get { return MonsterList.Get( MonsterId ); }
 		}
 
+		/// <summary>
+		/// Writing to team from pc buffer requires you to deposit and withdraw from pc ingame to get correct values.
+		/// </summary>
+		public byte[] RawData
+		{
+			get
+			{
+				var arr = new byte[_storage ? 80 : 100];
+				for( var i = 0; i < arr.Length; i++ )
+				{
+					arr[i] = _data[_offset + i];
+				}
+				return arr;
+			}
+
+			set
+			{
+				if( value.Length != 80 && value.Length != 100 )
+					throw new ArgumentException( "invalid array length" );
+				for( var i = 0; i < ( _storage ? 80 : 100 ); i++ )
+				{
+					if( i >= value.Length )
+						_data[_offset + i] = 0;
+					else
+						_data[_offset + i] = value[i];
+				}
+
+				if( !_storage && value.Length == 80 )
+				{
+					Level = 1;
+					CurrentHP = TotalHP = HPEV;
+					CurrentAttack = AttackEV;
+					CurrentDefense = DefenseEV;
+					CurrentSpAttack = SpAttackEV;
+					CurrentSpDefense = SpDefenseEV;
+					CurrentSpeed = SpeedEV;
+				}
+			}
+		}
+
 		public uint GetEncryptedDWord( int offset )
 		{
 			return _specificXor.Run( _data.GetInt( offset ) );
@@ -856,6 +919,14 @@ namespace PokeSave
 		public override string ToString()
 		{
 			return Full();
+		}
+
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		public void InvokePropertyChanged( string e )
+		{
+			if( PropertyChanged != null )
+				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
 		}
 	}
 }
