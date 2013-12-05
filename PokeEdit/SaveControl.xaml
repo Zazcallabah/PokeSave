@@ -1,32 +1,44 @@
 ﻿<UserControl x:Class="PokeEdit.SaveControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:PokeEdit="clr-namespace:PokeEdit"
-             mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-
+              xmlns:PokeEdit="clr-namespace:PokeEdit">
 	<StackPanel>
-		<PokeEdit:PropertyPanel PropertyName="Name" DataContext="{Binding Latest}"/>
-		<PokeEdit:PropertyPanel PropertyName="Rival" DataContext="{Binding Latest}"/>
-		<PokeEdit:PropertyPanel Label="Team size" PropertyName="TeamSize" DataContext="{Binding Latest}" />
-		<PokeEdit:PropertyPanel PropertyName="Gender" DataContext="{Binding Latest}" />
-		<PokeEdit:PropertyPanel PropertyName="GenderByte" DataContext="{Binding Latest}" />
-		<PokeEdit:PropertyPanel PropertyName="Money" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="PublicId" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecretId" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="TrainerId" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="TimePlayed" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="GameCode" DataContext="{Binding Latest}" />
-		<PokeEdit:ReadOnlyPropertyPanel PropertyName="SaveIndex" DataContext="{Binding Latest}" />
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Margin="0,0,4,0">
+				<PokeEdit:PropertyPanel PropertyName="Name" DataContext="{Binding Latest}"/>
+				<PokeEdit:PropertyPanel PropertyName="Rival" DataContext="{Binding Latest}"/>
+				<PokeEdit:PropertyPanel Label="Team size" PropertyName="TeamSize" DataContext="{Binding Latest}" />
+				<PokeEdit:PropertyPanel PropertyName="Gender" DataContext="{Binding Latest}" />
+				<PokeEdit:PropertyPanel PropertyName="GenderByte" DataContext="{Binding Latest}" />
+				<PokeEdit:PropertyPanel PropertyName="Money" DataContext="{Binding Latest}" />
+			</StackPanel>
+			<StackPanel>
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="PublicId" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecretId" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="TrainerId" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="TimePlayed" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="GameCode" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel PropertyName="SaveIndex" DataContext="{Binding Latest}" />
+			</StackPanel>
+		</StackPanel>
+
 		<PokeEdit:MonsterListPanel Header="Team" DataContext="{Binding Latest.Team,Mode=OneWay}" />
-		<PokeEdit:ItemListPanel Header="Items" DataContext="{Binding Latest.Items,Mode=OneWay}" />
-		<PokeEdit:ItemListPanel Header="Key Items" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
-		<PokeEdit:ItemListPanel Header="TM Case" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
-		<PokeEdit:ItemListPanel Header="Ball Pocket" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
-		<PokeEdit:ItemListPanel Header="Berries" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
-		<PokeEdit:ItemListPanel Header="PC Items" DataContext="{Binding Latest.PcItems,Mode=OneWay}" />
+
+		<StackPanel Orientation="Horizontal">
+			<StackPanel Margin="0,0,4,0">
+				<PokeEdit:ItemListPanel Header="Items" DataContext="{Binding Latest.Items,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Key Items" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="TM Case" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
+			</StackPanel>
+			<StackPanel>
+				<PokeEdit:ItemListPanel Header="Ball Pocket" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Berries" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="PC Items" DataContext="{Binding Latest.PcItems,Mode=OneWay}" />
+			</StackPanel>
+		</StackPanel>
+
 		<PokeEdit:MonsterListPanel Header="PC Buffer" DataContext="{Binding Latest.PcBuffer,Mode=OneWay}" />
+
 	</StackPanel>
 </UserControl>
