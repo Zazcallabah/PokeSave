@@ -71,6 +71,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="MovePropertyPanel.xaml.cs">
+      <DependentUpon>MovePropertyPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MonsterEntryPanel.xaml.cs">
       <DependentUpon>MonsterEntryPanel.xaml</DependentUpon>
     </Compile>
@@ -89,6 +92,10 @@
     <Compile Include="SaveControl.xaml.cs">
       <DependentUpon>SaveControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="MovePropertyPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MonsterEntryPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
