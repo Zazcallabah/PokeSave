@@ -5,7 +5,7 @@
 	<UserControl.Resources>
 		<PokeEdit:BoolToVisibilityConverter x:Key="VisiblityConverter"/>
 	</UserControl.Resources>
-	<Expander Header="{Binding Name}" Margin="2" BorderBrush="LightGray" BorderThickness="1" Visibility="{Binding Empty, Converter={StaticResource VisiblityConverter}, Mode=OneWay}">
+	<Expander Header="{Binding Name}" Margin="2" BorderBrush="LightGray" BorderThickness="1">
 		<Expander.ContextMenu>
 			<ContextMenu>
 				<MenuItem Header="Copy"  Click="CopyClicked"/>

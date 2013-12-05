@@ -71,14 +71,17 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="PcBoxHolderPanel.xaml.cs">
+      <DependentUpon>PcBoxHolderPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MovePropertyPanel.xaml.cs">
       <DependentUpon>MovePropertyPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="MonsterEntryPanel.xaml.cs">
       <DependentUpon>MonsterEntryPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MonsterListPanel.xaml.cs">
-      <DependentUpon>MonsterListPanel.xaml</DependentUpon>
+    <Compile Include="TeamListPanel.xaml.cs">
+      <DependentUpon>TeamListPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="ItemListPanel.xaml.cs">
       <DependentUpon>ItemListPanel.xaml</DependentUpon>
@@ -92,6 +95,10 @@
     <Compile Include="SaveControl.xaml.cs">
       <DependentUpon>SaveControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="PcBoxHolderPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MovePropertyPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -100,7 +107,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MonsterListPanel.xaml">
+    <Page Include="TeamListPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

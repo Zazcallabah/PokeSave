@@ -167,6 +167,7 @@ namespace PokeSave
 		public BindingList<ItemEntry> TMCase { get; private set; }
 		public BindingList<ItemEntry> Berries { get; private set; }
 
+		public BindingList<Box> Boxes { get; private set; }
 		public string Name
 		{
 			get { return _sections[0].GetText( _pointers[Type]["Name"], 8 ); }
@@ -335,10 +336,18 @@ namespace PokeSave
 		void ExtractPcBuffer()
 		{
 			var buffer = new PcBuffer( _sections.Skip( 5 ).ToArray() );
+			Boxes = new BindingList<Box>();
 			PcBuffer = new BindingList<MonsterEntry>();
 			PcBuffer.ListChanged += ( a, e ) => InvokePropertyChanged( "PcBuffer" );
 			for( int i = 0; i < 420; i++ )
-				PcBuffer.Add( new MonsterEntry( buffer, 4 + ( 80 * i ), true ) );
+			{
+				var entry = new MonsterEntry( buffer, 4 + ( 80 * i ), true );
+				var boxnumber = (int) Math.Floor( i / 30.0 );
+				if( i % 30 == 0 )
+					Boxes.Add( new Box( boxnumber ) );
+				PcBuffer.Add( entry );
+				Boxes[boxnumber].Content.Add( entry );
+			}
 		}
 
 		void ExtractType()

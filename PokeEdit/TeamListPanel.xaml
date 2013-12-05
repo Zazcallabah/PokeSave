@@ -1,0 +1,19 @@
+﻿<UserControl x:Class="PokeEdit.TeamListPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:PokeEdit="clr-namespace:PokeEdit"
+			 Margin="0,2,0,2">
+	<UserControl.Resources>
+		<PokeEdit:BoolToVisibilityConverter x:Key="VisiblityConverter"/>
+	</UserControl.Resources>
+	<StackPanel>
+		<ItemsControl ItemsSource="{Binding}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<PokeEdit:MonsterEntryPanel DataContext="{Binding}" Visibility="{Binding Empty, Converter={StaticResource VisiblityConverter}, Mode=OneWay}"/>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+		<Button Content="Add" Click="ActivateNextClicked" Margin="2"/>
+	</StackPanel>
+</UserControl>

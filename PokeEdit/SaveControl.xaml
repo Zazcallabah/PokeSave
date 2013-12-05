@@ -23,7 +23,9 @@
 			</StackPanel>
 		</StackPanel>
 
-		<PokeEdit:MonsterListPanel Header="Team" DataContext="{Binding Latest.Team,Mode=OneWay}" />
+		<Expander Header="Team" BorderBrush="Gray" BorderThickness="1">
+			<PokeEdit:TeamListPanel DataContext="{Binding Latest.Team,Mode=OneWay}" />
+		</Expander>
 
 		<StackPanel Orientation="Horizontal">
 			<StackPanel Margin="0,0,4,0">
@@ -38,7 +40,7 @@
 			</StackPanel>
 		</StackPanel>
 
-		<PokeEdit:MonsterListPanel Header="PC Buffer" DataContext="{Binding Latest.PcBuffer,Mode=OneWay}" />
+		<PokeEdit:PcBoxHolderPanel DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
 
 	</StackPanel>
 </UserControl>

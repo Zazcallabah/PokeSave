@@ -5,17 +5,11 @@ using PokeSave;
 
 namespace PokeEdit
 {
-	public partial class MonsterListPanel : UserControl
+	public partial class TeamListPanel : UserControl
 	{
-		public MonsterListPanel()
+		public TeamListPanel()
 		{
 			InitializeComponent();
-		}
-
-		public string Header
-		{
-			get { return (string) BorderLabel.Header; }
-			set { BorderLabel.Header = value; }
 		}
 
 		void ActivateNextClicked( object sender, RoutedEventArgs e )

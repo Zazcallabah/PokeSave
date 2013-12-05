@@ -28,6 +28,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Box.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Cipher.cs" />
     <Compile Include="AbilityList.cs" />
