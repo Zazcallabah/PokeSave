@@ -2,7 +2,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public struct MonsterInfo
+	public class MonsterInfo
 	{
 		public byte Ability1;
 		public byte Ability2;
@@ -20,7 +20,7 @@ namespace PokeSave
 		public uint Item1;
 		public uint Item2;
 		public byte LevelUpType;
-		public string Name;
+		public string Name { get; private set; }
 		public byte SafariRate;
 		public byte SpAttack;
 		public byte SpDefense;
@@ -31,7 +31,6 @@ namespace PokeSave
 
 		public MonsterInfo( byte[] source, uint index, uint offset )
 		{
-			Name = NameList.Get( index );
 			HP = source[offset];
 			Attack = source[offset + 1];
 			Defense = source[offset + 2];
@@ -55,6 +54,8 @@ namespace PokeSave
 			Ability2 = source[offset + 23];
 			SafariRate = source[offset + 24];
 			Color = source[offset + 25];
+			Name = NameList.Get( index );
+
 		}
 
 		public override string ToString()
