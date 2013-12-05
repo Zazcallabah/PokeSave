@@ -9,14 +9,13 @@ namespace PokeSave
 	{
 		readonly GameSection _data;
 		readonly int _offset;
-		readonly bool _storage;
 		Cipher _specificXor;
 
 		public MonsterEntry( GameSection data, int offset, bool storage )
 		{
 			_data = data;
 			_offset = offset;
-			_storage = storage;
+			Storage = storage;
 			_specificXor = new Cipher( Personality, OriginalTrainerId );
 		}
 
@@ -138,10 +137,10 @@ namespace PokeSave
 		/// </summary>
 		public uint StatusByte
 		{
-			get { return _storage ? (byte) 0 : (byte) ( _data.GetInt( _offset + 80 ) & 0xFF ); }
+			get { return Storage ? (byte) 0 : (byte) ( _data.GetInt( _offset + 80 ) & 0xFF ); }
 			set
 			{
-				if( !_storage && StatusByte != value )
+				if( !Storage && StatusByte != value )
 				{
 					_data[_offset + 80] = (byte) ( value & 0xff );
 					InvokePropertyChanged( "StatusByte" );
@@ -157,40 +156,40 @@ namespace PokeSave
 
 		public bool Poisoned
 		{
-			get { return !_storage && StatusByte.IsSet( 3 ); }
+			get { return !Storage && StatusByte.IsSet( 3 ); }
 			set { SetStatus( value, 3 ); }
 		}
 
 		public bool Burned
 		{
-			get { return !_storage && StatusByte.IsSet( 4 ); }
+			get { return !Storage && StatusByte.IsSet( 4 ); }
 			set { SetStatus( value, 4 ); }
 		}
 
 		public bool Frozen
 		{
-			get { return !_storage && StatusByte.IsSet( 5 ); }
+			get { return !Storage && StatusByte.IsSet( 5 ); }
 			set { SetStatus( value, 5 ); }
 		}
 
 		public bool Paralyzed
 		{
-			get { return !_storage && StatusByte.IsSet( 6 ); }
+			get { return !Storage && StatusByte.IsSet( 6 ); }
 			set { SetStatus( value, 6 ); }
 		}
 
 		public bool BadPoisoned
 		{
-			get { return !_storage && StatusByte.IsSet( 7 ); }
+			get { return !Storage && StatusByte.IsSet( 7 ); }
 			set { SetStatus( value, 7 ); }
 		}
 
 		public uint Level
 		{
-			get { return _storage ? 0u : _data[_offset + 84]; }
+			get { return Storage ? 0u : _data[_offset + 84]; }
 			set
 			{
-				if( !_storage && Level != value )
+				if( !Storage && Level != value )
 				{
 					_data[_offset + 84] = (byte) value;
 					InvokePropertyChanged( "Level" );
@@ -200,10 +199,10 @@ namespace PokeSave
 
 		public uint Virus
 		{
-			get { return _storage ? 0u : _data[_offset + 85]; }
+			get { return Storage ? 0u : _data[_offset + 85]; }
 			set
 			{
-				if( !_storage && Virus != value )
+				if( !Storage && Virus != value )
 				{
 					_data[_offset + 85] = (byte) value;
 					InvokePropertyChanged( "Virus" );
@@ -213,10 +212,10 @@ namespace PokeSave
 
 		public uint CurrentHP
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 86 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 86 ); }
 			set
 			{
-				if( !_storage && CurrentHP != value )
+				if( !Storage && CurrentHP != value )
 				{
 					_data.SetShort( _offset + 86, value );
 					InvokePropertyChanged( "CurrentHP" );
@@ -226,10 +225,10 @@ namespace PokeSave
 
 		public uint TotalHP
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 88 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 88 ); }
 			set
 			{
-				if( !_storage && TotalHP != value )
+				if( !Storage && TotalHP != value )
 				{
 					_data.SetShort( _offset + 88, value );
 					InvokePropertyChanged( "TotalHP" );
@@ -239,10 +238,10 @@ namespace PokeSave
 
 		public uint CurrentAttack
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 90 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 90 ); }
 			set
 			{
-				if( !_storage && CurrentAttack != value )
+				if( !Storage && CurrentAttack != value )
 				{
 					_data.SetShort( _offset + 90, value );
 					InvokePropertyChanged( "CurrentAttack" );
@@ -252,10 +251,10 @@ namespace PokeSave
 
 		public uint CurrentDefense
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 92 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 92 ); }
 			set
 			{
-				if( !_storage && CurrentDefense != value )
+				if( !Storage && CurrentDefense != value )
 				{
 					_data.SetShort( _offset + 92, value );
 					InvokePropertyChanged( "CurrentDefense" );
@@ -265,10 +264,10 @@ namespace PokeSave
 
 		public uint CurrentSpeed
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 94 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 94 ); }
 			set
 			{
-				if( !_storage && CurrentSpeed != value )
+				if( !Storage && CurrentSpeed != value )
 				{
 					_data.SetShort( _offset + 94, value );
 					InvokePropertyChanged( "CurrentSpeed" );
@@ -278,10 +277,10 @@ namespace PokeSave
 
 		public uint CurrentSpAttack
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 96 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 96 ); }
 			set
 			{
-				if( !_storage && CurrentSpAttack != value )
+				if( !Storage && CurrentSpAttack != value )
 				{
 					_data.SetShort( _offset + 96, value );
 					InvokePropertyChanged( "CurrentSpAttack" );
@@ -291,10 +290,10 @@ namespace PokeSave
 
 		public uint CurrentSpDefense
 		{
-			get { return _storage ? 0u : _data.GetShort( _offset + 98 ); }
+			get { return Storage ? 0u : _data.GetShort( _offset + 98 ); }
 			set
 			{
-				if( !_storage && CurrentSpDefense != value )
+				if( !Storage && CurrentSpDefense != value )
 				{
 					_data.SetShort( _offset + 98, value );
 					InvokePropertyChanged( "CurrentSpDefense" );
@@ -458,7 +457,7 @@ namespace PokeSave
 		{
 			get
 			{
-				for( int i = _offset; i < _offset + ( _storage ? 80 : 100 ); i++ )
+				for( int i = _offset; i < _offset + ( Storage ? 80 : 100 ); i++ )
 					if( _data[i] != 0 )
 						return false;
 				return true;
@@ -986,7 +985,7 @@ namespace PokeSave
 		{
 			get
 			{
-				var arr = new byte[_storage ? 80 : 100];
+				var arr = new byte[Storage ? 80 : 100];
 				for( var i = 0; i < arr.Length; i++ )
 				{
 					arr[i] = _data[_offset + i];
@@ -998,7 +997,7 @@ namespace PokeSave
 			{
 				if( value.Length != 80 && value.Length != 100 )
 					throw new ArgumentException( "invalid array length" );
-				for( var i = 0; i < ( _storage ? 80 : 100 ); i++ )
+				for( var i = 0; i < ( Storage ? 80 : 100 ); i++ )
 				{
 					if( i >= value.Length )
 						_data[_offset + i] = 0;
@@ -1006,7 +1005,7 @@ namespace PokeSave
 						_data[_offset + i] = value[i];
 				}
 
-				if( !_storage && value.Length == 80 )
+				if( !Storage && value.Length == 80 )
 				{
 					Level = 1;
 					CurrentHP = TotalHP = HPEV;
@@ -1016,6 +1015,8 @@ namespace PokeSave
 					CurrentSpDefense = SpDefenseEV;
 					CurrentSpeed = SpeedEV;
 				}
+
+				_specificXor = new Cipher( Personality, OriginalTrainerId );
 
 				foreach( var prop in GetType().GetProperties() )
 				{
@@ -1089,7 +1090,7 @@ namespace PokeSave
 
 		void SetStatus( bool value, int statusbit )
 		{
-			if( !_storage )
+			if( !Storage )
 				StatusByte = value ? StatusByte.SetBit( statusbit ) : StatusByte.ClearBit( statusbit );
 		}
 
@@ -1163,7 +1164,7 @@ namespace PokeSave
 			if( Mark != 0 )
 				sb.AppendLine( "Marks: " + Mark );
 
-			if( !_storage )
+			if( !Storage )
 			{
 				if( StatusByte == 0 )
 					sb.AppendLine( "No status ailment" );
@@ -1208,7 +1209,7 @@ namespace PokeSave
 				sb.Append( " " + Evolution );
 			sb.Append( " xp" + XP );
 			sb.Append( " f" + Friendship );
-			if( !_storage )
+			if( !Storage )
 			{
 				sb.Append( " st" + StatusByte );
 				sb.Append( " l" + Level );
@@ -1222,6 +1223,8 @@ namespace PokeSave
 			sb.Append( " o:" + OriginInfo.ToString( "X" ) );
 			return sb.ToString();
 		}
+
+		public bool Storage { get; private set; }
 
 		public override string ToString()
 		{
