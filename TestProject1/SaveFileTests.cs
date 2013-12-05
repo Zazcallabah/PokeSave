@@ -24,11 +24,15 @@ namespace TestProject1
 
 
 		[Test]
-		public void CanReadMonsterRawData()
+		public void CanReadAndWriteMonsterRawDataAndStillHaveCorrectMoves()
 		{
+			Assert.AreEqual( "Thundershock", _file.Latest.Team[0].Move1Name );
+			Assert.AreEqual( "Tackle", _file.Latest.PcBuffer[0].Move1Name );
+
 			_file.Latest.Team[0].RawData = _file.Latest.PcBuffer[0].RawData;
+
 			Assert.AreEqual( "PIDGEY", _file.Latest.Team[0].Name );
-			_file.SaveAs( "tmp.sav" );
+			Assert.AreEqual( "Tackle", _file.Latest.Team[0].Move1Name );
 		}
 
 		[Test]
