@@ -31,9 +31,7 @@ namespace PokeEdit
 					if( string.IsNullOrEmpty( Label ) )
 						Label = value;
 					_propertyName = value;
-					var b = new Binding( _propertyName );
-					b.Mode = BindingMode.OneWay;
-					ReadOnly.SetBinding( TextBlock.TextProperty, b );
+					ReadOnly.SetBinding( TextBlock.TextProperty, new Binding( _propertyName ) { Mode = BindingMode.OneWay } );
 				}
 			}
 		}

@@ -3,7 +3,6 @@ using System.Windows.Data;
 
 namespace PokeEdit
 {
-
 	/// <summary>
 	/// Interaction logic for PropertyPanel.xaml
 	/// </summary>
@@ -32,8 +31,7 @@ namespace PokeEdit
 					if( string.IsNullOrEmpty( Label ) )
 						Label = value;
 					_propertyName = value;
-					var b = new Binding( _propertyName );
-					TextBox.SetBinding( TextBox.TextProperty, b );
+					TextBox.SetBinding( TextBox.TextProperty, new Binding( _propertyName ) );
 				}
 			}
 		}
