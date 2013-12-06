@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using PokeSave;
 
 namespace PokeEdit
@@ -28,6 +29,12 @@ namespace PokeEdit
 					return;
 				}
 			}
+		}
+
+		public new Brush Background
+		{
+			get { return BorderLabel.Background; }
+			set { BorderLabel.Background = value; }
 		}
 	}
 }

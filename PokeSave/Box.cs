@@ -13,6 +13,5 @@ namespace PokeSave
 
 		public string Title { get { return "#" + ( _index + 1 ); } }
 		public BindingList<MonsterEntry> Content { get; private set; }
-
 	}
 }

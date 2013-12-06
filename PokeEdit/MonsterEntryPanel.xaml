@@ -5,15 +5,14 @@
 	<UserControl.Resources>
 		<PokeEdit:BoolToVisibilityConverter x:Key="VisiblityConverter"/>
 	</UserControl.Resources>
-	<Expander Header="{Binding Name}" Margin="2" BorderBrush="LightGray" BorderThickness="1">
-		<Expander.ContextMenu>
-			<ContextMenu>
-				<MenuItem Header="Copy"  Click="CopyClicked"/>
-				<MenuItem Header="Paste" Click="PasteClicked"/>
-			</ContextMenu>
-		</Expander.ContextMenu>
-		<StackPanel>
 
+		<StackPanel>
+			<StackPanel.ContextMenu>
+				<ContextMenu>
+					<MenuItem Header="Copy"  Click="CopyClicked"/>
+					<MenuItem Header="Paste" Click="PasteClicked"/>
+				</ContextMenu>
+			</StackPanel.ContextMenu>
 			<GroupBox Header="Data">
 				<StackPanel Orientation="Horizontal">
 					<StackPanel>
@@ -142,5 +141,4 @@
 
 			<Button Content="Remove" Click="RemoveClicked" Margin="2"/>
 		</StackPanel>
-	</Expander>
 </UserControl>

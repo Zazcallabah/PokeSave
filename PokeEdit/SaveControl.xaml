@@ -23,24 +23,24 @@
 			</StackPanel>
 		</StackPanel>
 
-		<Expander Header="Team" BorderBrush="Gray" BorderThickness="1">
+		<Expander Header="Team" BorderBrush="#808080" BorderThickness="1" Background="#FFFFFF" Margin="0,4,0,4">
 			<PokeEdit:TeamListPanel DataContext="{Binding Latest.Team,Mode=OneWay}" />
 		</Expander>
 
 		<StackPanel Orientation="Horizontal">
 			<StackPanel Margin="0,0,4,0">
-				<PokeEdit:ItemListPanel Header="Items" DataContext="{Binding Latest.Items,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="Key Items" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="TM Case" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Items" Background="#EEFFEE" DataContext="{Binding Latest.Items,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Key Items" Background="#EEEEFF" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="TM Case" Background="#FFFFEE" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
 			</StackPanel>
 			<StackPanel>
-				<PokeEdit:ItemListPanel Header="Ball Pocket" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="Berries" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="PC Items" DataContext="{Binding Latest.PcItems,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Ball Pocket" Background="#F0F0F0" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Berries" Background="#FFEEFF" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="PC Items" Background="#EEFFFF" DataContext="{Binding Latest.PCItems,Mode=OneWay}" />
 			</StackPanel>
 		</StackPanel>
 
-		<PokeEdit:PcBoxHolderPanel DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
+		<PokeEdit:PcBoxHolderPanel Background="#FFFFFF" DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
 
 	</StackPanel>
 </UserControl>

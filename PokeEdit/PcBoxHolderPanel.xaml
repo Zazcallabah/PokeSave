@@ -12,10 +12,9 @@
 					<Setter Property="Template">
 						<Setter.Value>
 							<ControlTemplate TargetType="{x:Type TabItem}">
-
 								<Border 
 										Name="Border"
-										Margin="2"
+										Margin="1"
 										Background="White"
 										BorderBrush="Gray"
 										BorderThickness="1"
@@ -24,7 +23,7 @@
 														  VerticalAlignment="Center"
 														  HorizontalAlignment="Center"
 														  ContentSource="Header"
-														  Margin="2"
+														  Margin="1"
 														  RecognizesAccessKey="True"/>
 								</Border>
 								<ControlTemplate.Triggers>
