@@ -7,13 +7,51 @@
 		<PokeEdit:BoolToVisibilityConverter x:Key="VisiblityConverter"/>
 	</UserControl.Resources>
 	<StackPanel>
-		<ItemsControl ItemsSource="{Binding}">
-			<ItemsControl.ItemTemplate>
+
+		<TabControl MaxWidth="300" BorderThickness="0" ItemsSource="{Binding}">
+			<TabControl.Resources>
+				<Style TargetType="{x:Type TabItem}">
+					<Setter Property="Visibility" Value="{Binding Empty, Converter={StaticResource VisiblityConverter}}"/>
+					<Setter Property="Template">
+						<Setter.Value>
+							<ControlTemplate TargetType="{x:Type TabItem}">
+								<Border 
+										Name="Border"
+										Margin="1"
+										Background="White"
+										BorderBrush="Gray"
+										BorderThickness="1"
+										CornerRadius="4" >
+									<ContentPresenter x:Name="ContentSite"
+														  VerticalAlignment="Center"
+														  HorizontalAlignment="Center"
+														  ContentSource="Header"
+														  Margin="1"
+														  RecognizesAccessKey="True"/>
+								</Border>
+								<ControlTemplate.Triggers>
+									<Trigger Property="IsSelected" Value="True">
+										<Setter Property="Panel.ZIndex" Value="100" />
+										<Setter TargetName="Border" Property="BorderBrush" Value="Black" />
+										<Setter TargetName="Border" Property="BorderThickness" Value="2" />
+									</Trigger>
+								</ControlTemplate.Triggers>
+							</ControlTemplate>
+						</Setter.Value>
+					</Setter>
+				</Style>
+			</TabControl.Resources>
+			<TabControl.ContentTemplate>
 				<DataTemplate>
 					<PokeEdit:MonsterEntryPanel DataContext="{Binding}" Visibility="{Binding Empty, Converter={StaticResource VisiblityConverter}, Mode=OneWay}"/>
 				</DataTemplate>
-			</ItemsControl.ItemTemplate>
-		</ItemsControl>
+			</TabControl.ContentTemplate>
+			<TabControl.ItemTemplate>
+				<DataTemplate>
+					<TextBlock Text="{Binding Name}"></TextBlock>
+				</DataTemplate>
+			</TabControl.ItemTemplate>
+		</TabControl>
 		<Button Content="Add" Click="ActivateNextClicked" Margin="2"/>
 	</StackPanel>
 </UserControl>
