@@ -1,43 +1,68 @@
-﻿<UserControl x:Class="PokeEdit.PcBoxHolderPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:PokeEdit="clr-namespace:PokeEdit"
-			 Margin="0,2,0,2">
-
-	<Expander Header="PC Buffer" BorderBrush="Gray" BorderThickness="1">
+﻿<UserControl
+	x:Class="PokeEdit.PcBoxHolderPanel"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:PokeEdit="clr-namespace:PokeEdit"
+	Margin="0,2,0,2">
+	<UserControl.Resources>
 		
-		<TabControl Width="300" BorderThickness="0" ItemsSource="{Binding}">
-			<TabControl.Resources>
-				<Style TargetType="{x:Type TabItem}">
+
+		<Style TargetType="TabItem">
+			<Setter Property="Margin" Value="2"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="Template">
+				<Setter.Value>
+					<ControlTemplate TargetType="{x:Type TabItem}">
+						<Border 
+							Width="36"
+							Height="24"
+							Name="Border"
+							Background="White"
+							BorderBrush="#808080"
+							BorderThickness="1"
+							CornerRadius="4" >
+							<ContentPresenter x:Name="ContentSite"
+								VerticalAlignment="Center"
+								HorizontalAlignment="Center"
+								ContentSource="Header"
+								RecognizesAccessKey="True"/>
+						</Border>
+						<ControlTemplate.Triggers>
+							<Trigger Property="IsSelected" Value="True">
+								<Setter Property="Panel.ZIndex" Value="100" />
+								<Setter TargetName="Border" Property="BorderBrush" Value="#000000" />
+								<Setter TargetName="Border" Property="BorderThickness" Value="2" />
+							</Trigger>
+						</ControlTemplate.Triggers>
+					</ControlTemplate>
+				</Setter.Value>
+			</Setter>
+		</Style>
+	</UserControl.Resources>
+
+	<Expander Header="PC Buffer" BorderBrush="#808080" BorderThickness="1">
+		<TabControl BorderThickness="0" ItemsSource="{Binding}">
+			<TabControl.Style>
+				<Style TargetType="{x:Type TabControl}">
 					<Setter Property="Template">
 						<Setter.Value>
-							<ControlTemplate TargetType="{x:Type TabItem}">
-								<Border 
-										Name="Border"
-										Margin="1"
-										Background="White"
-										BorderBrush="Gray"
-										BorderThickness="1"
-										CornerRadius="4" >
-									<ContentPresenter x:Name="ContentSite"
-														  VerticalAlignment="Center"
-														  HorizontalAlignment="Center"
-														  ContentSource="Header"
-														  Margin="1"
-														  RecognizesAccessKey="True"/>
-								</Border>
-								<ControlTemplate.Triggers>
-									<Trigger Property="IsSelected" Value="True">
-										<Setter Property="Panel.ZIndex" Value="100" />
-										<Setter TargetName="Border" Property="BorderBrush" Value="Black" />
-										<Setter TargetName="Border" Property="BorderThickness" Value="2" />
-									</Trigger>
-								</ControlTemplate.Triggers>
+							<ControlTemplate TargetType="TabControl">
+								<Grid>
+									<Grid.RowDefinitions>
+										<RowDefinition Height="Auto"/>
+										<RowDefinition Height="*"/>
+									</Grid.RowDefinitions>
+									<WrapPanel Grid.Row="0" HorizontalAlignment="Center" IsItemsHost="true"/>
+									<Border BorderThickness="1" Background="#FFFFFF" Margin="2" Padding="2" CornerRadius="2" BorderBrush="#000000" Grid.Row="1">
+										<ContentPresenter ContentSource="SelectedContent"/>
+									</Border>
+								</Grid>
 							</ControlTemplate>
 						</Setter.Value>
 					</Setter>
 				</Style>
-			</TabControl.Resources>
+			</TabControl.Style>
 			<TabControl.ContentTemplate>
 				<DataTemplate>
 					<PokeEdit:TeamListPanel DataContext="{Binding Content,Mode=OneWay}"/>
