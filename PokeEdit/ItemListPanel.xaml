@@ -1,26 +1,28 @@
-﻿<UserControl x:Class="PokeEdit.ItemListPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:PokeEdit="clr-namespace:PokeEdit"
-             Margin="0,2,0,2">
+﻿<UserControl
+	x:Class="PokeEdit.ItemListPanel"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:PokeEdit="clr-namespace:PokeEdit"
+	Margin="0,2,0,2">
 	<UserControl.Resources>
 		<PokeEdit:BoolToVisibilityConverter x:Key="VisiblityConverter"/>
 	</UserControl.Resources>
-	<Expander Name="BorderLabel" BorderBrush="Gray" BorderThickness="1" Width="150">
+	<Expander Name="BorderLabel" BorderBrush="#808080" BorderThickness="1" Width="150">
 		<StackPanel>
 			<ItemsControl ItemsSource="{Binding}" >
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Orientation="Horizontal" Visibility="{Binding Empty, Converter={StaticResource VisiblityConverter}}">
 							<ComboBox
-								Height="26"
+								Height="20"
 								Margin="2,2,2,0"
 								Width="115"
+								FontSize="10" 
 								IsTextSearchEnabled="True"
 								IsEditable="True"
 								ItemsSource="{Binding Names}"
 								SelectedValue="{Binding Path=Name}" />
-							<TextBox Height="26" Margin="0,2,2,0" Width="25" Text="{Binding Count}" />
+							<TextBox Height="20" Margin="0,2,2,0" FontSize="10" Width="25" Text="{Binding Count}" />
 						</StackPanel>
 					</DataTemplate>
 				</ItemsControl.ItemTemplate>

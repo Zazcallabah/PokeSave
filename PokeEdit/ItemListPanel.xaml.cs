@@ -31,7 +31,7 @@ namespace PokeEdit
 			}
 		}
 
-		public new Brush Background
+		public Brush Color
 		{
 			get { return BorderLabel.Background; }
 			set { BorderLabel.Background = value; }

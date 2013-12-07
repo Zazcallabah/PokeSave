@@ -1,7 +1,8 @@
-﻿<UserControl x:Class="PokeEdit.SaveControl"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-              xmlns:PokeEdit="clr-namespace:PokeEdit">
+﻿<UserControl
+	x:Class="PokeEdit.SaveControl"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:PokeEdit="clr-namespace:PokeEdit">
 	<StackPanel>
 		<StackPanel Orientation="Horizontal">
 			<StackPanel Margin="0,0,4,0">
@@ -27,16 +28,16 @@
 			<PokeEdit:TeamListPanel DataContext="{Binding Latest.Team,Mode=OneWay}" />
 		</Expander>
 
-		<StackPanel Orientation="Horizontal">
+		<StackPanel Margin="0,4,0,4" Orientation="Horizontal" HorizontalAlignment="Center">
 			<StackPanel Margin="0,0,4,0">
-				<PokeEdit:ItemListPanel Header="Items" Background="#EEFFEE" DataContext="{Binding Latest.Items,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="Key Items" Background="#EEEEFF" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="TM Case" Background="#FFFFEE" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Items" Color="#EEFFEE" DataContext="{Binding Latest.Items,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Key Items" Color="#EEEEFF" DataContext="{Binding Latest.KeyItems,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="TM Case" Color="#FFFFEE" DataContext="{Binding Latest.TMCase,Mode=OneWay}" />
 			</StackPanel>
 			<StackPanel>
-				<PokeEdit:ItemListPanel Header="Ball Pocket" Background="#F0F0F0" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="Berries" Background="#FFEEFF" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
-				<PokeEdit:ItemListPanel Header="PC Items" Background="#EEFFFF" DataContext="{Binding Latest.PCItems,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Ball Pocket" Color="#F0F0F0" DataContext="{Binding Latest.BallPocket,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="Berries" Color="#FFEEFF" DataContext="{Binding Latest.Berries,Mode=OneWay}" />
+				<PokeEdit:ItemListPanel Header="PC Items" Color="#EEFFFF" DataContext="{Binding Latest.PCItems,Mode=OneWay}" />
 			</StackPanel>
 		</StackPanel>
 

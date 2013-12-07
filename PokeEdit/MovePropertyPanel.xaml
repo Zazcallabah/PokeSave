@@ -1,8 +1,9 @@
-﻿<UserControl x:Class="PokeEdit.MovePropertyPanel"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:PokeEdit="clr-namespace:PokeEdit">
-	<Expander Name="Header">
+﻿<UserControl
+	x:Class="PokeEdit.MovePropertyPanel"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:PokeEdit="clr-namespace:PokeEdit">
+	<Expander Name="Header" BorderBrush="#000055" BorderThickness="1" Margin="1" Padding="1">
 		<StackPanel>
 			<PokeEdit:PropertyPanel x:Name="Move" DataContext="{Binding}"/>
 			<PokeEdit:PropertyPanel x:Name="PP" DataContext="{Binding}"/>
