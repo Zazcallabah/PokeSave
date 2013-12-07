@@ -14,16 +14,14 @@ namespace PokeEdit
 
 		void CopyClicked( object sender, RoutedEventArgs e )
 		{
-			var data = ( (MonsterEntry) DataContext ).RawData;
-			Clipboard.SetText( Convert.ToBase64String( data ) );
+			Clipboard.SetText( ( (MonsterEntry) DataContext ).RawDataString );
 		}
 
 		void PasteClicked( object sender, RoutedEventArgs e )
 		{
 			try
 			{
-				var data = Convert.FromBase64String( Clipboard.GetText() );
-				( (MonsterEntry) DataContext ).RawData = data;
+				( (MonsterEntry) DataContext ).RawDataString = Clipboard.GetText();
 			}
 			catch( Exception )
 			{ }

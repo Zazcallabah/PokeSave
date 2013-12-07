@@ -977,6 +977,18 @@ namespace PokeSave
 			get { return MonsterList.Get( MonsterId ); }
 		}
 
+		public string RawDataString
+		{
+			get
+			{
+				return Convert.ToBase64String( RawData );
+			}
+			set
+			{
+				RawData = Convert.FromBase64String( value );
+			}
+		}
+
 		/// <summary>
 		/// Writing to team from pc buffer requires you to deposit and withdraw from pc ingame to get correct values.
 		/// </summary>

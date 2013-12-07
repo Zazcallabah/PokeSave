@@ -4,6 +4,12 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:PokeEdit="clr-namespace:PokeEdit"
 	Margin="0,2,0,2">
+	<UserControl.ContextMenu>
+		<ContextMenu>
+			<MenuItem Header="Copy All"  Click="CopyClicked"/>
+			<MenuItem Header="Paste All" Click="PasteClicked"/>
+		</ContextMenu>
+	</UserControl.ContextMenu>
 	<UserControl.Resources>
 		<PokeEdit:BoolToVisibilityConverter x:Key="VisiblityConverter"/>
 		<Style TargetType="{x:Type TabItem}" >

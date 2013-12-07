@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using System.Windows;
-using System.Windows.Controls;
-using PokeSave;
+﻿using System.Windows.Controls;
 
 namespace PokeEdit
 {

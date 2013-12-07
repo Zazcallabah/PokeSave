@@ -53,7 +53,7 @@
 										<RowDefinition Height="Auto"/>
 										<RowDefinition Height="*"/>
 									</Grid.RowDefinitions>
-									<WrapPanel Grid.Row="0" HorizontalAlignment="Center" IsItemsHost="true"/>
+									<WrapPanel Grid.Row="0" HorizontalAlignment="Center" Width="300" IsItemsHost="true"/>
 									<Border BorderThickness="1" Background="#FFFFFF" Margin="2" Padding="2" CornerRadius="2" BorderBrush="#000000" Grid.Row="1">
 										<ContentPresenter ContentSource="SelectedContent"/>
 									</Border>
@@ -70,7 +70,7 @@
 			</TabControl.ContentTemplate>
 			<TabControl.ItemTemplate>
 				<DataTemplate>
-					<TextBlock Text="{Binding Title}"></TextBlock>
+					<TextBlock Text="{Binding Title}" />
 				</DataTemplate>
 			</TabControl.ItemTemplate>
 		</TabControl>
