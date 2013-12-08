@@ -12,6 +12,7 @@
 				<PokeEdit:PropertyPanel PropertyName="Gender" DataContext="{Binding Latest}" />
 				<PokeEdit:PropertyPanel PropertyName="GenderByte" DataContext="{Binding Latest}" />
 				<PokeEdit:PropertyPanel PropertyName="Money" DataContext="{Binding Latest}" />
+				<PokeEdit:ReadOnlyPropertyPanel Label="Game?" PropertyName="GameTypeGuess" DataContext="{Binding Latest}" />
 			</StackPanel>
 			<StackPanel>
 				<PokeEdit:ReadOnlyPropertyPanel PropertyName="PublicId" DataContext="{Binding Latest}" />

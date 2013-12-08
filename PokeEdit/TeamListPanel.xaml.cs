@@ -53,5 +53,14 @@ namespace PokeEdit
 				}
 			}
 		}
+
+		void ClaimClicked( object sender, RoutedEventArgs e )
+		{
+			var r = this.FirstAncestorOfType<SaveControl>();
+			foreach( var entry in (BindingList<MonsterEntry>) DataContext )
+			{
+				entry.MakeOwn( ( (SaveFile) r.DataContext ).Latest );
+			}
+		}
 	}
 }

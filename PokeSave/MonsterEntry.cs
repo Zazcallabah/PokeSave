@@ -1256,7 +1256,7 @@ namespace PokeSave
 			OriginalTrainerId = save.TrainerId;
 			OriginalTrainerGender = save.Gender;
 			OriginalTrainerName = save.Name;
-			GameOfOrigin = save.GameCode; // NOT CORRECT
+			GameOfOrigin = save.GameTypeGuess;
 		}
 
 		public void Clear()

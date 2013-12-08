@@ -129,9 +129,36 @@ namespace PokeSave
 			ExtractTeam();
 			ExtractPcBuffer();
 			ExtractItems();
+			GuessGame();
 		}
 
 		Cipher Xor { get; set; }
+
+		void GuessGame()
+		{
+			var d = new Dictionary<uint, int>();
+			var l = Team.Where( t => !t.Empty ).Concat( PcBuffer.Where( t => !t.Empty ) );
+			foreach( var me in l )
+			{
+				if( !d.ContainsKey( me.GameOfOrigin ) )
+					d.Add( me.GameOfOrigin, 0 );
+				d[me.GameOfOrigin]++;
+			}
+
+			int max = 0;
+			uint id = 4;
+			foreach( var kvp in d )
+			{
+				if( max < kvp.Value )
+				{
+					max = kvp.Value;
+					id = kvp.Key;
+				}
+			}
+			GameTypeGuess = id;
+		}
+
+		public uint GameTypeGuess { get; private set; }
 
 		public uint SaveIndex
 		{

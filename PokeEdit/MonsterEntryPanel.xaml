@@ -10,6 +10,7 @@
 		<ContextMenu>
 			<MenuItem Header="Copy"  Click="CopyClicked"/>
 			<MenuItem Header="Paste" Click="PasteClicked"/>
+			<MenuItem Header="Claim" Click="ClaimClicked"/>
 		</ContextMenu>
 	</UserControl.ContextMenu>
 

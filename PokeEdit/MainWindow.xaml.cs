@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -77,6 +78,17 @@ namespace PokeEdit
 		void SaveButtonClicked( object sender, RoutedEventArgs e )
 		{
 			ExtractSaveFileFromElement( (Button) sender ).Save();
+		}
+
+		void ClaimButtonClicked( object sender, RoutedEventArgs e )
+		{
+			var sf = ExtractSaveFileFromElement( (Button) sender );
+			var l = sf.Latest.Team.Where( t => !t.Empty ).Concat( sf.Latest.PcBuffer.Where( t => !t.Empty ) );
+			foreach( var me in l )
+			{
+				me.MakeOwn( sf.Latest );
+			}
+
 		}
 	}
 }

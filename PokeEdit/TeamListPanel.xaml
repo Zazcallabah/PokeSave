@@ -8,6 +8,7 @@
 		<ContextMenu>
 			<MenuItem Header="Copy All"  Click="CopyClicked"/>
 			<MenuItem Header="Paste All" Click="PasteClicked"/>
+			<MenuItem Header="Claim All" Click="ClaimClicked"/>
 		</ContextMenu>
 	</UserControl.ContextMenu>
 	<UserControl.Resources>

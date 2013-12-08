@@ -71,6 +71,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="BoolToVisibilityConverter.cs" />
+    <Compile Include="DependencyObjectExt.cs" />
     <Compile Include="PcBoxHolderPanel.xaml.cs">
       <DependentUpon>PcBoxHolderPanel.xaml</DependentUpon>
     </Compile>

@@ -30,6 +30,7 @@
 								<StackPanel Orientation="Horizontal">
 									<Button Height="26" Margin="4" Width="75" Content="Save" Click="SaveButtonClicked" />
 									<Button Height="26" Margin="4" Width="75" Content="Save as" Click="SaveAsButtonClicked" />
+									<Button Height="26" Margin="4" Width="75" Content="Claim all" Click="ClaimButtonClicked" />
 								</StackPanel>
 							</StackPanel>
 						</Border>	

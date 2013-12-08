@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using PokeSave;
 
 namespace PokeEdit
@@ -30,6 +31,13 @@ namespace PokeEdit
 		void RemoveClicked( object sender, RoutedEventArgs e )
 		{
 			( (MonsterEntry) DataContext ).Clear();
+		}
+
+
+		void ClaimClicked( object sender, RoutedEventArgs e )
+		{
+			var r = this.FirstAncestorOfType<SaveControl>();
+			( (MonsterEntry) DataContext ).MakeOwn( ( (SaveFile) r.DataContext ).Latest );
 		}
 	}
 }
