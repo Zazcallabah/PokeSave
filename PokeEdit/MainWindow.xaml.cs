@@ -18,6 +18,7 @@ namespace PokeEdit
 			InitializeComponent();
 			DataContext = new BindingList<SaveFile>();
 			Drop += MainWindow_Drop;
+			Info.Text = "This tool lives at https://github.com/Zazcallabah/PokeSave";
 		}
 
 		void MainWindow_Drop( object sender, DragEventArgs e )
@@ -88,7 +89,6 @@ namespace PokeEdit
 			{
 				me.MakeOwn( sf.Latest );
 			}
-
 		}
 	}
 }
