@@ -1,10 +1,11 @@
 using System;
+using System.ComponentModel;
 using System.IO;
 using System.Text;
 
 namespace PokeSave
 {
-	public class GameSection
+	public class GameSection : INotifyPropertyChanged
 	{
 		#region Lookuptables
 		static readonly string[] Names = new[]
@@ -45,11 +46,10 @@ namespace PokeSave
 		#endregion
 
 		readonly byte[] _datasource;
+		bool _isDirty;
 
 		protected GameSection()
-			: this( (byte[]) null )
-		{
-		}
+			: this( (byte[]) null ) { }
 
 		public GameSection( byte[] data )
 		{
@@ -66,7 +66,18 @@ namespace PokeSave
 			IsDirty = false;
 		}
 
-		public bool IsDirty { get; private set; }
+		public bool IsDirty
+		{
+			get { return _isDirty; }
+			private set
+			{
+				if( _isDirty != value )
+				{
+					_isDirty = value;
+					InvokePropertyChanged( "IsDirty" );
+				}
+			}
+		}
 
 		public virtual byte this[int index]
 		{
@@ -118,10 +129,15 @@ namespace PokeSave
 			}
 		}
 
+		#region INotifyPropertyChanged Members
+		public event PropertyChangedEventHandler PropertyChanged;
+		#endregion
+
 		public void SetText( int offset, int count, string data )
 		{
 			TextTable.WriteString( this, data, offset, count );
 		}
+
 		public void SetTextRaw( int offset, int count, string data )
 		{
 			TextTable.WriteStringRaw( this, data, offset, count );
@@ -141,9 +157,9 @@ namespace PokeSave
 		{
 			return
 				( (uint) this[offset + 3] << 24 )
-				| ( (uint) this[offset + 2] << 16 )
-				| ( (uint) this[offset + 1] << 8 )
-				| ( this[offset] );
+					| ( (uint) this[offset + 2] << 16 )
+						| ( (uint) this[offset + 1] << 8 )
+							| ( this[offset] );
 		}
 
 		public uint GetShort( int offset )
@@ -189,6 +205,12 @@ namespace PokeSave
 			sb.AppendLine( "Saveindex: " + SaveIndex );
 			sb.AppendLine( "   Length: " + Length );
 			return sb.ToString();
+		}
+
+		public void InvokePropertyChanged( string e )
+		{
+			if( PropertyChanged != null )
+				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
 		}
 	}
 }

@@ -28,8 +28,8 @@
 							<StackPanel>
 								<PokeEdit:SaveControl DataContext="{Binding}"/>
 								<StackPanel Orientation="Horizontal">
-									<Button Height="26" Margin="4" Width="75" Content="Save" Click="SaveButtonClicked" />
-									<Button Height="26" Margin="4" Width="75" Content="Save as" Click="SaveAsButtonClicked" />
+									<Button Height="26" Margin="4" Width="75" Content="Save" IsEnabled="{Binding Latest.IsDirty}" Click="SaveButtonClicked" />
+									<Button Height="26" Margin="4" Width="75" Content="Save as" IsEnabled="{Binding Latest.IsDirty}"  Click="SaveAsButtonClicked" />
 									<Button Height="26" Margin="4" Width="75" Content="Claim all" Click="ClaimButtonClicked" />
 								</StackPanel>
 							</StackPanel>

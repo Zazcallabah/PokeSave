@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using NUnit.Framework;
@@ -248,11 +249,11 @@ namespace TestProject1
 		[Test]
 		public void ChangingItemCountTriggersChange()
 		{
-			int count = 0;
-			_file.PropertyChanged += ( a, e ) => count++;
+			var properties = new List<string>();
+			_file.PropertyChanged += ( a, e ) => properties.Add( e.PropertyName );
 			_file.Latest.Items[0].Count = 44;
 
-			Assert.AreEqual( 2, count );
+			Assert.AreEqual( 3, properties.Count );
 		}
 
 		[Test]

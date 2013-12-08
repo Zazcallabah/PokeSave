@@ -10,6 +10,9 @@ namespace PokeSave
 	public class GameSave : INotifyPropertyChanged
 	{
 		readonly List<GameSection> _originalOrderSections;
+		readonly List<GameSection> _sections;
+
+		bool _isDirty;
 
 		#region _pointers
 		readonly Dictionary<GameType, Dictionary<string, int>> _pointers = new Dictionary<GameType, Dictionary<string, int>>
@@ -44,7 +47,7 @@ namespace PokeSave
 					{ "BerriesLength", 43 },
 					{ "Rival", 0xBCC }
 				}
-			},
+				},
 			{
 				GameType.E, new Dictionary<string, int>
 				{
@@ -75,11 +78,10 @@ namespace PokeSave
 					{ "BerriesLength", 46 },
 					{ "Rival", -1 }
 				}
-			},
+				},
 			{
 				GameType.RS, new Dictionary<string, int>
 				{
-				
 					{ "Name", 0 },
 					{ "Gender", 8 },
 					{ "PublicId", 0xA },
@@ -107,11 +109,9 @@ namespace PokeSave
 					{ "BerriesLength", 46 },
 					{ "Rival", -1 }
 				}
-			}
+				}
 		};
 		#endregion
-
-		readonly List<GameSection> _sections;
 
 		public GameSave( Stream instream )
 		{
@@ -119,7 +119,11 @@ namespace PokeSave
 			_originalOrderSections = new List<GameSection>();
 
 			for( int i = 0; i < 14; i++ )
-				_originalOrderSections.Add( new GameSection( instream ) );
+			{
+				var section = new GameSection( instream );
+				section.PropertyChanged += BubbleIsDirty;
+				_originalOrderSections.Add( section );
+			}
 			_sections = _originalOrderSections.OrderBy( s => s.ID ).ToList();
 
 			ExtractType();
@@ -132,31 +136,20 @@ namespace PokeSave
 			GuessGame();
 		}
 
-		Cipher Xor { get; set; }
-
-		void GuessGame()
+		public bool IsDirty
 		{
-			var d = new Dictionary<uint, int>();
-			var l = Team.Where( t => !t.Empty ).Concat( PcBuffer.Where( t => !t.Empty ) );
-			foreach( var me in l )
+			get { return _isDirty; }
+			set
 			{
-				if( !d.ContainsKey( me.GameOfOrigin ) )
-					d.Add( me.GameOfOrigin, 0 );
-				d[me.GameOfOrigin]++;
-			}
-
-			int max = 0;
-			uint id = 4;
-			foreach( var kvp in d )
-			{
-				if( max < kvp.Value )
+				if( IsDirty != value )
 				{
-					max = kvp.Value;
-					id = kvp.Key;
+					_isDirty = value;
+					InvokePropertyChanged( "IsDirty" );
 				}
 			}
-			GameTypeGuess = id;
 		}
+
+		Cipher Xor { get; set; }
 
 		public uint GameTypeGuess { get; private set; }
 
@@ -195,6 +188,7 @@ namespace PokeSave
 		public BindingList<ItemEntry> Berries { get; private set; }
 
 		public BindingList<Box> Boxes { get; private set; }
+
 		public string Name
 		{
 			get { return _sections[0].GetText( _pointers[Type]["Name"], 8 ); }
@@ -319,6 +313,38 @@ namespace PokeSave
 			private set { _sections[0].SetInt( _pointers[Type]["PublicId"], value ); }
 		}
 
+		#region INotifyPropertyChanged Members
+		public event PropertyChangedEventHandler PropertyChanged;
+		#endregion
+
+		void BubbleIsDirty( object sender, PropertyChangedEventArgs e )
+		{
+			if( e.PropertyName == "IsDirty" )
+				IsDirty = ( (GameSection) sender ).IsDirty;
+		}
+
+		void GuessGame()
+		{
+			var d = new Dictionary<uint, int>();
+			IEnumerable<MonsterEntry> l = Team.Where( t => !t.Empty ).Concat( PcBuffer.Where( t => !t.Empty ) );
+			foreach( MonsterEntry me in l )
+			{
+				if( !d.ContainsKey( me.GameOfOrigin ) )
+					d.Add( me.GameOfOrigin, 0 );
+				d[me.GameOfOrigin]++;
+			}
+
+			int max = 0;
+			uint id = 4;
+			foreach( var kvp in d )
+				if( max < kvp.Value )
+				{
+					max = kvp.Value;
+					id = kvp.Key;
+				}
+			GameTypeGuess = id;
+		}
+
 		void ExtractTeam()
 		{
 			Team = new BindingList<MonsterEntry>();
@@ -432,13 +458,11 @@ namespace PokeSave
 				sb.AppendIfNotEmpty( Berries[i].ToString(), i );
 
 			sb.AppendLine( "PC buffer:" );
-			var pre = string.Empty;
+			string pre = string.Empty;
 			for( int i = 0; i < PcBuffer.Count; i++ )
 			{
 				if( i % 30 == 0 )
-				{
 					pre = "PC Box #" + Math.Floor( i / 30.0 );
-				}
 				if( sb.AppendIfNotEmpty( PcBuffer[i].Brief(), i, pre ) )
 					pre = string.Empty;
 			}
@@ -455,8 +479,6 @@ namespace PokeSave
 			foreach( GameSection s in _originalOrderSections )
 				s.Write( stream );
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		public void InvokePropertyChanged( string e )
 		{
