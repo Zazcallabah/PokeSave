@@ -72,6 +72,9 @@
     </ApplicationDefinition>
     <Compile Include="BoolToVisibilityConverter.cs" />
     <Compile Include="DependencyObjectExt.cs" />
+    <Compile Include="Editor.xaml.cs">
+      <DependentUpon>Editor.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PcBoxHolderPanel.xaml.cs">
       <DependentUpon>PcBoxHolderPanel.xaml</DependentUpon>
     </Compile>
@@ -96,6 +99,10 @@
     <Compile Include="SaveControl.xaml.cs">
       <DependentUpon>SaveControl.xaml</DependentUpon>
     </Compile>
+    <Page Include="Editor.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="PcBoxHolderPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -170,6 +177,9 @@
       <Project>{B587C276-6F72-4E3F-A583-5C729E6AA58F}</Project>
       <Name>PokeSave</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\settings_32.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

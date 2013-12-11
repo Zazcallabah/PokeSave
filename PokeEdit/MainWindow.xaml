@@ -3,7 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:PokeEdit="clr-namespace:PokeEdit"
-	Title="PokeEdit" Height="480" Width="500" AllowDrop="True">
+	Title="PokeEdit" Height="480" Width="500" AllowDrop="True"  Icon="Resources\settings_32.png">
 	<Grid Background="#D3D3D3">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
@@ -30,8 +30,9 @@
 								<StackPanel Orientation="Horizontal">
 									<Button Height="26" Margin="4" Width="75" Content="Save" IsEnabled="{Binding Latest.IsDirty}" Click="SaveButtonClicked" />
 									<Button Height="26" Margin="4" Width="75" Content="Save as" IsEnabled="{Binding Latest.IsDirty}"  Click="SaveAsButtonClicked" />
-									<Button Height="26" Margin="4" Width="75" Content="Claim all" Click="ClaimButtonClicked" />
-								</StackPanel>
+										<Button Height="26" Margin="4" Width="75" Content="Claim all" Click="ClaimButtonClicked" />
+										<Button Height="26" Margin="4" Width="75" Content="Hex" Click="HexButtonClicked" />
+									</StackPanel>
 							</StackPanel>
 						</Border>	
 					</DataTemplate>

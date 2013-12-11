@@ -90,5 +90,25 @@ namespace PokeEdit
 				me.MakeOwn( sf.Latest );
 			}
 		}
+
+		// this is a bad pattern and must be fixed
+		Editor _edit;
+		void HexButtonClicked( object sender, RoutedEventArgs e )
+		{
+			if( _edit == null )
+			{
+				_edit = new Editor();
+				_edit.Closed += _edit_Closed;
+				_edit.DataContext = ExtractSaveFileFromElement( (Button) sender );
+				_edit.Show();
+			}
+
+		}
+
+		void _edit_Closed( object sender, EventArgs e )
+		{
+			_edit.Closed -= _edit_Closed;
+			_edit = null;
+		}
 	}
 }
