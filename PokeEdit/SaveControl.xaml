@@ -41,6 +41,8 @@
 				<PokeEdit:ItemListPanel Header="PC Items" Color="#EEFFFF" DataContext="{Binding Latest.PCItems,Mode=OneWay}" />
 			</StackPanel>
 		</StackPanel>
+		
+		<PokeEdit:DexHolderPanel DataContext="{Binding Latest.Dex,Mode=OneWay}" />
 
 		<PokeEdit:PcBoxHolderPanel Background="#FFFFFF" DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
 
