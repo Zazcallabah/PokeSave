@@ -15,6 +15,9 @@ Todo
 * language needs combo? - nah
 * map ribbons
 * add a bunch of typeinformation info
+* Feature that automerges entries in all loaded files.
+* Editable pokedex data and autoset that data when automerge.
+
 
 Testing and code coverage
 -------------------------
