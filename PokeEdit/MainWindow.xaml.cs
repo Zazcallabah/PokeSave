@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using Microsoft.Win32;
 using PokeSave;
 
 namespace PokeEdit
@@ -13,8 +15,11 @@ namespace PokeEdit
 	/// </summary>
 	public partial class MainWindow : Window
 	{
+		readonly Dictionary<string, Editor> _editwindows;
+
 		public MainWindow()
 		{
+			_editwindows = new Dictionary<string, Editor>();
 			InitializeComponent();
 			DataContext = new BindingList<SaveFile>();
 			Drop += MainWindow_Drop;
@@ -24,49 +29,47 @@ namespace PokeEdit
 		void MainWindow_Drop( object sender, DragEventArgs e )
 		{
 			if( e.Data.GetDataPresent( DataFormats.FileDrop ) )
-			{
 				try
 				{
-					foreach( var file in (string[]) e.Data.GetData( DataFormats.FileDrop ) )
+					foreach( string file in (string[]) e.Data.GetData( DataFormats.FileDrop ) )
 						AddSaveFile( new SaveFile( file ) );
 				}
 				catch( ArgumentException )
 				{
 					Info.Text = "Not valid file";
 				}
-			}
 		}
 
 		void AddSaveFile( SaveFile saveFile )
 		{
-			( (BindingList<SaveFile>) DataContext ).Add( saveFile );
+			var list = (BindingList<SaveFile>) DataContext;
+			if( list.All( sf => sf.FileName != saveFile.FileName ) )
+				list.Add( saveFile );
 		}
 
 		void LoadButtonClicked( object sender, RoutedEventArgs e )
 		{
-			var dlg = new Microsoft.Win32.OpenFileDialog() { Multiselect = true };
+			var dlg = new OpenFileDialog { Multiselect = true };
 			bool? result = dlg.ShowDialog();
 			if( result == true )
-			{
-				foreach( var name in dlg.FileNames )
+				foreach( string name in dlg.FileNames )
 				{
 					AddSaveFile( new SaveFile( name ) );
 					Info.Text = name;
 				}
-			}
 		}
 
 		SaveFile ExtractSaveFileFromElement( Button button )
 		{
-			var buttoncontainer = VisualTreeHelper.GetParent( button ) as StackPanel;
-			var savecontainer = VisualTreeHelper.GetParent( buttoncontainer ) as StackPanel;
-			var sc = savecontainer.Children[0] as SaveControl;
-			return sc.DataContext as SaveFile;
+			var buttoncontainer = (StackPanel) VisualTreeHelper.GetParent( button );
+			var savecontainer = (StackPanel) VisualTreeHelper.GetParent( buttoncontainer );
+			var sc = (SaveControl) savecontainer.Children[0];
+			return (SaveFile) sc.DataContext;
 		}
 
 		void SaveAsButtonClicked( object sender, RoutedEventArgs e )
 		{
-			var dlg = new Microsoft.Win32.SaveFileDialog();
+			var dlg = new SaveFileDialog();
 			bool? result = dlg.ShowDialog();
 
 			if( result == true )
@@ -83,32 +86,34 @@ namespace PokeEdit
 
 		void ClaimButtonClicked( object sender, RoutedEventArgs e )
 		{
-			var sf = ExtractSaveFileFromElement( (Button) sender );
-			var l = sf.Latest.Team.Where( t => !t.Empty ).Concat( sf.Latest.PcBuffer.Where( t => !t.Empty ) );
-			foreach( var me in l )
-			{
+			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );
+			IEnumerable<MonsterEntry> l = sf.Latest.Team.Where( t => !t.Empty ).Concat(
+				sf.Latest.PcBuffer.Where( t => !t.Empty ) );
+			foreach( MonsterEntry me in l )
 				me.MakeOwn( sf.Latest );
-			}
 		}
 
-		// this is a bad pattern and must be fixed
-		Editor _edit;
 		void HexButtonClicked( object sender, RoutedEventArgs e )
 		{
-			if( _edit == null )
+			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );
+			if( _editwindows.ContainsKey( sf.FileName ) )
+				_editwindows[sf.FileName].Focus();
+			else
 			{
-				_edit = new Editor();
-				_edit.Closed += _edit_Closed;
-				_edit.DataContext = ExtractSaveFileFromElement( (Button) sender );
-				_edit.Show();
+				var editor = new Editor();
+				editor.Closed += EditClosed;
+				editor.DataContext = sf;
+				_editwindows.Add( sf.FileName, editor );
+				editor.Show();
 			}
-
 		}
 
-		void _edit_Closed( object sender, EventArgs e )
+		void EditClosed( object sender, EventArgs e )
 		{
-			_edit.Closed -= _edit_Closed;
-			_edit = null;
+			var editor = (Editor) sender;
+			editor.Closed -= EditClosed;
+			var sf = (SaveFile) editor.DataContext;
+			_editwindows.Remove( sf.FileName );
 		}
 	}
 }

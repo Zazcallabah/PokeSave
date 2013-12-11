@@ -68,6 +68,7 @@ namespace PokeConsoleClient
 					else
 						_com.Inject( lines.Actions );
 				}
+
 			}
 		}
 
