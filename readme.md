@@ -28,3 +28,9 @@ Put all bin-folders into a bin folder in the root of this repo, then run runtest
 * https://github.com/sawilde/opencover/
 * http://reportgenerator.codeplex.com/
 * http://www.nunit.org/
+
+
+Thanks
+------
+* Bulbapedia
+* KazoWAR

@@ -30,18 +30,22 @@ namespace PokeSave
 		{
 			return val | ( 1U << pos );
 		}
+
 		public static byte SetBit( this byte val, int pos )
 		{
 			return (byte) SetBit( (uint) val, pos );
 		}
+
 		public static uint ClearBit( this uint val, int pos )
 		{
 			return val & ~( 1U << pos );
 		}
+
 		public static byte ClearBit( this byte val, int pos )
 		{
 			return (byte) ClearBit( (uint) val, pos );
 		}
+
 		public static byte AssignBit( this byte val, int pos, bool value )
 		{
 			return value ? SetBit( val, pos ) : ClearBit( val, pos );

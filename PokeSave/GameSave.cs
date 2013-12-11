@@ -417,6 +417,10 @@ namespace PokeSave
 
 		public void SetSeen( int index, bool value )
 		{
+			if( !value && GetOwned( index ) )
+			{
+				SetOwned( index, false );
+			}
 			var offset = index / 8;
 			var bit = index % 8;
 			var buffervalue = _sections[0][0x5c + offset];
@@ -431,6 +435,31 @@ namespace PokeSave
 				}
 				InvokePropertyChanged( "Seen" );
 			}
+		}
+
+		public bool GetOwned( int index )
+		{
+			var offset = index / 8;
+			var bit = index % 8;
+			return _sections[0][40 + offset].IsSet( bit );
+		}
+
+		public void SetOwned( int index, bool value )
+		{
+			if( value && !GetSeen( index ) )
+			{
+				SetSeen( index, true );
+			}
+			var offset = index / 8;
+			var bit = index % 8;
+			var buffervalue = _sections[0][40 + offset];
+			var result = buffervalue.AssignBit( bit, value );
+			if( result != buffervalue )
+			{
+				_sections[0][40 + offset] = result;
+				InvokePropertyChanged( "Seen" );
+			}
+
 		}
 
 		void ExtractTeam()
