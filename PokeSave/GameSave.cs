@@ -15,7 +15,8 @@ namespace PokeSave
 		bool _isDirty;
 
 		#region _pointers
-		public readonly Dictionary<GameType, Dictionary<string, int>> _pointers = new Dictionary<GameType, Dictionary<string, int>>
+		public readonly Dictionary<GameType, Dictionary<string, int>> _pointers = new Dictionary
+			<GameType, Dictionary<string, int>>
 		{
 			{
 				GameType.FRLG, new Dictionary<string, int>
@@ -46,15 +47,15 @@ namespace PokeSave
 					{ "Berries", 0x54c },
 					{ "BerriesLength", 43 },
 					{ "Rival", 0xBCC },
-					{"DexOffset1", 0x5F8 },
-					{"DexOffset2", 0xB98 },
-					{"DexOffset3", 0x11C },
-					{"DexOffset4", 0x68 },
-					{"DexOffset5", 0x1B },
-					{"DexOffset5Value", 0xB9 },
-					{"DexOffset3Value1", 0x58 },
-					{"DexOffset3Value2", 0x62 },
-					{"DexOffset4bitindex", 0 },
+					{ "DexOffset1", 0x5F8 },
+					{ "DexOffset2", 0xB98 },
+					{ "DexOffset3", 0x11C },
+					{ "DexOffset4", 0x68 },
+					{ "DexOffset5", 0x1B },
+					{ "DexOffset5Value", 0xB9 },
+					{ "DexOffset3Value1", 0x58 },
+					{ "DexOffset3Value2", 0x62 },
+					{ "DexOffset4bitindex", 0 },
 				}
 				},
 			{
@@ -86,15 +87,15 @@ namespace PokeSave
 					{ "Berries", 0x790 },
 					{ "BerriesLength", 46 },
 					{ "Rival", -1 },
-					{"DexOffset1", 0x938 },
-					{"DexOffset2", 0xC0C },
-					{"DexOffset3", 0x44C },
-					{"DexOffset4", 0x3A6 },
-					{"DexOffset5", 0x1A },
-					{"DexOffset5Value", 0xDA },
-					{"DexOffset3Value1", 0x2 },
-					{"DexOffset3Value2", 0x3 },
-					{"DexOffset4bitindex", 6 },
+					{ "DexOffset1", 0x938 },
+					{ "DexOffset2", 0xC0C },
+					{ "DexOffset3", 0x44C },
+					{ "DexOffset4", 0x3A6 },
+					{ "DexOffset5", 0x1A },
+					{ "DexOffset5Value", 0xDA },
+					{ "DexOffset3Value1", 0x2 },
+					{ "DexOffset3Value2", 0x3 },
+					{ "DexOffset4bitindex", 6 },
 				}
 				},
 			{
@@ -126,15 +127,15 @@ namespace PokeSave
 					{ "Berries", 0x740 },
 					{ "BerriesLength", 46 },
 					{ "Rival", -1 },
-					{"DexOffset1", 0x938 },
-					{"DexOffset2", 0xC0C },
-					{"DexOffset3", 0x44C },
-					{"DexOffset4", 0x3A6 },
-					{"DexOffset5", 0x1A },
-					{"DexOffset5Value", 0xDA },
-					{"DexOffset3Value1", 0x2 },
-					{"DexOffset3Value2", 0x3 },
-					{"DexOffset4bitindex", 6 },
+					{ "DexOffset1", 0x938 },
+					{ "DexOffset2", 0xC0C },
+					{ "DexOffset3", 0x44C },
+					{ "DexOffset4", 0x3A6 },
+					{ "DexOffset5", 0x1A },
+					{ "DexOffset5Value", 0xDA },
+					{ "DexOffset3Value1", 0x2 },
+					{ "DexOffset3Value2", 0x3 },
+					{ "DexOffset4bitindex", 6 },
 				}
 				}
 		};
@@ -157,10 +158,19 @@ namespace PokeSave
 
 			Xor = new Cipher( SecurityKey );
 
+			Dex = new BindingList<DexEntry>();
+			for( var i = 0; i < 416; i++ )
+				Dex.Add( new DexEntry( i, this ) );
+
 			ExtractTeam();
 			ExtractPcBuffer();
 			ExtractItems();
 			GuessGame();
+		}
+
+		public Dictionary<string, int> Pointers
+		{
+			get { return _pointers[Type]; }
 		}
 
 		public bool IsDirty
@@ -213,17 +223,18 @@ namespace PokeSave
 		public BindingList<ItemEntry> BallPocket { get; private set; }
 		public BindingList<ItemEntry> TMCase { get; private set; }
 		public BindingList<ItemEntry> Berries { get; private set; }
+		public BindingList<DexEntry> Dex { get; private set; }
 
 		public BindingList<Box> Boxes { get; private set; }
 
 		public string Name
 		{
-			get { return _sections[0].GetText( _pointers[Type]["Name"], 8 ); }
+			get { return _sections[0].GetText( Pointers["Name"], 8 ); }
 			set
 			{
 				if( Name != value )
 				{
-					_sections[0].SetText( _pointers[Type]["Name"], 8, value );
+					_sections[0].SetText( Pointers["Name"], 8, value );
 					InvokePropertyChanged( "Name" );
 				}
 			}
@@ -231,12 +242,12 @@ namespace PokeSave
 
 		public string Rival
 		{
-			get { return _sections[4].GetText( _pointers[Type]["Rival"], 8 ); }
+			get { return _sections[4].GetText( Pointers["Rival"], 8 ); }
 			set
 			{
 				if( Rival != value )
 				{
-					_sections[4].SetText( _pointers[Type]["Rival"], 8, value );
+					_sections[4].SetText( Pointers["Rival"], 8, value );
 					InvokePropertyChanged( "Rival" );
 				}
 			}
@@ -267,8 +278,8 @@ namespace PokeSave
 		/// </summary>
 		public uint PublicId
 		{
-			get { return _sections[0].GetShort( _pointers[Type]["PublicId"] ); }
-			private set { _sections[0].SetShort( _pointers[Type]["PublicId"], value ); }
+			get { return _sections[0].GetShort( Pointers["PublicId"] ); }
+			private set { _sections[0].SetShort( Pointers["PublicId"], value ); }
 		}
 
 		/// <summary>
@@ -276,15 +287,15 @@ namespace PokeSave
 		/// </summary>
 		public uint SecretId
 		{
-			get { return _sections[0].GetShort( _pointers[Type]["SecretId"] ); }
-			private set { _sections[0].SetShort( _pointers[Type]["SecretId"], value ); }
+			get { return _sections[0].GetShort( Pointers["SecretId"] ); }
+			private set { _sections[0].SetShort( Pointers["SecretId"], value ); }
 		}
 
 		public string TimePlayed
 		{
 			get
 			{
-				uint h = _sections[0].GetShort( _pointers[Type]["TimeHours"] );
+				uint h = _sections[0].GetShort( Pointers["TimeHours"] );
 				byte m = _sections[0][_pointers[Type]["TimeMinutes"]];
 				byte s = _sections[0][_pointers[Type]["TimeSeconds"]];
 				byte f = _sections[0][_pointers[Type]["TimeFrames"]];
@@ -295,24 +306,24 @@ namespace PokeSave
 
 		public uint GameCode
 		{
-			get { return _sections[0].GetShort( _pointers[Type]["GameCode"] ); }
-			private set { _sections[0].SetShort( _pointers[Type]["GameCode"], value ); }
+			get { return _sections[0].GetShort( Pointers["GameCode"] ); }
+			private set { _sections[0].SetShort( Pointers["GameCode"], value ); }
 		}
 
 		public uint SecurityKey
 		{
-			get { return _sections[0].GetInt( _pointers[Type]["SecurityKey"] ); }
-			private set { _sections[0].SetInt( _pointers[Type]["SecurityKey"], value ); }
+			get { return _sections[0].GetInt( Pointers["SecurityKey"] ); }
+			private set { _sections[0].SetInt( Pointers["SecurityKey"], value ); }
 		}
 
 		public uint TeamSize
 		{
-			get { return _sections[1].GetInt( _pointers[Type]["TeamSize"] ); }
+			get { return _sections[1].GetInt( Pointers["TeamSize"] ); }
 			set
 			{
 				if( value != TeamSize )
 				{
-					_sections[1].SetInt( _pointers[Type]["TeamSize"], value );
+					_sections[1].SetInt( Pointers["TeamSize"], value );
 					InvokePropertyChanged( "TeamSize" );
 				}
 			}
@@ -320,12 +331,12 @@ namespace PokeSave
 
 		public uint Money
 		{
-			get { return Xor.Run( _sections[1].GetInt( _pointers[Type]["Money"] ) ); }
+			get { return Xor.Run( _sections[1].GetInt( Pointers["Money"] ) ); }
 			set
 			{
 				if( value != Money )
 				{
-					_sections[1].SetInt( _pointers[Type]["Money"], Xor.Run( value ) );
+					_sections[1].SetInt( Pointers["Money"], Xor.Run( value ) );
 					InvokePropertyChanged( "Money" );
 				}
 			}
@@ -336,8 +347,8 @@ namespace PokeSave
 		/// </summary>
 		public uint TrainerId
 		{
-			get { return _sections[0].GetInt( _pointers[Type]["PublicId"] ); }
-			private set { _sections[0].SetInt( _pointers[Type]["PublicId"], value ); }
+			get { return _sections[0].GetInt( Pointers["PublicId"] ); }
+			private set { _sections[0].SetInt( Pointers["PublicId"], value ); }
 		}
 
 		public string Hidden
@@ -356,9 +367,24 @@ namespace PokeSave
 			}
 		}
 
-		#region INotifyPropertyChanged Members
+		public bool National
+		{
+			get { return _sections[2][_pointers[Type]["DexOffset4"]].IsSet( Pointers["DexOffset4bitindex"] ); }
+			set
+			{
+				if( National != value )
+				{
+					if( value )
+						_sections[2][_pointers[Type]["DexOffset4"]].SetBit( Pointers["DexOffset4bitindex"] );
+					else
+						_sections[2][_pointers[Type]["DexOffset4"]].ClearBit( Pointers["DexOffset4bitindex"] );
+
+					InvokePropertyChanged( "National" );
+				}
+			}
+		}
+
 		public event PropertyChangedEventHandler PropertyChanged;
-		#endregion
 
 		void BubbleIsDirty( object sender, PropertyChangedEventArgs e )
 		{
@@ -388,119 +414,46 @@ namespace PokeSave
 			GameTypeGuess = id;
 		}
 
-		public bool National
-		{
-			get
-			{
-				return _sections[2][_pointers[Type]["DexOffset4"]].IsSet( _pointers[Type]["DexOffset4bitindex"] );
-			}
-			set
-			{
-				if( National != value )
-				{
-					if( value )
-						_sections[2][_pointers[Type]["DexOffset4"]].SetBit( _pointers[Type]["DexOffset4bitindex"] );
-					else
-						_sections[2][_pointers[Type]["DexOffset4"]].ClearBit( _pointers[Type]["DexOffset4bitindex"] );
-
-					InvokePropertyChanged( "National" );
-				}
-			}
-		}
-
-		public bool GetSeen( int index )
-		{
-			var offset = index / 8;
-			var bit = index % 8;
-			return _sections[0][0x5c + offset].IsSet( bit );
-		}
-
-		public void SetSeen( int index, bool value )
-		{
-			if( !value && GetOwned( index ) )
-			{
-				SetOwned( index, false );
-			}
-			var offset = index / 8;
-			var bit = index % 8;
-			var buffervalue = _sections[0][0x5c + offset];
-			var result = buffervalue.AssignBit( bit, value );
-			if( result != buffervalue )
-			{
-				_sections[0][0x5c + offset] = result;
-				if( offset <= 30 )
-				{
-					_sections[1][_pointers[Type]["DexOffset1"] + offset] = result;
-					_sections[4][_pointers[Type]["DexOffset2"] + offset] = result;
-				}
-				InvokePropertyChanged( "Seen" );
-			}
-		}
-
-		public bool GetOwned( int index )
-		{
-			var offset = index / 8;
-			var bit = index % 8;
-			return _sections[0][40 + offset].IsSet( bit );
-		}
-
-		public void SetOwned( int index, bool value )
-		{
-			if( value && !GetSeen( index ) )
-			{
-				SetSeen( index, true );
-			}
-			var offset = index / 8;
-			var bit = index % 8;
-			var buffervalue = _sections[0][40 + offset];
-			var result = buffervalue.AssignBit( bit, value );
-			if( result != buffervalue )
-			{
-				_sections[0][40 + offset] = result;
-				InvokePropertyChanged( "Seen" );
-			}
-
-		}
 
 		void ExtractTeam()
 		{
 			Team = new BindingList<MonsterEntry>();
 			Team.ListChanged += ( a, e ) => InvokePropertyChanged( "Team" );
 			for( int i = 0; i < 6; i++ )
-				Team.Add( new MonsterEntry( _sections[1], _pointers[Type]["TeamList"] + ( i * 100 ), false ) );
+				Team.Add( new MonsterEntry( _sections[1], Pointers["TeamList"] + ( i * 100 ), false ) );
 		}
 
 		void ExtractItems()
 		{
 			PCItems = new BindingList<ItemEntry>();
 			PCItems.ListChanged += ( a, e ) => InvokePropertyChanged( "PCItems" );
-			for( int i = 0; i < _pointers[Type]["PCItemsLength"]; i++ )
-				PCItems.Add( new ItemEntry( _sections[1], _pointers[Type]["PCItems"] + ( i * 4 ) ) );
+			for( int i = 0; i < Pointers["PCItemsLength"]; i++ )
+				PCItems.Add( new ItemEntry( _sections[1], Pointers["PCItems"] + ( i * 4 ) ) );
 
 			Items = new BindingList<ItemEntry>();
 			Items.ListChanged += ( a, e ) => InvokePropertyChanged( "Items" );
-			for( int i = 0; i < _pointers[Type]["ItemsLength"]; i++ )
-				Items.Add( new ItemEntry( _sections[1], _pointers[Type]["Items"] + ( i * 4 ), Xor ) );
+			for( int i = 0; i < Pointers["ItemsLength"]; i++ )
+				Items.Add( new ItemEntry( _sections[1], Pointers["Items"] + ( i * 4 ), Xor ) );
 
 			KeyItems = new BindingList<ItemEntry>();
 			KeyItems.ListChanged += ( a, e ) => InvokePropertyChanged( "KeyItems" );
-			for( int i = 0; i < _pointers[Type]["KeyItemsLength"]; i++ )
-				KeyItems.Add( new ItemEntry( _sections[1], _pointers[Type]["KeyItems"] + ( i * 4 ), Xor ) );
+			for( int i = 0; i < Pointers["KeyItemsLength"]; i++ )
+				KeyItems.Add( new ItemEntry( _sections[1], Pointers["KeyItems"] + ( i * 4 ), Xor ) );
 
 			BallPocket = new BindingList<ItemEntry>();
 			BallPocket.ListChanged += ( a, e ) => InvokePropertyChanged( "BallPocket" );
-			for( int i = 0; i < _pointers[Type]["BallPocketLength"]; i++ )
-				BallPocket.Add( new ItemEntry( _sections[1], _pointers[Type]["BallPocket"] + ( i * 4 ), Xor ) );
+			for( int i = 0; i < Pointers["BallPocketLength"]; i++ )
+				BallPocket.Add( new ItemEntry( _sections[1], Pointers["BallPocket"] + ( i * 4 ), Xor ) );
 
 			TMCase = new BindingList<ItemEntry>();
 			TMCase.ListChanged += ( a, e ) => InvokePropertyChanged( "TMCase" );
-			for( int i = 0; i < _pointers[Type]["TMCaseLength"]; i++ )
-				TMCase.Add( new ItemEntry( _sections[1], _pointers[Type]["TMCase"] + ( i * 4 ), Xor ) );
+			for( int i = 0; i < Pointers["TMCaseLength"]; i++ )
+				TMCase.Add( new ItemEntry( _sections[1], Pointers["TMCase"] + ( i * 4 ), Xor ) );
 
 			Berries = new BindingList<ItemEntry>();
 			Berries.ListChanged += ( a, e ) => InvokePropertyChanged( "Berries" );
-			for( int i = 0; i < _pointers[Type]["BerriesLength"]; i++ )
-				Berries.Add( new ItemEntry( _sections[1], _pointers[Type]["Berries"] + ( i * 4 ), Xor ) );
+			for( int i = 0; i < Pointers["BerriesLength"]; i++ )
+				Berries.Add( new ItemEntry( _sections[1], Pointers["Berries"] + ( i * 4 ), Xor ) );
 		}
 
 		void ExtractPcBuffer()
