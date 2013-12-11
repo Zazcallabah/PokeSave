@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using System.Text;
 
@@ -86,6 +87,41 @@ namespace PokeSave
 			{
 				IsDirty = true;
 				_datasource[index] = value;
+			}
+		}
+
+		public string TextRepresentation
+		{
+			get
+			{
+				var sb = new StringBuilder();
+				for( int i = 0; i < _datasource.Length; i += 8 )
+				{
+					sb.Append( i.ToString( "X4" ) );
+					sb.Append( ": " );
+					for( int j = 0; j < 8; j++ )
+					{
+						sb.Append( _datasource[i + j].ToString( "X2" ) );
+						sb.Append( " " );
+					}
+					sb.AppendLine();
+				}
+				return sb.ToString();
+			}
+			set
+			{
+				var lines = value.Split( new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries );
+				int index = 0;
+				foreach( var l in lines )
+				{
+					for( int i = 0; i < 8 && index < _datasource.Length; i++, index++ )
+					{
+						var substr = l.Substring( 6 + (i*3), 2 );
+						var b = byte.Parse( substr, NumberStyles.HexNumber );
+						if( _datasource[index] != b )
+							this[index] = b;
+					}
+				}
 			}
 		}
 

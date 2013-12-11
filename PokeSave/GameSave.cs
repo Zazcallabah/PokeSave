@@ -15,7 +15,7 @@ namespace PokeSave
 		bool _isDirty;
 
 		#region _pointers
-		readonly Dictionary<GameType, Dictionary<string, int>> _pointers = new Dictionary<GameType, Dictionary<string, int>>
+		public readonly Dictionary<GameType, Dictionary<string, int>> _pointers = new Dictionary<GameType, Dictionary<string, int>>
 		{
 			{
 				GameType.FRLG, new Dictionary<string, int>
@@ -45,7 +45,16 @@ namespace PokeSave
 					{ "TMCaseLength", 58 },
 					{ "Berries", 0x54c },
 					{ "BerriesLength", 43 },
-					{ "Rival", 0xBCC }
+					{ "Rival", 0xBCC },
+					{"DexOffset1", 0x5F8 },
+					{"DexOffset2", 0xB98 },
+					{"DexOffset3", 0x11C },
+					{"DexOffset4", 0x68 },
+					{"DexOffset5", 0x1B },
+					{"DexOffset5Value", 0xB9 },
+					{"DexOffset3Value1", 0x58 },
+					{"DexOffset3Value2", 0x62 },
+					{"DexOffset4bitindex", 0 },
 				}
 				},
 			{
@@ -76,7 +85,16 @@ namespace PokeSave
 					{ "TMCaseLength", 64 },
 					{ "Berries", 0x790 },
 					{ "BerriesLength", 46 },
-					{ "Rival", -1 }
+					{ "Rival", -1 },
+					{"DexOffset1", 0x938 },
+					{"DexOffset2", 0xC0C },
+					{"DexOffset3", 0x44C },
+					{"DexOffset4", 0x3A6 },
+					{"DexOffset5", 0x1A },
+					{"DexOffset5Value", 0xDA },
+					{"DexOffset3Value1", 0x2 },
+					{"DexOffset3Value2", 0x3 },
+					{"DexOffset4bitindex", 6 },
 				}
 				},
 			{
@@ -107,7 +125,16 @@ namespace PokeSave
 					{ "TMCaseLength", 64 },
 					{ "Berries", 0x740 },
 					{ "BerriesLength", 46 },
-					{ "Rival", -1 }
+					{ "Rival", -1 },
+					{"DexOffset1", 0x938 },
+					{"DexOffset2", 0xC0C },
+					{"DexOffset3", 0x44C },
+					{"DexOffset4", 0x3A6 },
+					{"DexOffset5", 0x1A },
+					{"DexOffset5Value", 0xDA },
+					{"DexOffset3Value1", 0x2 },
+					{"DexOffset3Value2", 0x3 },
+					{"DexOffset4bitindex", 6 },
 				}
 				}
 		};
@@ -313,6 +340,22 @@ namespace PokeSave
 			private set { _sections[0].SetInt( _pointers[Type]["PublicId"], value ); }
 		}
 
+		public string Hidden
+		{
+			get
+			{
+				var sb = new StringBuilder();
+				for( int i = 0; i < 4 * 1024; i++ )
+				{
+					sb.Append( _sections[0][i].ToString( "X2" ) );
+					sb.Append( " " );
+					if( i % 8 == 7 )
+						sb.AppendLine();
+				}
+				return sb.ToString();
+			}
+		}
+
 		#region INotifyPropertyChanged Members
 		public event PropertyChangedEventHandler PropertyChanged;
 		#endregion
@@ -343,6 +386,51 @@ namespace PokeSave
 					id = kvp.Key;
 				}
 			GameTypeGuess = id;
+		}
+
+		public bool National
+		{
+			get
+			{
+				return _sections[2][_pointers[Type]["DexOffset4"]].IsSet( _pointers[Type]["DexOffset4bitindex"] );
+			}
+			set
+			{
+				if( National != value )
+				{
+					if( value )
+						_sections[2][_pointers[Type]["DexOffset4"]].SetBit( _pointers[Type]["DexOffset4bitindex"] );
+					else
+						_sections[2][_pointers[Type]["DexOffset4"]].ClearBit( _pointers[Type]["DexOffset4bitindex"] );
+
+					InvokePropertyChanged( "National" );
+				}
+			}
+		}
+
+		public bool GetSeen( int index )
+		{
+			var offset = index / 8;
+			var bit = index % 8;
+			return _sections[0][0x5c + offset].IsSet( bit );
+		}
+
+		public void SetSeen( int index, bool value )
+		{
+			var offset = index / 8;
+			var bit = index % 8;
+			var buffervalue = _sections[0][0x5c + offset];
+			var result = buffervalue.AssignBit( bit, value );
+			if( result != buffervalue )
+			{
+				_sections[0][0x5c + offset] = result;
+				if( offset <= 30 )
+				{
+					_sections[1][_pointers[Type]["DexOffset1"] + offset] = result;
+					_sections[4][_pointers[Type]["DexOffset2"] + offset] = result;
+				}
+				InvokePropertyChanged( "Seen" );
+			}
 		}
 
 		void ExtractTeam()
@@ -484,6 +572,11 @@ namespace PokeSave
 		{
 			if( PropertyChanged != null )
 				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
+		}
+
+		public GameSection Section( int index )
+		{
+			return _sections[index];
 		}
 	}
 }

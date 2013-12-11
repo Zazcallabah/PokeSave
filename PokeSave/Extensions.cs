@@ -16,6 +16,11 @@ namespace PokeSave
 			return ( value & mask ) | ( origin & ~mask );
 		}
 
+		public static bool IsSet( this byte val, int pos )
+		{
+			return ( val & ( (byte) 1 << pos ) ) != 0;
+		}
+
 		public static bool IsSet( this uint val, int pos )
 		{
 			return ( val & ( 1U << pos ) ) != 0;
@@ -25,10 +30,21 @@ namespace PokeSave
 		{
 			return val | ( 1U << pos );
 		}
-
+		public static byte SetBit( this byte val, int pos )
+		{
+			return (byte) SetBit( (uint) val, pos );
+		}
 		public static uint ClearBit( this uint val, int pos )
 		{
 			return val & ~( 1U << pos );
+		}
+		public static byte ClearBit( this byte val, int pos )
+		{
+			return (byte) ClearBit( (uint) val, pos );
+		}
+		public static byte AssignBit( this byte val, int pos, bool value )
+		{
+			return value ? SetBit( val, pos ) : ClearBit( val, pos );
 		}
 
 		public static bool AppendIfNotEmpty( this StringBuilder sb, string line, int index, string pre = "" )

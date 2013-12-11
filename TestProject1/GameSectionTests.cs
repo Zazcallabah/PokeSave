@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using NUnit.Framework;
 using PokeSave;
@@ -88,6 +89,30 @@ namespace TestProject1
 					Assert.AreEqual( "GREEN", s.GetText( 0, 8 ) );
 				}
 			}
+		}
+
+		[Test]
+		public void CanParseTextRepresentation()
+		{
+			Assert.AreEqual( "0000: 00 00 00 00 00 00 00 00 \r\n0008: 00 00 00 00 00 00 00 00", _savesA[0].TextRepresentation.Substring( 0, 61 ) );
+			_savesA[0].TextRepresentation = "aoeu: 10 01 02 03 04 05 06 07 aoseuaoeus\r\n000j: ff fe fd fc fb fa f0 99";
+			Assert.AreEqual( 16, _savesA[0][0] );
+			Assert.AreEqual( 1, _savesA[0][1] );
+			Assert.AreEqual( 2, _savesA[0][2] );
+			Assert.AreEqual( 3, _savesA[0][3] );
+			Assert.AreEqual( 4, _savesA[0][4] );
+			Assert.AreEqual( 5, _savesA[0][5] );
+			Assert.AreEqual( 6, _savesA[0][6] );
+			Assert.AreEqual( 7, _savesA[0][7] );
+			Assert.AreEqual( 255, _savesA[0][8] );
+			Assert.AreEqual( 254, _savesA[0][9] );
+			Assert.AreEqual( 253, _savesA[0][10] );
+			Assert.AreEqual( 252, _savesA[0][11] );
+			Assert.AreEqual( 251, _savesA[0][12] );
+			Assert.AreEqual( 250, _savesA[0][13] );
+			Assert.AreEqual( 240, _savesA[0][14] );
+			Assert.AreEqual( int.Parse( "99", NumberStyles.HexNumber ), _savesA[0][15] );
+			Assert.AreEqual( 0, _savesA[0][16] );
 		}
 
 		[Test]
