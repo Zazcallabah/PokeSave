@@ -22,11 +22,11 @@ namespace PokeEdit
 			_editwindows = new Dictionary<string, Editor>();
 			InitializeComponent();
 			DataContext = new BindingList<SaveFile>();
-			Drop += MainWindow_Drop;
+			Drop += MainWindowDrop;
 			Info.Text = "This tool lives at https://github.com/Zazcallabah/PokeSave";
 		}
 
-		void MainWindow_Drop( object sender, DragEventArgs e )
+		void MainWindowDrop( object sender, DragEventArgs e )
 		{
 			if( e.Data.GetDataPresent( DataFormats.FileDrop ) )
 				try
