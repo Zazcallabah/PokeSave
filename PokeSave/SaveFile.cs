@@ -10,11 +10,11 @@ namespace PokeSave
 	public class SaveFile : INotifyPropertyChanged
 	{
 		readonly byte[] _tail;
-		readonly string _originalFileName;
+		public string FileName { get; private set; }
 
 		public SaveFile( string name )
 		{
-			_originalFileName = name;
+			FileName = name;
 			var inputstream = File.OpenRead( name );
 
 			try
@@ -103,7 +103,7 @@ namespace PokeSave
 
 		public void Save()
 		{
-			SaveFileWithBackup( _originalFileName );
+			SaveFileWithBackup( FileName );
 		}
 
 		public void SaveAs( string name )
