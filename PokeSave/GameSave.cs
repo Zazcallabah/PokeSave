@@ -569,6 +569,31 @@ namespace PokeSave
 				RepairPokeDex( p );
 		}
 
+		public void Merge( GameSave external )
+		{
+			var ml = Team.Concat( PcBuffer ).ToList();
+			var externallist = external.Team.Concat( external.PcBuffer ).ToList();
+			var toadd = externallist.Where( e => !( ml.Any( m => m.MonsterId == e.MonsterId ) ) ).ToList();
+
+			var l = LastEmptyIndex( PcBuffer.Count - 1 );
+			foreach( var entry in toadd )
+			{
+				if( l == -1 )
+					break;
+				PcBuffer[l].RawData = entry.RawData;
+				l = LastEmptyIndex( l );
+			}
+		}
+
+		int LastEmptyIndex( int start )
+		{
+			for( int i = start; i >= 0; i-- )
+			{
+				if( PcBuffer[i].Empty )
+					return i;
+			}
+			return -1;
+		}
 		public void RepairPokeDex( MonsterEntry m )
 		{
 			var dexEntry = Dex.FirstOrDefault( a => a.Name == m.TypeInformation.Name );

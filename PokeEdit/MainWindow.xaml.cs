@@ -59,6 +59,23 @@ namespace PokeEdit
 				}
 		}
 
+		void MergeButtonClicked( object sender, RoutedEventArgs e )
+		{
+			var list = (BindingList<SaveFile>) DataContext;
+
+			for( int i = 0; i < list.Count; i++ )
+			{
+				for( int j = 0; j < list.Count; j++ )
+				{
+					if( i != j )
+						list[i].Latest.Merge( list[j].Latest );
+				}
+				list[i].Latest.RepairPokeDex();
+			}
+		}
+
+
+
 		SaveFile ExtractSaveFileFromElement( Button button )
 		{
 			var buttoncontainer = (StackPanel) VisualTreeHelper.GetParent( button );
