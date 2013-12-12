@@ -560,5 +560,23 @@ namespace PokeSave
 		{
 			return _sections[index];
 		}
+
+		public void RepairPokeDex()
+		{
+			foreach( MonsterEntry p in Team.Where( t => !t.Empty ) )
+				RepairPokeDex( p );
+			foreach( MonsterEntry p in PcBuffer.Where( t => !t.Empty ) )
+				RepairPokeDex( p );
+		}
+
+		public void RepairPokeDex( MonsterEntry m )
+		{
+			var dexEntry = Dex.FirstOrDefault( a => a.Name == m.TypeInformation.Name );
+			if( dexEntry != null )
+			{
+				dexEntry.Seen = true;
+				dexEntry.Owned = true;
+			}
+		}
 	}
 }

@@ -11,12 +11,11 @@
 			</Grid.RowDefinitions>
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="120"/>
-				<ColumnDefinition Width="*"/>
+				<ColumnDefinition Width="40"/>
+				<ColumnDefinition Width="15"/>
 				<ColumnDefinition Width="50"/>
-				<ColumnDefinition Width="20"/>
+				<ColumnDefinition Width="15"/>
 				<ColumnDefinition Width="*"/>
-				<ColumnDefinition Width="50"/>
-				<ColumnDefinition Width="30"/>
 			</Grid.ColumnDefinitions>
 			<ComboBox
 		Margin="2"
@@ -27,10 +26,11 @@
 		ItemsSource="{Binding}"
 		DisplayMemberPath="Name" />
 
-			<TextBlock Grid.Column="2" Padding="2"  VerticalAlignment="Center" HorizontalAlignment="Right" Text="Seen"/>
-			<CheckBox Grid.Column="3" VerticalAlignment="Center" IsChecked="{Binding Path=SelectedItem.Seen,ElementName=Selection}"/>
-			<TextBlock Grid.Column="5"  Padding="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Owned"/>
-			<CheckBox Grid.Column="6" VerticalAlignment="Center" IsChecked="{Binding Path=SelectedItem.Owned,ElementName=Selection}"/>
+			<TextBlock Grid.Column="1" Padding="2"  VerticalAlignment="Center" HorizontalAlignment="Right" Text="Seen"/>
+			<CheckBox Grid.Column="2" VerticalAlignment="Center" IsChecked="{Binding Path=SelectedItem.Seen,ElementName=Selection}"/>
+			<TextBlock Grid.Column="3"  Padding="2" VerticalAlignment="Center" HorizontalAlignment="Right" Text="Owned"/>
+			<CheckBox Grid.Column="4" VerticalAlignment="Center" IsChecked="{Binding Path=SelectedItem.Owned,ElementName=Selection}"/>
+			<Button Width="70" HorizontalAlignment="Right"  Grid.Column="5" Click="RepairClick">Repair All</Button>
 		</Grid> 
 	</GroupBox>
 
