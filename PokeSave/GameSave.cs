@@ -351,22 +351,6 @@ namespace PokeSave
 			private set { _sections[0].SetInt( Pointers["PublicId"], value ); }
 		}
 
-		public string Hidden
-		{
-			get
-			{
-				var sb = new StringBuilder();
-				for( int i = 0; i < 4 * 1024; i++ )
-				{
-					sb.Append( _sections[0][i].ToString( "X2" ) );
-					sb.Append( " " );
-					if( i % 8 == 7 )
-						sb.AppendLine();
-				}
-				return sb.ToString();
-			}
-		}
-
 		public bool National
 		{
 			get { return _sections[2][_pointers[Type]["DexOffset4"]].IsSet( Pointers["DexOffset4bitindex"] ); }
