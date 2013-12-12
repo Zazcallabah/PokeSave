@@ -23,16 +23,17 @@
 								BorderThickness="2"
 								BorderBrush="#000000"
 								Padding="4"
-								Width="350"
+								Width="352"
 								Background="#FFF2F2">
 							<StackPanel>
 								<PokeEdit:SaveControl DataContext="{Binding}"/>
 								<StackPanel Orientation="Horizontal">
-									<Button Height="26" Margin="4" Width="75" Content="Save" IsEnabled="{Binding Latest.IsDirty}" Click="SaveButtonClicked" />
-									<Button Height="26" Margin="4" Width="75" Content="Save as" IsEnabled="{Binding Latest.IsDirty}"  Click="SaveAsButtonClicked" />
-										<Button Height="26" Margin="4" Width="75" Content="Claim all" Click="ClaimButtonClicked" />
-										<Button Height="26" Margin="4" Width="75" Content="Hex" Click="HexButtonClicked" />
-									</StackPanel>
+									<Button Height="26" Margin="4" Width="60" Content="Save" IsEnabled="{Binding Latest.IsDirty}" Click="SaveButtonClicked" />
+									<Button Height="26" Margin="4" Width="60" Content="Save as" IsEnabled="{Binding Latest.IsDirty}"  Click="SaveAsButtonClicked" />
+									<Button Height="26" Margin="4" Width="60" Content="Claim all" Click="ClaimButtonClicked" />
+									<Button Height="26" Margin="4" Width="60" Content="Hex" Click="HexButtonClicked" />
+									<Button Height="26" Margin="4" Width="60" Content="Close" Click="CloseButtonClicked" />
+								</StackPanel>
 							</StackPanel>
 						</Border>	
 					</DataTemplate>

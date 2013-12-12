@@ -44,7 +44,7 @@
 		
 		<PokeEdit:DexHolderPanel DataContext="{Binding Latest.Dex,Mode=OneWay}" />
 
-		<PokeEdit:PcBoxHolderPanel Background="#FFFFFF" DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
+		<PokeEdit:PcBoxHolderPanel Margin="0,4,0,4"  Background="#FFFFFF" DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
 
 	</StackPanel>
 </UserControl>

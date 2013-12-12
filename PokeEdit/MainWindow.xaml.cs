@@ -108,6 +108,12 @@ namespace PokeEdit
 			}
 		}
 
+		void CloseButtonClicked( object sender, RoutedEventArgs e )
+		{
+			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );
+			( (BindingList<SaveFile>) DataContext ).Remove( sf );
+		}
+
 		void EditClosed( object sender, EventArgs e )
 		{
 			var editor = (Editor) sender;
