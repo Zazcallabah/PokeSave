@@ -202,8 +202,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// Checks subsection save indexes and checksums.
-		/// This will be false if save file has been changed without calling FixChecksum()
+		/// 	Checks subsection save indexes and checksums. This will be false if save file has been changed without calling FixChecksum()
 		/// </summary>
 		public bool Valid
 		{
@@ -274,7 +273,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// Writing these is not currently supported
+		/// 	Writing these is not currently supported
 		/// </summary>
 		public uint PublicId
 		{
@@ -283,7 +282,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// Writing these is not currently supported
+		/// 	Writing these is not currently supported
 		/// </summary>
 		public uint SecretId
 		{
@@ -343,7 +342,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// This sets publicid and secretid at the same time
+		/// 	This sets publicid and secretid at the same time
 		/// </summary>
 		public uint TrainerId
 		{
@@ -572,12 +571,11 @@ namespace PokeSave
 		int LastEmptyIndex( int start )
 		{
 			for( int i = start; i >= 0; i-- )
-			{
 				if( PcBuffer[i].Empty )
 					return i;
-			}
 			return -1;
 		}
+
 		public void RepairPokeDex( MonsterEntry m )
 		{
 			var dexEntry = Dex.FirstOrDefault( a => a.Name == m.TypeInformation.Name );
