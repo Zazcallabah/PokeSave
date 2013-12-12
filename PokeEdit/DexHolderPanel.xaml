@@ -1,8 +1,7 @@
 ﻿<UserControl
 	x:Class="PokeEdit.DexHolderPanel"
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	Margin="2">
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 	<GroupBox Header="PokeDex" BorderBrush="#808080" Background="#FFFFFF">
 
 		<Grid>

@@ -3,7 +3,7 @@
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	xmlns:PokeEdit="clr-namespace:PokeEdit"
-	Title="PokeEdit" Height="480" Width="500" AllowDrop="True"  Icon="Resources\settings_32.png">
+	Title="PokeEdit" Height="480" Width="500" MinHeight="200" MinWidth="200" AllowDrop="True"  Icon="Resources\settings_32.png">
 	<Grid Background="#D3D3D3">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*"/>
