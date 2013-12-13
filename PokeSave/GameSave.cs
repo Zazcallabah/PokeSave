@@ -56,6 +56,8 @@ namespace PokeSave
 					{ "DexOffset3Value1", 0x58 },
 					{ "DexOffset3Value2", 0x62 },
 					{ "DexOffset4bitindex", 0 },
+					{ "BoxNames",0x8344},
+					{"BoxWallpapers",0x83C2},
 				}
 				},
 			{
@@ -96,6 +98,8 @@ namespace PokeSave
 					{ "DexOffset3Value1", 0x2 },
 					{ "DexOffset3Value2", 0x3 },
 					{ "DexOffset4bitindex", 6 },
+					{ "BoxNames",0x8344},
+					{"BoxWallpapers",0x83C2},
 				}
 				},
 			{
@@ -136,8 +140,10 @@ namespace PokeSave
 					{ "DexOffset3Value1", 0x2 },
 					{ "DexOffset3Value2", 0x3 },
 					{ "DexOffset4bitindex", 6 },
+					{ "BoxNames",0x8344},
+					{"BoxWallpapers",0x83C2},
 				}
-				}
+			}
 		};
 		#endregion
 
