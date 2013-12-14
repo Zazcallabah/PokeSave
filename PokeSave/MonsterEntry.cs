@@ -320,6 +320,12 @@ namespace PokeSave
 		/// </summary>
 		public bool IsDirty { get; private set; }
 
+		public string HeldItemName
+		{
+			get { return ItemList.Get( Item ); }
+			set { Item = ItemList.First( value ); }
+		}
+
 		public uint Item
 		{
 			get { return GetEncryptedWord( GrowthOffset, false ); }
@@ -329,6 +335,7 @@ namespace PokeSave
 				{
 					SetEncryptedWord( GrowthOffset, false, (ushort) value );
 					InvokePropertyChanged( "Item" );
+					InvokePropertyChanged( "HeldItemName" );
 				}
 			}
 		}
@@ -459,7 +466,7 @@ namespace PokeSave
 			get
 			{
 				for( int i = _offset; i < _offset + ( Storage ? 80 : 100 ); i++ )
-					if( _data[i] != 0 )
+					if( i != ( _offset + 85 ) && _data[i] != 0 ) // for some reason this byte is FF in empty entries
 						return false;
 				return true;
 			}

@@ -15,121 +15,121 @@
 	</UserControl.ContextMenu>
 
 	<StackPanel>
-			<GroupBox Header="Data">
-				<StackPanel Orientation="Horizontal">
-					<StackPanel>
-						<PokeEdit:PropertyPanel PropertyName="Name" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="MonsterId" DataContext="{Binding}"/>
-						<PokeEdit:ReadOnlyPropertyPanel PropertyName="Checksum" DataContext="{Binding}" />
-			<!-- combo--><PokeEdit:PropertyPanel PropertyName="Item" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Friendship" DataContext="{Binding}"/>
-					</StackPanel>
-					<StackPanel>
-						<PokeEdit:ReadOnlyPropertyPanel Label="Type" PropertyName="TypeInformation.Name" DataContext="{Binding}" />
-						<PokeEdit:PropertyPanel PropertyName="XP" DataContext="{Binding}"/>
-						<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding}" />
-						<PokeEdit:PropertyPanel PropertyName="Mark" DataContext="{Binding}"/>
-						<!-- has a bunch of sub properties	<PokeEdit:ReadOnlyPropertyPanel PropertyName="TypeInformation" DataContext="{Binding}" />-->
-					</StackPanel>
+		<GroupBox Header="Data">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<PokeEdit:PropertyPanel PropertyName="Name" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="MonsterId" DataContext="{Binding}"/>
+					<PokeEdit:ReadOnlyPropertyPanel PropertyName="Checksum" DataContext="{Binding}" />
+					<PokeEdit:ComboBoxPanel PropertyName="HeldItemName" ListSourceClass="ItemList" Label="Held item"  DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Friendship" DataContext="{Binding}"/>
 				</StackPanel>
-			</GroupBox>
+				<StackPanel>
+					<PokeEdit:ReadOnlyPropertyPanel Label="Type" PropertyName="TypeInformation.Name" DataContext="{Binding}" />
+					<PokeEdit:PropertyPanel PropertyName="XP" DataContext="{Binding}"/>
+					<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding}" />
+					<PokeEdit:PropertyPanel PropertyName="Mark" DataContext="{Binding}"/>
+					<!-- has a bunch of sub properties	<PokeEdit:ReadOnlyPropertyPanel PropertyName="TypeInformation" DataContext="{Binding}" />-->
+				</StackPanel>
+			</StackPanel>
+		</GroupBox>
 			
-			<GroupBox Header="Moves">
-				<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-					<StackPanel>
-						<PokeEdit:MovePropertyPanel Index="1" />
-						<PokeEdit:MovePropertyPanel Index="3" />
-					</StackPanel>
-					<StackPanel>
-						<PokeEdit:MovePropertyPanel Index="2" />
-						<PokeEdit:MovePropertyPanel Index="4" />
-					</StackPanel>
+		<GroupBox Header="Moves">
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+				<StackPanel>
+					<PokeEdit:MovePropertyPanel Index="1" />
+					<PokeEdit:MovePropertyPanel Index="3" />
 				</StackPanel>
-			</GroupBox>
-
-			<GroupBox Header="Origin">
-				<StackPanel Orientation="Horizontal">
-					<StackPanel>
-						<PokeEdit:PropertyPanel Label="Id" PropertyName="OriginalTrainerId" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Name" PropertyName="OriginalTrainerName" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Gender" PropertyName="OriginalTrainerGender" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Game" PropertyName="GameOfOrigin" DataContext="{Binding}"/>
-					</StackPanel>
-					<StackPanel>
-						<PokeEdit:PropertyPanel Label="Ball" PropertyName="BallCaught" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Level met" PropertyName="LevelMet" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Location met" PropertyName="MetLocation" DataContext="{Binding}"/>
-						<PokeEdit:ReadOnlyPropertyPanel PropertyName="OriginInfo" DataContext="{Binding}" />
-					</StackPanel>
+				<StackPanel>
+					<PokeEdit:MovePropertyPanel Index="2" />
+					<PokeEdit:MovePropertyPanel Index="4" />
 				</StackPanel>
-			</GroupBox>
+			</StackPanel>
+		</GroupBox>
 
-			<Expander Header="Current Status" Visibility="{Binding Storage, Converter={StaticResource VisiblityConverter}, Mode=OneWay}">
-				<StackPanel Orientation="Horizontal">
-					<StackPanel>
-						<PokeEdit:PropertyPanel PropertyName="Level" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="HP" PropertyName="CurrentHP" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Total HP" PropertyName="TotalHP" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Attack" PropertyName="CurrentAttack" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Defense" PropertyName="CurrentDefense" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Speed"  PropertyName="CurrentSpeed" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="CurrentSpAttack" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="CurrentSpDefense" DataContext="{Binding}"/>
-					</StackPanel>
-					<StackPanel>
-						<PokeEdit:PropertyPanel Label="Status" PropertyName="StatusByte" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Sleeping" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Poisoned" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Burned" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Frozen" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Paralyzed" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="BadPoisoned" DataContext="{Binding}"/>
-					</StackPanel>
+		<GroupBox Header="Origin">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<PokeEdit:PropertyPanel Label="Id" PropertyName="OriginalTrainerId" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Name" PropertyName="OriginalTrainerName" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Gender" PropertyName="OriginalTrainerGender" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Game" PropertyName="GameOfOrigin" DataContext="{Binding}"/>
 				</StackPanel>
-			</Expander>
-
-			<Expander Header="Personality &amp; Virus">
-				<StackPanel Orientation="Horizontal">
-					<StackPanel>
-						<PokeEdit:PropertyPanel PropertyName="Personality" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Nature" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Gender" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Evolution" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Shiny" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Ability" DataContext="{Binding}"/>
-						<PokeEdit:ReadOnlyPropertyPanel PropertyName="AbilityName" DataContext="{Binding}" />
-					</StackPanel>
-
-					<StackPanel>
-						<PokeEdit:PropertyPanel PropertyName="Virus" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Immune" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="VirusStrain" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="VirusFade" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="VirusStatus" DataContext="{Binding}"/>
-					</StackPanel>
+				<StackPanel>
+					<PokeEdit:PropertyPanel Label="Ball" PropertyName="BallCaught" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Level met" PropertyName="LevelMet" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Location met" PropertyName="MetLocation" DataContext="{Binding}"/>
+					<PokeEdit:ReadOnlyPropertyPanel PropertyName="OriginInfo" DataContext="{Binding}" />
 				</StackPanel>
-			</Expander>
+			</StackPanel>
+		</GroupBox>
+
+		<Expander Header="Current Status" Visibility="{Binding Storage, Converter={StaticResource VisiblityConverter}, Mode=OneWay}">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<PokeEdit:PropertyPanel PropertyName="Level" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="HP" PropertyName="CurrentHP" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Total HP" PropertyName="TotalHP" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Attack" PropertyName="CurrentAttack" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Defense" PropertyName="CurrentDefense" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Speed"  PropertyName="CurrentSpeed" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="CurrentSpAttack" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="CurrentSpDefense" DataContext="{Binding}"/>
+				</StackPanel>
+				<StackPanel>
+					<PokeEdit:PropertyPanel Label="Status" PropertyName="StatusByte" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Sleeping" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Poisoned" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Burned" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Frozen" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Paralyzed" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="BadPoisoned" DataContext="{Binding}"/>
+				</StackPanel>
+			</StackPanel>
+		</Expander>
+
+		<Expander Header="Personality &amp; Virus">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<PokeEdit:PropertyPanel PropertyName="Personality" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Nature" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Gender" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Evolution" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Shiny" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Ability" DataContext="{Binding}"/>
+					<PokeEdit:ReadOnlyPropertyPanel PropertyName="AbilityName" DataContext="{Binding}" />
+				</StackPanel>
+
+				<StackPanel>
+					<PokeEdit:PropertyPanel PropertyName="Virus" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Immune" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="VirusStrain" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="VirusFade" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="VirusStatus" DataContext="{Binding}"/>
+				</StackPanel>
+			</StackPanel>
+		</Expander>
 			
-			<Expander Header="EVs">
-				<StackPanel Orientation="Horizontal">
-					<StackPanel>
-						<PokeEdit:PropertyPanel Label="HP" PropertyName="HPEV" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Attack" PropertyName="AttackEV" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Defense" PropertyName="DefenseEV" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Speed"  PropertyName="SpeedEV" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="SpAttackEV" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="SpDefenseEV" DataContext="{Binding}"/>
-					</StackPanel>
-					<StackPanel>
-						<PokeEdit:PropertyPanel PropertyName="Coolness" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Beauty" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Cuteness" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Smartness" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Toughness" DataContext="{Binding}"/>
-						<PokeEdit:PropertyPanel PropertyName="Feel" DataContext="{Binding}"/>
-					</StackPanel>
+		<Expander Header="EVs">
+			<StackPanel Orientation="Horizontal">
+				<StackPanel>
+					<PokeEdit:PropertyPanel Label="HP" PropertyName="HPEV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Attack" PropertyName="AttackEV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Defense" PropertyName="DefenseEV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Speed"  PropertyName="SpeedEV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="SpAttackEV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="SpDefenseEV" DataContext="{Binding}"/>
 				</StackPanel>
-			</Expander>
+				<StackPanel>
+					<PokeEdit:PropertyPanel PropertyName="Coolness" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Beauty" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Cuteness" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Smartness" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Toughness" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel PropertyName="Feel" DataContext="{Binding}"/>
+				</StackPanel>
+			</StackPanel>
+		</Expander>
 		
 		<Expander Header="IVs">
 				<StackPanel>
@@ -147,11 +147,10 @@
 					<PokeEdit:PropertyPanel PropertyName="Language" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="IVs" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="PPBonus" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Ribbons" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Ribbons" DataContext="{Binding}"/>
+			</StackPanel>
+		</Expander>
 
-				</StackPanel>
-			</Expander>
-
-			<Button Content="Remove" Click="RemoveClicked" Margin="2"/>
-		</StackPanel>
+		<Button Content="Remove" Click="RemoveClicked" Margin="2"/>
+	</StackPanel>
 </UserControl>
