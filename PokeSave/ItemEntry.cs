@@ -47,7 +47,7 @@ namespace PokeSave
 		public string Name
 		{
 			get { return ItemList.Get( ID ); }
-			set { ID = ItemList.Set( value ); }
+			set { ID = ItemList.First( value ); }
 		}
 
 		public uint Count

@@ -12,11 +12,10 @@
 
 		public static string Get( uint index )
 		{
-
 			return Items.Get( index );
 		}
 
-		public static uint Set( string value )
+		public static uint First( string value )
 		{
 			return Items.First( value );
 		}

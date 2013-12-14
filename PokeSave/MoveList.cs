@@ -2,27 +2,27 @@ namespace PokeSave
 {
 	public static class MoveList
 	{
-		static StringList _moves;
+		static readonly StringList Moves;
+
+		static MoveList()
+		{
+			if( Moves == null )
+				Moves = new StringList( "moves.bin" );
+		}
 
 		public static string Get( uint index )
 		{
-			if( _moves == null )
-				_moves = new StringList( "moves.bin" );
-			return _moves.Get( index );
+			return Moves.Get( index );
 		}
 
 		public static string[] All()
 		{
-			if( _moves == null )
-				_moves = new StringList( "moves.bin" );
-			return _moves.All();
+			return Moves.All();
 		}
 
 		public static uint First( string value )
 		{
-			if( _moves == null )
-				_moves = new StringList( "moves.bin" );
-			return _moves.First( value );
+			return Moves.First( value );
 		}
 	}
 }

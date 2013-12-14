@@ -2,13 +2,17 @@ namespace PokeSave
 {
 	public static class NameList
 	{
-		static StringList _names;
+		static readonly StringList Names;
+
+		static NameList()
+		{
+			if( Names == null )
+				Names = new StringList( "names.bin" );
+		}
 
 		public static string Get( uint index )
 		{
-			if( _names == null )
-				_names = new StringList( "names.bin" );
-			return _names.Get( index );
+			return Names.Get( index );
 		}
 	}
 }
