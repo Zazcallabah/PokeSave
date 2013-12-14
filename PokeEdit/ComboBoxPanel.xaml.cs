@@ -21,6 +21,18 @@ namespace PokeEdit
 			set { TextBlock.Text = value; }
 		}
 
+		public string ListSourceClass
+		{
+			get { return null; }
+			set
+			{ 
+				Assembly assembly = Assembly.GetAssembly( typeof( MoveList ) );
+				Type type = assembly.GetType( "PokeSave." + value );
+				var m = type.GetMethod("All",BindingFlags.Static | BindingFlags.Public );
+				ListSource = (string[])m.Invoke(null,null);
+			}
+		}
+
 		public string[] ListSource
 		{
 			get { return null; }

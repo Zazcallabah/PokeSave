@@ -24,12 +24,10 @@ namespace PokeEdit
 				if( _index != value )
 				{
 					_index = value;
-					Header.SetBinding( Expander.HeaderProperty, new Binding( "Move" + value + "Name" ) { Mode = BindingMode.OneWay } );
+					var movename = "Move" + value + "Name";
+					Header.SetBinding( Expander.HeaderProperty, new Binding( movename ) { Mode = BindingMode.OneWay } );
 
-					Move.PropertyName = "Move" + value + "Name";
-					Move.ListSource = MoveList.All();
-
-
+					Move.PropertyName = movename;
 					PP.PropertyName = "PP" + value;
 					PPBonus.PropertyName = "PPBonus" + value;
 				}

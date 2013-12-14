@@ -5,7 +5,7 @@
 	xmlns:PokeEdit="clr-namespace:PokeEdit">
 	<Expander Name="Header" BorderBrush="#000055" BorderThickness="1" Margin="1" Padding="1">
 		<StackPanel>
-			<PokeEdit:ComboBoxPanel x:Name="Move" SearchBox="true"  DataContext="{Binding}"/>
+			<PokeEdit:ComboBoxPanel x:Name="Move" SearchBox="true" ListSourceClass="MoveList" DataContext="{Binding}"/>
 			<PokeEdit:PropertyPanel x:Name="PP" DataContext="{Binding}"/>
 			<PokeEdit:PropertyPanel x:Name="PPBonus" DataContext="{Binding}"/>
 		</StackPanel>
