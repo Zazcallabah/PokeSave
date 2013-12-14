@@ -872,6 +872,43 @@ namespace PokeSave
 			}
 		}
 
+		public uint HPIV
+		{
+			get { return ( IVs & 0x1F ); }
+			set { IVs = IVs.Mask( 0x1F, value ); }
+		}
+
+		public uint AttackIV
+		{
+			get { return ( IVs & ( 0x1F << 5 ) ) >> 5; }
+			set { IVs = IVs.Mask( 0x3E0, value << 5 ); }
+		}
+
+		public uint DefenseIV
+		{
+			get { return ( IVs & ( 0x1F << 10 ) ) >> 10; }
+			set { IVs = IVs.Mask( ( 0x1F << 10 ), value << 10 ); }
+		}
+
+		public uint SpeedIV
+		{
+			get { return ( IVs & ( 0x1F << 15 ) ) >> 15; }
+			set { IVs = IVs.Mask( ( 0x1F << 15 ), value << 15 ); }
+		}
+
+		public uint SpAttackIV
+		{
+			get { return ( IVs & ( 0x1F << 20 ) ) >> 20; }
+			set { IVs = IVs.Mask( ( 0x1F << 20 ), value << 20 ); }
+		}
+
+		public uint SpDefenseIV
+		{
+			get { return ( IVs & ( 0x1F << 25 ) ) >> 25; }
+			set { IVs = IVs.Mask( ( 0x1F << 25 ), value << 25 ); }
+		}
+
+
 		public uint Ribbons
 		{
 			get { return GetEncryptedDWord( MiscOffset + 8 ); }
