@@ -96,7 +96,8 @@
 					<PokeEdit:ComboBoxPanel EnumSource="MonsterGender" PropertyName="Gender" DataContext="{Binding}"/>
 					<PokeEdit:ComboBoxPanel EnumSource="EvolutionDirection" PropertyName="Evolution" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="Shiny" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Ability" DataContext="{Binding}"/>
+					<PokeEdit:ComboBoxPanel EnumSource="AbilityIndex"  Label="P A"  PropertyName="Ability" DataContext="{Binding}"/>
+					<PokeEdit:ComboBoxPanel EnumSource="AbilityIndex"  Label="Ability" PropertyName="ActualAbility" DataContext="{Binding}"/>
 					<PokeEdit:ReadOnlyPropertyPanel PropertyName="AbilityName" DataContext="{Binding}" />
 				</StackPanel>
 

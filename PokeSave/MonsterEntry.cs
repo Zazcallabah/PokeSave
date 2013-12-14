@@ -393,6 +393,18 @@ namespace PokeSave
 			set { SetPersonality( new PersonalityEngine( this ) { Ability = value } ); }
 		}
 
+		public AbilityIndex ActualAbility
+		{
+			get { return IVs.IsSet( 31 ) ? AbilityIndex.Second : AbilityIndex.First; }
+			set { IVs = IVs.AssignBit( 31, value == AbilityIndex.Second ); }
+		}
+
+		public bool IsEgg
+		{
+			get { return IVs.IsSet( 30 ); }
+			set { IVs = IVs.AssignBit( 30, value ); }
+		}
+
 		public MonsterNature Nature
 		{
 			get { return (MonsterNature) ( Personality % 25 ); }
@@ -434,7 +446,7 @@ namespace PokeSave
 				if( type.Ability2 == 0 )
 					return AbilityList.Get( type.Ability1 );
 
-				return AbilityList.Get( Ability == AbilityIndex.First ? type.Ability1 : type.Ability2 );
+				return AbilityList.Get( ActualAbility == AbilityIndex.First ? type.Ability1 : type.Ability2 );
 			}
 		}
 
@@ -1019,8 +1031,8 @@ namespace PokeSave
 
 		public string TypeName
 		{
-			get { return NameList.Get( MonsterId );}
-				set{ MonsterId = NameList.First( value ); }
+			get { return NameList.Get( MonsterId ); }
+			set { MonsterId = NameList.First( value ); }
 		}
 
 		public MonsterInfo TypeInformation

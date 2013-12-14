@@ -48,6 +48,11 @@ namespace PokeSave
 
 		public static byte AssignBit( this byte val, int pos, bool value )
 		{
+			return (byte) AssignBit((uint)val,pos,value);
+		}
+
+		public static uint AssignBit( this uint val, int pos, bool value )
+		{
 			return value ? SetBit( val, pos ) : ClearBit( val, pos );
 		}
 
