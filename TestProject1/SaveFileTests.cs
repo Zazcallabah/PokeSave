@@ -365,12 +365,15 @@ namespace TestProject1
 		}
 
 		[Test]
-		public void CanSetAbility()
+		public void CanSetCorrectAbility()
 		{
 			Assert.AreEqual( AbilityIndex.Second, _file.Latest.Team[3].Ability );
 			Assert.AreEqual( "Sturdy", _file.Latest.Team[3].AbilityName );
 			_file.Latest.Team[3].Ability = AbilityIndex.First;
 			Assert.AreEqual( AbilityIndex.First, _file.Latest.Team[3].Ability );
+			Assert.AreEqual( "Sturdy", _file.Latest.Team[3].AbilityName );
+			_file.Latest.Team[3].ActualAbility = AbilityIndex.First;
+			Assert.AreEqual( AbilityIndex.First, _file.Latest.Team[3].ActualAbility );
 			Assert.AreEqual( "Rock Head", _file.Latest.Team[3].AbilityName );
 		}
 
