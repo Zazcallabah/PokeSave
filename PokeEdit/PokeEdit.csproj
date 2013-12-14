@@ -87,6 +87,9 @@
     <Compile Include="MonsterEntryPanel.xaml.cs">
       <DependentUpon>MonsterEntryPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ComboBoxPanel.xaml.cs">
+      <DependentUpon>ComboBoxPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TeamListPanel.xaml.cs">
       <DependentUpon>TeamListPanel.xaml</DependentUpon>
     </Compile>
@@ -119,6 +122,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="MonsterEntryPanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="ComboBoxPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

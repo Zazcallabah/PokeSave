@@ -26,6 +26,17 @@ namespace PokeSave
 		None
 	}
 
+	public enum GameName
+	{
+		ColosseumBonusDisc = 0,
+		Sapphire,
+		Ruby,
+		Emerald,
+		FireRed,
+		LeafGreen,
+		ColosseumOrXD = 15
+	}
+
 	public enum MonsterType
 	{
 		Normal = 0,

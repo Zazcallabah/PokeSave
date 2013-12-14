@@ -40,7 +40,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	When setting this value, we take some care to preserve shiny-ness.
+		///     When setting this value, we take some care to preserve shiny-ness.
 		/// </summary>
 		public uint OriginalTrainerId
 		{
@@ -114,7 +114,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	This should only be set right before a save.
+		///     This should only be set right before a save.
 		/// </summary>
 		public uint Checksum
 		{
@@ -123,7 +123,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Xor key used to encrypt sub sections
+		///     Xor key used to encrypt sub sections
 		/// </summary>
 		public uint SecurityKey
 		{
@@ -131,7 +131,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Set all statuses at the same time. Should possibly be a byte but meh.
+		///     Set all statuses at the same time. Should possibly be a byte but meh.
 		/// </summary>
 		public uint StatusByte
 		{
@@ -316,7 +316,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	this property indicates if we need to recalculate subsection checksum before save
+		///     this property indicates if we need to recalculate subsection checksum before save
 		/// </summary>
 		public bool IsDirty { get; private set; }
 
@@ -360,16 +360,19 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Making it shiny means setting personality compatible with original trainer id.
+		///     Making it shiny means setting personality compatible with original trainer id.
 		/// </summary>
 		public bool Shiny
 		{
 			get { return ( ( SecurityKey & 0xFFFF ) ^ ( SecurityKey >> 16 ) ) < 8; }
-			set { SetPersonality( new PersonalityEngine( this ) { OriginalTrainer = value ? (uint?) OriginalTrainerId : null } ); }
+			set
+			{
+				SetPersonality( new PersonalityEngine( this ) { OriginalTrainer = value ? (uint?) OriginalTrainerId : null } );
+			}
 		}
 
 		/// <summary>
-		/// 	This is set using personalityengine or Gender property
+		///     This is set using personalityengine or Gender property
 		/// </summary>
 		public uint GenderByte
 		{
@@ -479,6 +482,7 @@ namespace PokeSave
 		public string Move1Name
 		{
 			get { return MoveList.Get( Move1 ); }
+			set { Move1 = MoveList.First( value ); }
 		}
 
 		public uint Move2
@@ -498,6 +502,7 @@ namespace PokeSave
 		public string Move2Name
 		{
 			get { return MoveList.Get( Move2 ); }
+			set { Move2 = MoveList.First( value ); }
 		}
 
 		public uint Move3
@@ -517,6 +522,7 @@ namespace PokeSave
 		public string Move3Name
 		{
 			get { return MoveList.Get( Move3 ); }
+			set { Move3 = MoveList.First( value ); }
 		}
 
 		public uint Move4
@@ -536,6 +542,7 @@ namespace PokeSave
 		public string Move4Name
 		{
 			get { return MoveList.Get( Move4 ); }
+			set { Move4 = MoveList.First( value ); }
 		}
 
 		public uint PP1
@@ -794,9 +801,9 @@ namespace PokeSave
 			{
 				uint p = Personality;
 				return ( ( p & 3 ) |
-					( ( p >> 6 ) & 12 ) |
-						( ( p >> 12 ) & 48 ) |
-							( ( p >> 18 ) & 192 ) ) % 28;
+				         ( ( p >> 6 ) & 12 ) |
+				         ( ( p >> 12 ) & 48 ) |
+				         ( ( p >> 18 ) & 192 ) ) % 28;
 			}
 		}
 
@@ -879,16 +886,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	0 is possible but illegitimate 1-15 valid
-		/// </summary>
-		public void AssignVirusStrain( byte strain )
-		{
-			VirusStrain = strain;
-			VirusFade = (uint) ( strain % 4 ) + 1;
-		}
-
-		/// <summary>
-		/// 	Immune if already has virus
+		///     Immune if already has virus
 		/// </summary>
 		public bool Immune
 		{
@@ -897,7 +895,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	0 is no virus, 1-15 is valid
+		///     0 is no virus, 1-15 is valid
 		/// </summary>
 		public uint VirusStrain
 		{
@@ -906,7 +904,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Decreases 1 every midnight, valid values are 0-4, initial is strain mod 4 + 1
+		///     Decreases 1 every midnight, valid values are 0-4, initial is strain mod 4 + 1
 		/// </summary>
 		public uint VirusFade
 		{
@@ -980,7 +978,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Writing to team from pc buffer requires you to deposit and withdraw from pc ingame to get correct values.
+		///     Writing to team from pc buffer requires you to deposit and withdraw from pc ingame to get correct values.
 		/// </summary>
 		// trigger empty
 		public byte[] RawData
@@ -1022,6 +1020,18 @@ namespace PokeSave
 					Debug.WriteLine( prop.Name );
 				}
 			}
+		}
+
+		public bool Storage { get; private set; }
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		/// <summary>
+		///     0 is possible but illegitimate 1-15 valid
+		/// </summary>
+		public void AssignVirusStrain( byte strain )
+		{
+			VirusStrain = strain;
+			VirusFade = (uint) ( strain % 4 ) + 1;
 		}
 
 		public uint GetEncryptedDWord( int offset )
@@ -1067,7 +1077,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	When personality or original trainer changes, subsections need to move and be re-encrypted with new key.
+		///     When personality or original trainer changes, subsections need to move and be re-encrypted with new key.
 		/// </summary>
 		void Recrypt( uint newpersonality, uint newOTid )
 		{
@@ -1222,14 +1232,10 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
-		public bool Storage { get; private set; }
-
 		public override string ToString()
 		{
 			return Full();
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		public void InvokePropertyChanged( string e )
 		{
@@ -1242,7 +1248,7 @@ namespace PokeSave
 			OriginalTrainerId = save.TrainerId;
 			OriginalTrainerGender = save.Gender;
 			OriginalTrainerName = save.Name;
-			GameOfOrigin = save.GameTypeGuess;
+			GameOfOrigin = (uint) save.GameTypeGuess;
 		}
 
 		public void Clear()

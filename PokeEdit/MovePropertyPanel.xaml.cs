@@ -1,5 +1,6 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Data;
+using PokeSave;
 
 namespace PokeEdit
 {
@@ -24,7 +25,11 @@ namespace PokeEdit
 				{
 					_index = value;
 					Header.SetBinding( Expander.HeaderProperty, new Binding( "Move" + value + "Name" ) { Mode = BindingMode.OneWay } );
-					Move.PropertyName = "Move" + value;
+
+					Move.PropertyName = "Move" + value + "Name";
+					Move.ListSource = MoveList.All();
+
+
 					PP.PropertyName = "PP" + value;
 					PPBonus.PropertyName = "PPBonus" + value;
 				}

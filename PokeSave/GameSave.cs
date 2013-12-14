@@ -12,6 +12,7 @@ namespace PokeSave
 		readonly List<GameSection> _originalOrderSections;
 		readonly List<GameSection> _sections;
 
+		GameName _gameTypeGuess;
 		bool _isDirty;
 
 		#region _pointers
@@ -56,10 +57,10 @@ namespace PokeSave
 					{ "DexOffset3Value1", 0x58 },
 					{ "DexOffset3Value2", 0x62 },
 					{ "DexOffset4bitindex", 0 },
-					{ "BoxNames",0x8344},
-					{"BoxWallpapers",0x83C2},
+					{ "BoxNames", 0x8344 },
+					{ "BoxWallpapers", 0x83C2 },
 				}
-				},
+			},
 			{
 				GameType.E, new Dictionary<string, int>
 				{
@@ -98,10 +99,10 @@ namespace PokeSave
 					{ "DexOffset3Value1", 0x2 },
 					{ "DexOffset3Value2", 0x3 },
 					{ "DexOffset4bitindex", 6 },
-					{ "BoxNames",0x8344},
-					{"BoxWallpapers",0x83C2},
+					{ "BoxNames", 0x8344 },
+					{ "BoxWallpapers", 0x83C2 },
 				}
-				},
+			},
 			{
 				GameType.RS, new Dictionary<string, int>
 				{
@@ -140,8 +141,8 @@ namespace PokeSave
 					{ "DexOffset3Value1", 0x2 },
 					{ "DexOffset3Value2", 0x3 },
 					{ "DexOffset4bitindex", 6 },
-					{ "BoxNames",0x8344},
-					{"BoxWallpapers",0x83C2},
+					{ "BoxNames", 0x8344 },
+					{ "BoxWallpapers", 0x83C2 },
 				}
 			}
 		};
@@ -194,7 +195,18 @@ namespace PokeSave
 
 		Cipher Xor { get; set; }
 
-		public uint GameTypeGuess { get; private set; }
+		public GameName GameTypeGuess
+		{
+			get { return _gameTypeGuess; }
+			set
+			{
+				if( _gameTypeGuess != value )
+				{
+					_gameTypeGuess = value;
+					InvokePropertyChanged( "GameTypeGuess" );
+				}
+			}
+		}
 
 		public uint SaveIndex
 		{
@@ -208,14 +220,15 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Checks subsection save indexes and checksums. This will be false if save file has been changed without calling FixChecksum()
+		///     Checks subsection save indexes and checksums. This will be false if save file has been changed without calling
+		///     FixChecksum()
 		/// </summary>
 		public bool Valid
 		{
 			get
 			{
 				return _sections.All( s => s.Checksum == s.CalculatedChecksum )
-					&& _sections.All( s => s.SaveIndex == _sections[0].SaveIndex );
+				       && _sections.All( s => s.SaveIndex == _sections[0].SaveIndex );
 			}
 		}
 
@@ -279,7 +292,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Writing these is not currently supported
+		///     Writing these is not currently supported
 		/// </summary>
 		public uint PublicId
 		{
@@ -288,7 +301,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	Writing these is not currently supported
+		///     Writing these is not currently supported
 		/// </summary>
 		public uint SecretId
 		{
@@ -348,7 +361,7 @@ namespace PokeSave
 		}
 
 		/// <summary>
-		/// 	This sets publicid and secretid at the same time
+		///     This sets publicid and secretid at the same time
 		/// </summary>
 		public uint TrainerId
 		{
@@ -400,7 +413,7 @@ namespace PokeSave
 					max = kvp.Value;
 					id = kvp.Key;
 				}
-			GameTypeGuess = id;
+			GameTypeGuess = (GameName)id;
 		}
 
 

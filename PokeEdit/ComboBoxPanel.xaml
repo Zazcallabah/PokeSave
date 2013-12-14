@@ -1,0 +1,9 @@
+﻿<UserControl
+	x:Class="PokeEdit.ComboBoxPanel"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<StackPanel Orientation="Horizontal">
+		<TextBlock Width="70" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" Margin="2" Name="TextBlock"/>
+		<ComboBox Width="80" Height="20" HorizontalAlignment="Left" FontSize="10" VerticalAlignment="Center" Margin="2" Name="Combo"/>
+	</StackPanel>
+</UserControl>
