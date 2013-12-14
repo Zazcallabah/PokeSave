@@ -130,8 +130,19 @@
 					</StackPanel>
 				</StackPanel>
 			</Expander>
+		
+		<Expander Header="IVs">
+				<StackPanel>
+					<PokeEdit:PropertyPanel Label="HP" PropertyName="HPIV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Attack" PropertyName="AttackIV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Defense" PropertyName="DefenseIV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Speed"  PropertyName="SpeedIV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="SpAttackIV" DataContext="{Binding}"/>
+					<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="SpDefenseIV" DataContext="{Binding}"/>
+				</StackPanel>
+		</Expander>
 
-			<Expander Header="Misc">
+		<Expander Header="Misc">
 				<StackPanel>
 					<PokeEdit:PropertyPanel PropertyName="Language" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="IVs" DataContext="{Binding}"/>

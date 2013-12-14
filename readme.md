@@ -38,7 +38,8 @@ Put all bin-folders into a bin folder in the root of this repo, then run runtest
 Thanks and sources
 ------------------
 * [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_III)
-* [KazoWAR](http://projectpokemon.org/forums/showthread.php?31254-A-Save-(3rd-Generation-Save-Editor))
+* [KazoWAR](http://projectpokemon.org/forums/showthread.php?31254-A-Save-(3rd-Generation-Save-Editor)
+* [kpdavatar](http://www.ppnstudio.com/maker/PokemonMakerHelp.txt)
 
 License
 -------

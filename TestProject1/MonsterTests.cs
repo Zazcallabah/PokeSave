@@ -49,6 +49,117 @@ namespace TestProject1
 		}
 
 		[Test]
+		public void IVValuesCanGetCorrectData()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			Assert.AreEqual( 4, t.HPIV );
+			Assert.AreEqual( 1, t.AttackIV );
+			Assert.AreEqual( 16, t.DefenseIV );
+			Assert.AreEqual( 29, t.SpAttackIV );
+			Assert.AreEqual( 6, t.SpDefenseIV );
+			Assert.AreEqual( 2, t.SpeedIV );
+
+		}
+
+				public void IVValuesCanSetSpAttack()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			t.SpAttackIV = 5;
+
+			Assert.AreEqual( 4, t.HPIV );
+			Assert.AreEqual( 1, t.AttackIV );
+			Assert.AreEqual( 16, t.DefenseIV );
+			Assert.AreEqual( 5, t.SpAttackIV );
+			Assert.AreEqual( 6, t.SpDefenseIV );
+			Assert.AreEqual( 2, t.SpeedIV );
+		}
+
+
+		public void IVValuesCanSetDefense()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			t.DefenseIV = 5;
+
+			Assert.AreEqual( 4, t.HPIV );
+			Assert.AreEqual( 1, t.AttackIV );
+			Assert.AreEqual( 5, t.DefenseIV );
+			Assert.AreEqual( 29, t.SpAttackIV );
+			Assert.AreEqual( 6, t.SpDefenseIV );
+			Assert.AreEqual( 2, t.SpeedIV );
+		}
+
+
+		public void IVValuesCanSetAttack()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			t.AttackIV = 5;
+
+			Assert.AreEqual( 4, t.HPIV );
+			Assert.AreEqual( 5, t.AttackIV );
+			Assert.AreEqual( 16, t.DefenseIV );
+			Assert.AreEqual( 29, t.SpAttackIV );
+			Assert.AreEqual( 6, t.SpDefenseIV );
+			Assert.AreEqual( 2, t.SpeedIV );
+		}
+
+
+		public void IVValuesCanSetSpDefense()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			t.SpDefenseIV = 5;
+
+			Assert.AreEqual( 4, t.HPIV );
+			Assert.AreEqual( 1, t.AttackIV );
+			Assert.AreEqual( 16, t.DefenseIV );
+			Assert.AreEqual( 29, t.SpAttackIV );
+			Assert.AreEqual( 5, t.SpDefenseIV );
+			Assert.AreEqual( 2, t.SpeedIV );
+		}
+
+
+		public void IVValuesCanSetSpeed()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			t.SpeedIV = 5;
+
+			Assert.AreEqual( 4, t.HPIV );
+			Assert.AreEqual( 1, t.AttackIV );
+			Assert.AreEqual( 16, t.DefenseIV );
+			Assert.AreEqual( 29, t.SpAttackIV );
+			Assert.AreEqual( 6, t.SpDefenseIV );
+			Assert.AreEqual( 5, t.SpeedIV );
+		}
+
+		public void IVValuesCanSetHp()
+		{
+			var t = TestSection();
+
+			Assert.AreEqual( 231817252, t.IVs );
+			t.HPIV = 5;
+
+			Assert.AreEqual( 5, t.HPIV );
+			Assert.AreEqual( 1, t.AttackIV );
+			Assert.AreEqual( 16, t.DefenseIV );
+			Assert.AreEqual( 29, t.SpAttackIV );
+			Assert.AreEqual( 6, t.SpDefenseIV );
+			Assert.AreEqual( 2, t.SpeedIV );
+
+		}
+
+
+		[Test]
 		public void BaseStatsAreCorrect()
 		{
 			var t = MonsterList.Get( 1 );

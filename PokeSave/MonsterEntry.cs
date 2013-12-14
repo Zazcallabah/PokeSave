@@ -868,6 +868,12 @@ namespace PokeSave
 				{
 					SetEncryptedDWord( MiscOffset + 4, value );
 					InvokePropertyChanged( "IVs" );
+					InvokePropertyChanged( "HPIv" );
+					InvokePropertyChanged( "AttackIV" );
+					InvokePropertyChanged( "DefenseIV" );
+					InvokePropertyChanged( "SpeedIV" );
+					InvokePropertyChanged( "SpAttackIV" );
+					InvokePropertyChanged( "SpDefenseIV" );
 				}
 			}
 		}
