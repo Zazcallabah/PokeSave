@@ -3,26 +3,18 @@ PokeSave
 
 Todo
 ----
-* There are still some substructures not fully mapped.
-* How should we best parse time? Is it even needed?
-* held Item should be combo box
-* add button to make not outsider
+* There are still some save sections that aren't mapped, or have been mapped but not added to this app. There is also a few parts of the pokemon substructures that haven't been added yet. Ribbons, Box names, and wallpapers, I'm probably forgetting others.
+* Some of the read-only fields could become writable. Time needs to be parsed in some way though.
 * Level met doesnt show properly
 * location met could use combo box with valid values
-* Gameoforigin could use combo box with valid values
 * Trying to change gender for certain types crashes (shouldn crash, may still be invalid)
 * some stats are zero?
 * language needs combo? - nah
-* map ribbons
 * add a bunch of typeinformation info
-* Feature that automerges entries in all loaded files.
-* Editable pokedex data and autoset that data when automerge.
 * Show filename somewhere
-* Feature to set 'Guess?'field
-* simplify, Combine all typed lists into just stringlist
 * Test pokedex seen and owned. Why are the different seen fields set?
 * test set national? repair, section, merge
-* add box wallpapers and names
+* Virus for empty team entry is 255?
 
 Testing and code coverage
 -------------------------
@@ -33,7 +25,6 @@ Put all bin-folders into a bin folder in the root of this repo, then run runtest
 * https://github.com/sawilde/opencover/
 * http://reportgenerator.codeplex.com/
 * http://www.nunit.org/
-
 
 Thanks and sources
 ------------------
