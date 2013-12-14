@@ -310,6 +310,7 @@ namespace PokeSave
 					InvokePropertyChanged( "Empty" );
 					InvokePropertyChanged( "MonsterId" );
 					InvokePropertyChanged( "Type" );
+					InvokePropertyChanged( "TypeName" );
 					InvokePropertyChanged( "TypeInformation" );
 				}
 			}
@@ -1014,6 +1015,12 @@ namespace PokeSave
 		{
 			get { return MonsterId; }
 			set { MonsterId = value; }
+		}
+
+		public string TypeName
+		{
+			get { return NameList.Get( MonsterId );}
+				set{ MonsterId = NameList.First( value ); }
 		}
 
 		public MonsterInfo TypeInformation

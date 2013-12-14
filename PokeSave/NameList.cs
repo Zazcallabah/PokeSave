@@ -14,5 +14,15 @@ namespace PokeSave
 		{
 			return Names.Get( index );
 		}
+
+		public static uint First( string value )
+		{
+			return Names.First(value);
+		}
+
+		public static string[] All()
+		{
+			return Names.All();
+		}
 	}
 }

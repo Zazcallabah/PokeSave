@@ -21,11 +21,11 @@
 					<PokeEdit:PropertyPanel PropertyName="Name" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="MonsterId" DataContext="{Binding}"/>
 					<PokeEdit:ReadOnlyPropertyPanel PropertyName="Checksum" DataContext="{Binding}" />
-					<PokeEdit:ComboBoxPanel PropertyName="HeldItemName" ListSourceClass="ItemList" Label="Held item"  DataContext="{Binding}"/>
+					<PokeEdit:ComboBoxPanel PropertyName="HeldItemName" ListSourceClass="ItemList" Label="Held item" SearchBox="true"  DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="Friendship" DataContext="{Binding}"/>
 				</StackPanel>
 				<StackPanel>
-					<PokeEdit:ReadOnlyPropertyPanel Label="Type" PropertyName="TypeInformation.Name" DataContext="{Binding}" />
+					<PokeEdit:ComboBoxPanel Label="Type" PropertyName="TypeName" ListSourceClass="NameList" SearchBox="true"  DataContext="{Binding}" />
 					<PokeEdit:PropertyPanel PropertyName="XP" DataContext="{Binding}"/>
 					<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding}" />
 					<PokeEdit:PropertyPanel PropertyName="Mark" DataContext="{Binding}"/>
@@ -92,9 +92,9 @@
 			<StackPanel Orientation="Horizontal">
 				<StackPanel>
 					<PokeEdit:PropertyPanel PropertyName="Personality" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Nature" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Gender" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Evolution" DataContext="{Binding}"/>
+					<PokeEdit:ComboBoxPanel EnumSource="MonsterNature" PropertyName="Nature" DataContext="{Binding}"/>
+					<PokeEdit:ComboBoxPanel EnumSource="MonsterGender" PropertyName="Gender" DataContext="{Binding}"/>
+					<PokeEdit:ComboBoxPanel EnumSource="EvolutionDirection" PropertyName="Evolution" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="Shiny" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="Ability" DataContext="{Binding}"/>
 					<PokeEdit:ReadOnlyPropertyPanel PropertyName="AbilityName" DataContext="{Binding}" />
