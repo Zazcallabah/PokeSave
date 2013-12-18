@@ -15,6 +15,23 @@ Todo
 * Test pokedex seen and owned. Why are the different seen fields set?
 * test set national? repair, section, merge
 * Virus for empty team entry is 255?
+* when importing multiple files, flag that not all were importen / look for invalid data / check if length is ok and tell user if not
+
+coin
+bps?
+pkm file
+fateful encounter
+setting spinda spots - without editing rest?
+unown letter
+stats generation from iv and ev
+hidden power
+met location list
+language list
+second charset
+rtc edit
+
+0:898 - last screens?
+3:280 - loads of encrypted 0
 
 Testing and code coverage
 -------------------------
