@@ -149,6 +149,7 @@ namespace PokeSave
 		public uint SaveIndex
 		{
 			get { return GetShort( 0xffc ); }
+			set { SetShort( 0xffc, value ); }
 		}
 
 		public uint CalculatedChecksum

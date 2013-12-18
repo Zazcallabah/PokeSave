@@ -214,8 +214,22 @@ namespace PokeSave
 			{
 				uint index = _sections[0].SaveIndex;
 				if( _sections.Any( s => s.SaveIndex != index ) )
-					throw new InvalidOperationException( "Differing save indexes" );
+					RepairSaveIndexes();
 				return index;
+			}
+		}
+
+		public void RepairSaveIndexes()
+		{
+			uint largest = 0;
+			foreach( var s in _sections )
+			{
+				if( s.SaveIndex > largest )
+					largest = s.SaveIndex;
+			}
+			foreach( var s in _sections.Where( s => s.SaveIndex != largest ) )
+			{
+				s.SaveIndex = largest;
 			}
 		}
 
@@ -260,7 +274,9 @@ namespace PokeSave
 
 		public string Rival
 		{
-			get { return _sections[4].GetText( Pointers["Rival"], 8 ); }
+			get { if( Type == GameType.FRLG)
+				return _sections[4].GetText( Pointers["Rival"], 8 );
+			return "";}
 			set
 			{
 				if( Rival != value )
