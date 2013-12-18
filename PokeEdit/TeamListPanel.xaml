@@ -61,6 +61,9 @@
 				</DataTemplate>
 			</TabControl.ItemTemplate>
 		</TabControl>
-		<Button Content="Add" Click="ActivateNextClicked" Margin="2"/>
+		<StackPanel Orientation="Horizontal">
+			<Button Content="Add Blank" Click="ActivateNextClicked" Margin="2" Padding="2"/>
+			<Button Content="Import" Click="ImportClicked" Margin="2" Padding="2"/>
+		</StackPanel>
 	</StackPanel>
 </UserControl>

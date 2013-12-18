@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using Microsoft.Win32;
 using PokeSave;
 
 namespace PokeEdit
@@ -52,6 +54,29 @@ namespace PokeEdit
 					return;
 				}
 			}
+		}
+
+		void ImportClicked( object sender, RoutedEventArgs e )
+		{
+			var dlg = new OpenFileDialog { Multiselect = true };
+			bool? result = dlg.ShowDialog();
+			if( result == true )
+				foreach( string name in dlg.FileNames )
+				{
+					var data = File.ReadAllBytes( name );
+					if( data.Length == 80 || data.Length == 100 )
+					{
+						foreach( var entry in (BindingList<MonsterEntry>) DataContext )
+						{
+							if( entry.Empty )
+							{
+								entry.RawData = data;
+								break;
+							}
+						}
+					}
+				}
+
 		}
 
 		void ClaimClicked( object sender, RoutedEventArgs e )
