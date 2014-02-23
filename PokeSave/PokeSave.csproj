@@ -34,6 +34,7 @@
     <Compile Include="Cipher.cs" />
     <Compile Include="AbilityList.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="FileTypeDetector.cs" />
     <Compile Include="GenderDecision.cs" />
     <Compile Include="MoveList.cs" />
     <Compile Include="MonsterInfo.cs" />
