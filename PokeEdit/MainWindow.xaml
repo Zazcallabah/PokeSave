@@ -15,7 +15,8 @@
 
 		<Border BorderBrush="#000000" BorderThickness="0,0,0,1">
 		<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" Background="#FFFFFF">
-			<ItemsControl ItemsSource="{Binding}">
+				<StackPanel Orientation="Horizontal">
+					<ItemsControl ItemsSource="{Binding Gen3Saves}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<Border CornerRadius="8"
@@ -44,7 +45,30 @@
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
-		</ScrollViewer>
+				<ItemsControl ItemsSource="{Binding PKM}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate>
+							<Border CornerRadius="8"
+								Margin="8"
+								BorderThickness="2"
+								BorderBrush="#000000"
+								Padding="4"
+								Width="352"
+								Background="#FFF2F2">
+								<StackPanel>
+									<PokeEdit:MonsterEntryPanel DataContext="{Binding}"/>
+								</StackPanel>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<StackPanel Orientation="Horizontal"/>
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+				</ItemsControl>
+				</StackPanel>
+			</ScrollViewer>
 		</Border>
 		<TextBlock Grid.Row="1" Margin="4" HorizontalAlignment="Right" Height="22" Name="Info"/>
 		<StackPanel  Grid.Row="1"  HorizontalAlignment="Left" Orientation="Horizontal">

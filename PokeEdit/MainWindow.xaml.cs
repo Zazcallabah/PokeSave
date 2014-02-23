@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Media;
 using Microsoft.Win32;
 using PokeSave;
@@ -16,14 +20,18 @@ namespace PokeEdit
 	public partial class MainWindow : Window
 	{
 		readonly Dictionary<string, Editor> _editwindows;
+		readonly Controller _controller;
 
 		public MainWindow()
 		{
 			_editwindows = new Dictionary<string, Editor>();
+			DataContext = _controller = new Controller();
 			InitializeComponent();
-			DataContext = new BindingList<SaveFile>();
 			Drop += MainWindowDrop;
 			Info.Text = "This tool lives at https://github.com/Zazcallabah/PokeSave";
+#if DEBUG
+			Add( @"C:\src\VisualBoyAdvance 1.8.0 beta 3\pfr.sa1" );
+#endif
 		}
 
 		void MainWindowDrop( object sender, DragEventArgs e )
@@ -32,7 +40,7 @@ namespace PokeEdit
 				try
 				{
 					foreach( string file in (string[]) e.Data.GetData( DataFormats.FileDrop ) )
-						AddSaveFile( new SaveFile( file ) );
+						Add( file );
 				}
 				catch( ArgumentException )
 				{
@@ -40,11 +48,28 @@ namespace PokeEdit
 				}
 		}
 
-		void AddSaveFile( SaveFile saveFile )
+		void Add( string path )
 		{
-			var list = (BindingList<SaveFile>) DataContext;
-			if( list.All( sf => sf.FileName != saveFile.FileName ) )
-				list.Add( saveFile );
+			var data = File.ReadAllBytes( path );
+			if( FileTypeDetector.IsGen3SaveFile( data ) )
+				AddGen3SaveFile( new SaveFile( data, path ) );
+			else
+				AddPkmFile( FileTypeDetector.Open( data ) );
+		}
+
+		void AddPkmFile( IEnumerable<MonsterEntry> entries )
+		{
+			if( entries != null )
+			{
+				foreach( var entry in entries )
+					_controller.PKM.Add( entry );
+			}
+		}
+
+		void AddGen3SaveFile( SaveFile saveFile )
+		{
+			if( _controller.Gen3Saves.All( sf => sf.FileName != saveFile.FileName ) )
+				_controller.Gen3Saves.Add( saveFile );
 		}
 
 		void LoadButtonClicked( object sender, RoutedEventArgs e )
@@ -54,14 +79,14 @@ namespace PokeEdit
 			if( result == true )
 				foreach( string name in dlg.FileNames )
 				{
-					AddSaveFile( new SaveFile( name ) );
+					Add( name );
 					Info.Text = name;
 				}
 		}
 
 		void MergeButtonClicked( object sender, RoutedEventArgs e )
 		{
-			var list = (BindingList<SaveFile>) DataContext;
+			var list = _controller.Gen3Saves;
 
 			for( int i = 0; i < list.Count; i++ )
 			{
@@ -128,7 +153,7 @@ namespace PokeEdit
 		void CloseButtonClicked( object sender, RoutedEventArgs e )
 		{
 			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );
-			( (BindingList<SaveFile>) DataContext ).Remove( sf );
+			_controller.Gen3Saves.Remove( sf );
 		}
 
 		void EditClosed( object sender, EventArgs e )
