@@ -1,7 +1,23 @@
 PokeSave
 ========
+PokeSave, working title, intends to be an easy and intuitive tool for editing Pokemon save files. Currently it only supports generation 3 games, and I have only tested it on emulator 128k saves.
 
-Todo
+Roadmap
+-----
+* Add support for just adding pkm-file.
+* Automatically recognize what file is opened.
+* Introduce storage concept.
+* Add support for parsing gen4 savegames and gen4 save files
+* add support for parsing gen5 savegames and gen5 save files
+* add support for conversion between all those
+* add gts support for easier pkm extraction
+* Figure out catchy name
+
+Minor TODO
+--------
+* add 'drop files here' sign.
+
+Notes, Gen III
 ----
 * There are still some save sections that aren't mapped, or have been mapped but not added to this app. There is also a few parts of the pokemon substructures that haven't been added yet. Ribbons, Box names, and wallpapers, I'm probably forgetting others.
 * Some of the read-only fields could become writable. Time needs to be parsed in some way though.
@@ -45,9 +61,13 @@ Put all bin-folders into a bin folder in the root of this repo, then run runtest
 
 Thanks and sources
 ------------------
+* [Project Pokemon](http://projectpokemon.org/wiki/Main_Page)
 * [Bulbapedia](http://bulbapedia.bulbagarden.net/wiki/Save_data_structure_in_Generation_III)
-* [KazoWAR](http://projectpokemon.org/forums/showthread.php?31254-A-Save-(3rd-Generation-Save-Editor)
+* [KazoWAR](http://projectpokemon.org/forums/showthread.php?31254-A-Save-(3rd-Generation-Save-Editor))
 * [kpdavatar](http://www.ppnstudio.com/maker/PokemonMakerHelp.txt)
+* [CodeMonkey85](https://github.com/codemonkey85)
+* Kaphotics, OmegaDonut, onyxphase, Bond697, and others from the pp irc
+ 
 
 License
 -------
