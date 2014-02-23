@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClientTests.cs" />
+    <Compile Include="PkmFileTests.cs" />
     <Compile Include="TextTableTests.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="DexTests.cs" />
@@ -67,6 +68,9 @@
     <Compile Include="TestComms.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="edited.pkm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="test.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -80,6 +84,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="p4.sav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="testing.pkm">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
