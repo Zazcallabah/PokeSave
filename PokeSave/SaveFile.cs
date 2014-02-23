@@ -13,9 +13,18 @@ namespace PokeSave
 		public string FileName { get; private set; }
 
 		public SaveFile( string name )
+			: this( File.OpenRead( name ), name )
+		{
+		}
+
+		public SaveFile( byte[] data, string name )
+			: this( new MemoryStream( data ), name )
+		{
+		}
+
+		public SaveFile( Stream inputstream, string name )
 		{
 			FileName = name;
-			var inputstream = File.OpenRead( name );
 
 			try
 			{
