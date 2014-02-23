@@ -11,6 +11,37 @@ namespace PokeSave
 		readonly int _offset;
 		Cipher _specificXor;
 
+		public MonsterEntry( string data )
+			: this( Convert.FromBase64String( data ), false )
+		{ }
+
+		public MonsterEntry( byte[] data, bool from3gpkm )
+		{
+			_data = new GameSection( data );
+			_offset = 0;
+			Storage = data.Length == 80;
+
+			if( from3gpkm )
+			{
+				// definiton for 3gpkm-file is
+				// decrypted subsection, with shuffle order GAEM
+				// Fix by encrypting  incoming data and shifting personality to 0 before recrypting
+				var personality = Personality;
+				_data.SetInt( 0, 0 );
+				_specificXor = new Cipher( 0, OriginalTrainerId );
+				for( int i = 32; i < 80; i += 4 )
+				{
+					SetEncryptedDWord( i, _data.GetInt( i ) );
+				}
+				Personality = personality;
+				Checksum = CalculatedChecksum;
+			}
+			else
+			{
+				_specificXor = new Cipher( Personality, OriginalTrainerId );
+			}
+		}
+
 		public MonsterEntry( GameSection data, int offset, bool storage )
 		{
 			_data = data;
@@ -821,9 +852,9 @@ namespace PokeSave
 			{
 				uint p = Personality;
 				return ( ( p & 3 ) |
-				         ( ( p >> 6 ) & 12 ) |
-				         ( ( p >> 12 ) & 48 ) |
-				         ( ( p >> 18 ) & 192 ) ) % 28;
+						 ( ( p >> 6 ) & 12 ) |
+						 ( ( p >> 12 ) & 48 ) |
+						 ( ( p >> 18 ) & 192 ) ) % 28;
 			}
 		}
 
@@ -1323,6 +1354,20 @@ namespace PokeSave
 		public void Clear()
 		{
 			RawData = new byte[100];
+		}
+
+		public byte[] To3gPkm()
+		{
+			var section = new GameSection( RawData );
+			var clone = new MonsterEntry( section, 0, Storage );
+			clone.Personality = 0;
+			for( int i = 32; i < 80; i += 4 )
+			{
+				section.SetInt( i, clone.GetEncryptedDWord( i ) );
+			}
+			section.SetInt( 0, Personality );
+			section.SetShort( 28, CalculatedChecksum );
+			return clone.RawData;
 		}
 	}
 }
