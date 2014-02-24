@@ -89,10 +89,7 @@
 				<ItemsControl ItemsSource="{Binding OpenFiles}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
-								<TextBlock Text="{Binding Label}"></TextBlock>
-								<Button Content="Edit" Command="{Binding EditCommand}"/>
-							</StackPanel>
+							<PokeEdit:FilePanel DataContext="{Binding}"/>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
