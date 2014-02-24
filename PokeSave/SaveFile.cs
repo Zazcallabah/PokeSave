@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public class SaveFile : INotifyPropertyChanged
+	public class SaveFile : IHaveDirtyState
 	{
 		readonly byte[] _tail;
 		public string FileName { get; private set; }
@@ -38,7 +38,12 @@ namespace PokeSave
 			{
 				inputstream.Close();
 			}
-			Latest.PropertyChanged += ( a, e ) => InvokePropertyChanged( "Latest" );
+			Latest.PropertyChanged += ( a, e ) =>
+				{
+					InvokePropertyChanged( "Latest" );
+					if( e.PropertyName == "IsDirty" )
+						InvokePropertyChanged( "IsDirty" );
+				};
 		}
 
 		public GameSave A { get; private set; }
@@ -128,5 +133,7 @@ namespace PokeSave
 			if( PropertyChanged != null )
 				PropertyChanged( this, new PropertyChangedEventArgs( e ) );
 		}
+
+		public bool IsDirty { get { return Latest.IsDirty; } }
 	}
 }

@@ -36,6 +36,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FileTypeDetector.cs" />
     <Compile Include="GenderDecision.cs" />
+    <Compile Include="IHaveDirtyState.cs" />
     <Compile Include="MoveList.cs" />
     <Compile Include="MonsterInfo.cs" />
     <Compile Include="MonsterList.cs" />

@@ -1,9 +1,13 @@
 using System;
+using System.ComponentModel;
 using System.Windows.Input;
 using PokeSave;
 
 namespace PokeEdit
 {
+	/// <summary>
+	/// Controller entity for opened file
+	/// </summary>
 	public class OpenFile
 	{
 		public OpenFile()
@@ -24,12 +28,13 @@ namespace PokeEdit
 		/// </summary>
 		public string Path { get; set; }
 		public string Label { get; set; }
-		public object Data { get; set; }
+		public IHaveDirtyState Data { get; set; }
 		public FileType Type { get; set; }
 
 		public ICommand EditCommand { get; private set; }
 		public ICommand StopEditCommand { get; private set; }
 		public ICommand ClaimCommand { get; private set; }
+		public ICommand SaveCommand { get; private set; }
 
 		public event EventHandler<EventArgs> Edit;
 		public event EventHandler<EventArgs> StopEdit;

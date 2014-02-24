@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public class GameSave : INotifyPropertyChanged
+	public class GameSave : INotifyPropertyChanged, IHaveDirtyState
 	{
 		readonly List<GameSection> _originalOrderSections;
 		readonly List<GameSection> _sections;

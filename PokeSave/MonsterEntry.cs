@@ -5,7 +5,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public class MonsterEntry : INotifyPropertyChanged
+	public class MonsterEntry : INotifyPropertyChanged, IHaveDirtyState
 	{
 		readonly GameSection _data;
 		readonly int _offset;
