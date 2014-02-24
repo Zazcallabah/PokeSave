@@ -11,69 +11,101 @@
 		</Grid.RowDefinitions>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+			<ColumnDefinition Width="100"/>
 		</Grid.ColumnDefinitions>
 
 		<Border BorderBrush="#000000" BorderThickness="0,0,0,1">
-		<ScrollViewer Grid.Row="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" Background="#FFFFFF">
+			<ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible" Background="#FFFFFF">
 				<StackPanel Orientation="Horizontal">
 					<ItemsControl ItemsSource="{Binding Gen3Saves}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<Border CornerRadius="8"
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border CornerRadius="8"
+										Margin="8"
+										BorderThickness="2"
+										BorderBrush="#000000"
+										Padding="4"
+										Width="352"
+										Background="#FFF2F2">
+									<StackPanel>
+										<PokeEdit:SaveControl DataContext="{Binding Data}"/>
+										<StackPanel Orientation="Horizontal">
+											<Button Height="26" Margin="4" Width="60" Content="Claim all" Click="{Binding ClaimCommand}" />
+											<Button Height="26" Margin="4" Width="60" Content="Close" Command="{Binding StopEditCommand}" />
+										</StackPanel>
+									</StackPanel>
+								</Border>	
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Horizontal"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
+					<ItemsControl ItemsSource="{Binding PKM}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border CornerRadius="8"
+									Margin="8"
+									BorderThickness="2"
+									BorderBrush="#000000"
+									Padding="4"
+									Width="352"
+									Background="#FFF2F2">
+									<StackPanel>
+										<PokeEdit:MonsterEntryPanel DataContext="{Binding Data}"/>
+										<Button Height="26" Margin="4" Width="60" Content="Close" Command="{Binding StopEditCommand}" />
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+						<ItemsControl.ItemsPanel>
+							<ItemsPanelTemplate>
+								<StackPanel Orientation="Horizontal"/>
+							</ItemsPanelTemplate>
+						</ItemsControl.ItemsPanel>
+					</ItemsControl>
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+		<GridSplitter 
+            ResizeDirection="Columns" 
+            Grid.Column="1" 
+			Grid.Row="0"
+            Width="3"
+            Height="Auto" 
+            HorizontalAlignment="Stretch" 
+            VerticalAlignment="Stretch" 
+            Margin="0"/>
+
+		<Border Grid.Column="2" CornerRadius="8"
 								Margin="8"
 								BorderThickness="2"
 								BorderBrush="#000000"
-								Padding="4"
-								Width="352"
-								Background="#FFF2F2">
-							<StackPanel>
-								<PokeEdit:SaveControl DataContext="{Binding}"/>
-								<StackPanel Orientation="Horizontal">
-									<Button Height="26" Margin="4" Width="60" Content="Save" IsEnabled="{Binding Latest.IsDirty}" Click="SaveButtonClicked" />
-									<Button Height="26" Margin="4" Width="60" Content="Save as" IsEnabled="{Binding Latest.IsDirty}"  Click="SaveAsButtonClicked" />
-									<Button Height="26" Margin="4" Width="60" Content="Claim all" Click="ClaimButtonClicked" />
-									<Button Height="26" Margin="4" Width="60" Content="Hex" Click="HexButtonClicked" />
-									<Button Height="26" Margin="4" Width="60" Content="Close" Click="CloseButtonClicked" />
-								</StackPanel>
-							</StackPanel>
-						</Border>	
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-				<ItemsControl.ItemsPanel>
-					<ItemsPanelTemplate>
-						<StackPanel Orientation="Horizontal"/>
-					</ItemsPanelTemplate>
-				</ItemsControl.ItemsPanel>
-			</ItemsControl>
-				<ItemsControl ItemsSource="{Binding PKM}">
+								Padding="4">
+			<ScrollViewer>
+				<ItemsControl ItemsSource="{Binding OpenFiles}">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate>
-							<Border CornerRadius="8"
-								Margin="8"
-								BorderThickness="2"
-								BorderBrush="#000000"
-								Padding="4"
-								Width="352"
-								Background="#FFF2F2">
-								<StackPanel>
-									<PokeEdit:MonsterEntryPanel DataContext="{Binding}"/>
-								</StackPanel>
-							</Border>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding Label}"></TextBlock>
+								<Button Content="Edit" Command="{Binding EditCommand}"/>
+							</StackPanel>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 					<ItemsControl.ItemsPanel>
 						<ItemsPanelTemplate>
-							<StackPanel Orientation="Horizontal"/>
+							<StackPanel />
 						</ItemsPanelTemplate>
 					</ItemsControl.ItemsPanel>
 				</ItemsControl>
-				</StackPanel>
 			</ScrollViewer>
 		</Border>
-		<TextBlock Grid.Row="1" Margin="4" HorizontalAlignment="Right" Height="22" Name="Info"/>
-		<StackPanel  Grid.Row="1"  HorizontalAlignment="Left" Orientation="Horizontal">
+			<TextBlock Grid.Row="1" Grid.ColumnSpan="3" Margin="4" HorizontalAlignment="Right" Height="22" Name="Info"/>
+		<StackPanel  Grid.Row="1" Grid.ColumnSpan="3"  HorizontalAlignment="Left" Orientation="Horizontal">
 			<Button Margin="4" Content="Load" Height="22" Width="75" Click="LoadButtonClicked" />
-			<Button Margin="4" Content="Merge" Height="22" Width="75" Click="MergeButtonClicked" />
 		</StackPanel>
 	</Grid>
 </Window>

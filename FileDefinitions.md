@@ -28,3 +28,8 @@ You can label the entries in the file. Just separate your label from the base64 
     label:QW5vdGhlciBleGFtcGxlLg==
 
 The application will disregard everything before the last colon. The expected file encoding is utf-8, but unless you get really fancy with your labels that shouldn't be noticable.
+
+Gen3 save file
+--------------
+Currently recognized by file size (128 KB).
+Only tested with emulator saves from firered and leafgreen.

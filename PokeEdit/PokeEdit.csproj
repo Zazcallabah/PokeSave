@@ -79,6 +79,7 @@
     <Compile Include="Editor.xaml.cs">
       <DependentUpon>Editor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="OpenFile.cs" />
     <Compile Include="PcBoxHolderPanel.xaml.cs">
       <DependentUpon>PcBoxHolderPanel.xaml</DependentUpon>
     </Compile>
@@ -91,6 +92,7 @@
     <Compile Include="ComboBoxPanel.xaml.cs">
       <DependentUpon>ComboBoxPanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="RelayCommand.cs" />
     <Compile Include="TeamListPanel.xaml.cs">
       <DependentUpon>TeamListPanel.xaml</DependentUpon>
     </Compile>

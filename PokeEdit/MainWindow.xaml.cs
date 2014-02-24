@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -50,26 +52,59 @@ namespace PokeEdit
 
 		void Add( string path )
 		{
-			var data = File.ReadAllBytes( path );
-			if( FileTypeDetector.IsGen3SaveFile( data ) )
-				AddGen3SaveFile( new SaveFile( data, path ) );
-			else
-				AddPkmFile( FileTypeDetector.Open( data ) );
-		}
+			if( _controller.OpenFiles.Any( f => f.Path == path ) )
+				return;
 
-		void AddPkmFile( IEnumerable<MonsterEntry> entries )
-		{
-			if( entries != null )
+			var data = File.ReadAllBytes( path );
+
+			if( FileTypeDetector.IsGen3SaveFile( data ) )
 			{
-				foreach( var entry in entries )
-					_controller.PKM.Add( entry );
+				var file = new SaveFile( data, path );
+				var fileinfo = new FileInfo( path );
+				_controller.OpenFiles.Add(
+					new OpenFile
+					{
+						Data = file,
+						Path = path,
+						Type = FileType.Gen3Save,
+						Label = fileinfo.Name
+					} );
+			}
+			else
+			{
+				var entries = FileTypeDetector.Open( data );
+				if( entries != null )
+				{
+					foreach( var entry in entries )
+					{
+						var existing = _controller.OpenFiles.Where( f => f.Type == FileType.PKM ).ToList();
+						var md5 = CalculateMD5Hash( entry.RawData );
+						if( existing.All( e => e.Path != md5 ) )
+						{
+							_controller.OpenFiles.Add( new OpenFile
+							{
+								Path = md5,
+								Data = entry,
+								Label = entry.TypeName + entry.Name,
+								Type = FileType.PKM
+							} );
+						}
+					}
+				}
 			}
 		}
 
-		void AddGen3SaveFile( SaveFile saveFile )
+		public string CalculateMD5Hash( byte[] data )
 		{
-			if( _controller.Gen3Saves.All( sf => sf.FileName != saveFile.FileName ) )
-				_controller.Gen3Saves.Add( saveFile );
+			MD5 md5 = System.Security.Cryptography.MD5.Create();
+			byte[] hash = md5.ComputeHash( data );
+
+			StringBuilder sb = new StringBuilder();
+			for( int i = 0; i < hash.Length; i++ )
+			{
+				sb.Append( hash[i].ToString( "X2" ) );
+			}
+			return sb.ToString();
 		}
 
 		void LoadButtonClicked( object sender, RoutedEventArgs e )
@@ -83,23 +118,6 @@ namespace PokeEdit
 					Info.Text = name;
 				}
 		}
-
-		void MergeButtonClicked( object sender, RoutedEventArgs e )
-		{
-			var list = _controller.Gen3Saves;
-
-			for( int i = 0; i < list.Count; i++ )
-			{
-				for( int j = 0; j < list.Count; j++ )
-				{
-					if( i != j )
-						list[i].Latest.Merge( list[j].Latest );
-				}
-				list[i].Latest.RepairPokeDex();
-			}
-		}
-
-
 
 		SaveFile ExtractSaveFileFromElement( Button button )
 		{
@@ -148,12 +166,6 @@ namespace PokeEdit
 				_editwindows.Add( sf.FileName, editor );
 				editor.Show();
 			}
-		}
-
-		void CloseButtonClicked( object sender, RoutedEventArgs e )
-		{
-			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );
-			_controller.Gen3Saves.Remove( sf );
 		}
 
 		void EditClosed( object sender, EventArgs e )

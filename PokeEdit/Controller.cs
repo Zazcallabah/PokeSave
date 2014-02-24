@@ -1,4 +1,8 @@
+using System;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows;
+using System.Windows.Input;
 using PokeSave;
 
 namespace PokeEdit
@@ -7,32 +11,78 @@ namespace PokeEdit
 	{
 		public Controller()
 		{
-			Gen3Saves = new BindingList<SaveFile>();
-			PKM = new BindingList<MonsterEntry>();
+			Gen3Saves = new BindingList<OpenFile>();
+			PKM = new BindingList<OpenFile>();
+			OpenFiles = new BindingList<OpenFile>();
 
-			Gen3Saves.ListChanged += Gen3Saves_ListChanged;
-			PKM.ListChanged += PKM_ListChanged;
+			Gen3Saves.ListChanged += ( s, e ) => InvokePropertyChanged( "Gen3Saves" );
+			PKM.ListChanged += ( s, e ) => InvokePropertyChanged( "PKM" );
+			OpenFiles.ListChanged += ( s, e ) => InvokePropertyChanged( "OpenFiles" );
+			OpenFiles.ListChanged += SubscribeToButtons;
 		}
 
-		void PKM_ListChanged( object sender, ListChangedEventArgs e )
+		void SubscribeToButtons( object sender, ListChangedEventArgs listargs )
 		{
-			OnPropertyChanged( "PKM" );
+			if( listargs.ListChangedType == ListChangedType.ItemAdded )
+			{
+				var item = OpenFiles[listargs.NewIndex];
+				item.Edit += ( s, e ) => EditFile( (OpenFile) s );
+				item.StopEdit += ( s, e ) => StopEditFile( (OpenFile) s );
+			}
 		}
 
-		void Gen3Saves_ListChanged( object sender, ListChangedEventArgs e )
+		public void StopEditFile( OpenFile file )
 		{
-			OnPropertyChanged( "Gen3Saves" );
+			var list = GetListForType( file.Type );
+			if( list.Any( ft => ft.Path == file.Path ) )
+				list.Remove( file );
 		}
-		public BindingList<SaveFile> Gen3Saves { get; private set; }
-		public BindingList<MonsterEntry> PKM { get; private set; }
+
+		public void EditFile( OpenFile file )
+		{
+			var list = GetListForType( file.Type );
+			if( list.All( ft => ft.Path != file.Path ) )
+				list.Add( file );
+		}
+
+		BindingList<OpenFile> GetListForType( FileType type )
+		{
+			if( type == FileType.PKM )
+				return PKM;
+			if( type == FileType.Gen3Save )
+				return Gen3Saves;
+			return null;
+		}
+
+		// commands
+		// hex edit
+		// save (saves file as is)
+		// save as (queries for file name)
+		// open -DONE
+		// convert pkm to other gen pkm
+		// compare commanD? - queries for winmerge if not found, related to hex viewer
+		// close command
+
+		// bulk commands
+		// export pkm to stringfile - query for gen
+		// export pkm to zipped 3gpkm (and other gens)
+		// merge
+		// claim - queries for original trainer
+
+		// filters for selecting all files of one type, for easy bulk export
+
+		public BindingList<OpenFile> OpenFiles { get; private set; }
+		public BindingList<OpenFile> Gen3Saves { get; private set; }
+		public BindingList<OpenFile> PKM { get; private set; }
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
-		protected virtual void OnPropertyChanged( string propertyName )
+		void InvokePropertyChanged( string propertyName )
 		{
-			var handler = PropertyChanged;
-			if( handler != null )
-				handler( this, new PropertyChangedEventArgs( propertyName ) );
+			if( PropertyChanged != null )
+				PropertyChanged( this, new PropertyChangedEventArgs( propertyName ) );
 		}
 	}
+
+	public enum FileType { Gen3Save, PKM }
 }
