@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Media;
+using System.Windows.Navigation;
 using Microsoft.Win32;
 using PokeSave;
 
@@ -30,9 +31,8 @@ namespace PokeEdit
 			DataContext = _controller = new Controller();
 			InitializeComponent();
 			Drop += MainWindowDrop;
-			Info.Text = "This tool lives at https://github.com/Zazcallabah/PokeSave";
 #if DEBUG
-			Add( @"C:\src\VisualBoyAdvance 1.8.0 beta 3\pfr.sa1" );
+			//	Add( @"C:\src\VisualBoyAdvance 1.8.0 beta 3\pfr.sa1" );
 #endif
 		}
 
@@ -62,9 +62,8 @@ namespace PokeEdit
 				var file = new SaveFile( data, path );
 				var fileinfo = new FileInfo( path );
 				_controller.OpenFiles.Add(
-					new OpenFile
+					new OpenFile( file )
 					{
-						Data = file,
 						Path = path,
 						Type = FileType.Gen3Save,
 						Label = fileinfo.Name
@@ -81,10 +80,9 @@ namespace PokeEdit
 						var md5 = CalculateMD5Hash( entry.RawData );
 						if( existing.All( e => e.Path != md5 ) )
 						{
-							_controller.OpenFiles.Add( new OpenFile
+							_controller.OpenFiles.Add( new OpenFile( entry )
 							{
 								Path = md5,
-								Data = entry,
 								Label = entry.TypeName + entry.Name,
 								Type = FileType.PKM
 							} );
@@ -107,7 +105,7 @@ namespace PokeEdit
 			return sb.ToString();
 		}
 
-		void LoadButtonClicked( object sender, RoutedEventArgs e )
+		void OpenClick( object sender, RoutedEventArgs e )
 		{
 			var dlg = new OpenFileDialog { Multiselect = true };
 			bool? result = dlg.ShowDialog();
@@ -165,6 +163,12 @@ namespace PokeEdit
 			editor.Closed -= EditClosed;
 			var sf = (SaveFile) editor.DataContext;
 			_editwindows.Remove( sf.FileName );
+		}
+
+		void Browser( object sender, RequestNavigateEventArgs e )
+		{
+			Process.Start( new ProcessStartInfo( e.Uri.AbsoluteUri ) );
+			e.Handled = true;
 		}
 	}
 }
