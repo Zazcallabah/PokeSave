@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace PokeSave
 {
@@ -9,16 +10,20 @@ namespace PokeSave
 	{
 		readonly Dictionary<uint, string> _data;
 
-		public StringList( string filename )
+		public StringList( string resourcename )
 		{
 			if( _data != null )
 				return;
 
 			_data = new Dictionary<uint, string>();
-			foreach( string entry in File.ReadAllLines( filename ) )
+			using( var textstream = new StreamReader( Assembly.GetExecutingAssembly().GetManifestResourceStream( "PokeSave.Resources." + resourcename ) ) )
 			{
-				string[] d = entry.Split( ',' );
-				_data.Add( UInt32.Parse( d[0] ), d[1] );
+				string line;
+				while( ( line = textstream.ReadLine() ) != null )
+				{
+					string[] d = line.Split( ',' );
+					_data.Add( UInt32.Parse( d[0] ), d[1] );
+				}
 			}
 		}
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace PokeSave
 {
@@ -15,9 +16,13 @@ namespace PokeSave
 
 			_dex = new Dictionary<uint, MonsterInfo>();
 
-			byte[] data = File.ReadAllBytes( "dex.bin" );
-			for( uint offset = 0, index = 1; offset < data.Length - 28; offset += 28, index++ )
-				_dex.Add( index, new MonsterInfo( data, index, offset ) );
+			using( var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream( "PokeSave.dex.bin" ) )
+			{
+				var data = new byte[11536];
+				stream.Read( data, 0, data.Length );
+				for( uint offset = 0, index = 1; offset < data.Length - 28; offset += 28, index++ )
+					_dex.Add( index, new MonsterInfo( data, index, offset ) );
+			}
 		}
 
 		public static MonsterInfo Get( uint index )

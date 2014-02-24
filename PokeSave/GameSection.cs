@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public class GameSection : INotifyPropertyChanged
+	public class GameSection : INotifyPropertyChanged, IHaveDirtyState
 	{
 		#region Lookuptables
 		static readonly string[] Names = new[]
@@ -116,7 +116,7 @@ namespace PokeSave
 				{
 					for( int i = 0; i < 8 && index < _datasource.Length; i++, index++ )
 					{
-						var substr = l.Substring( 6 + (i*3), 2 );
+						var substr = l.Substring( 6 + ( i * 3 ), 2 );
 						var b = byte.Parse( substr, NumberStyles.HexNumber );
 						if( _datasource[index] != b )
 							this[index] = b;

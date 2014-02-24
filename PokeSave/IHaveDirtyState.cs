@@ -1,6 +1,8 @@
+using System.ComponentModel;
+
 namespace PokeSave
 {
-	public interface IHaveDirtyState
+	public interface IHaveDirtyState : INotifyPropertyChanged
 	{
 		bool IsDirty { get; }
 	}

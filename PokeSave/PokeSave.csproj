@@ -55,24 +55,12 @@
     <Compile Include="TextTable.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="abilities.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="dex.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="dexnames.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="items.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="moves.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="names.bin">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <EmbeddedResource Include="Resources\abilities.bin" />
+    <EmbeddedResource Include="Resources\dex.bin" />
+    <EmbeddedResource Include="Resources\dexnames.bin" />
+    <EmbeddedResource Include="Resources\items.bin" />
+    <EmbeddedResource Include="Resources\moves.bin" />
+    <EmbeddedResource Include="Resources\names.bin" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
