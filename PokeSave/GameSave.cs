@@ -242,7 +242,7 @@ namespace PokeSave
 			get
 			{
 				return _sections.All( s => s.Checksum == s.CalculatedChecksum )
-				       && _sections.All( s => s.SaveIndex == _sections[0].SaveIndex );
+					   && _sections.All( s => s.SaveIndex == _sections[0].SaveIndex );
 			}
 		}
 
@@ -274,9 +274,12 @@ namespace PokeSave
 
 		public string Rival
 		{
-			get { if( Type == GameType.FRLG)
-				return _sections[4].GetText( Pointers["Rival"], 8 );
-			return "";}
+			get
+			{
+				if( Type == GameType.FRLG )
+					return _sections[4].GetText( Pointers["Rival"], 8 );
+				return "";
+			}
 			set
 			{
 				if( Rival != value )
@@ -429,7 +432,14 @@ namespace PokeSave
 					max = kvp.Value;
 					id = kvp.Key;
 				}
-			GameTypeGuess = (GameName)id;
+			GameTypeGuess = (GameName) id;
+		}
+
+		public void ClaimAll()
+		{
+			IEnumerable<MonsterEntry> l = Team.Where( t => !t.Empty ).Concat( PcBuffer.Where( t => !t.Empty ) );
+			foreach( MonsterEntry me in l )
+				me.MakeOwn( this );
 		}
 
 
