@@ -144,15 +144,6 @@ namespace PokeEdit
 			ExtractSaveFileFromElement( (Button) sender ).Save();
 		}
 
-		void ClaimButtonClicked( object sender, RoutedEventArgs e )
-		{
-			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );
-			IEnumerable<MonsterEntry> l = sf.Latest.Team.Where( t => !t.Empty ).Concat(
-				sf.Latest.PcBuffer.Where( t => !t.Empty ) );
-			foreach( MonsterEntry me in l )
-				me.MakeOwn( sf.Latest );
-		}
-
 		void HexButtonClicked( object sender, RoutedEventArgs e )
 		{
 			SaveFile sf = ExtractSaveFileFromElement( (Button) sender );

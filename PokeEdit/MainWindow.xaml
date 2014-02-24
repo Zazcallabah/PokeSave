@@ -31,7 +31,7 @@
 									<StackPanel>
 										<PokeEdit:SaveControl DataContext="{Binding Data}"/>
 										<StackPanel Orientation="Horizontal">
-											<Button Height="26" Margin="4" Width="60" Content="Claim all" Click="{Binding ClaimCommand}" />
+											<Button Height="26" Margin="4" Width="60" Content="Claim all" Command="{Binding ClaimCommand}" />
 											<Button Height="26" Margin="4" Width="60" Content="Close" Command="{Binding StopEditCommand}" />
 										</StackPanel>
 									</StackPanel>
