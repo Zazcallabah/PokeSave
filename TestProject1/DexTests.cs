@@ -11,8 +11,7 @@ namespace TestProject1
 		[Test]
 		public void CanHaveData()
 		{
-			var data = File.ReadAllBytes( "dex.bin" );
-			var entry = new MonsterInfo( data, 1, 0 );
+			var entry = MonsterList.Get( 1 );
 
 			Assert.AreEqual( 45, entry.HP );
 			Assert.AreEqual( 49, entry.Attack );

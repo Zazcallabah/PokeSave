@@ -65,7 +65,7 @@ namespace TestProject1
 			_file.Latest.Team[0].PPBonus3 = 1;
 			_file.Latest.Team[0].PPBonus4 = 0;
 			Assert.IsTrue( _file.Latest.Team[0].IsDirty );
-			_file.SaveAs( "tmp.sav" );
+			_file.Save( "tmp.sav" );
 			Assert.IsFalse( _file.Latest.Team[0].IsDirty );
 			Assert.AreEqual( 0, _file.Latest.Team[0].PPBonus4 );
 			Assert.AreEqual( 1, _file.Latest.Team[0].PPBonus3 );
@@ -219,7 +219,7 @@ namespace TestProject1
 			_file.Latest.Team[0].MonsterId = 277;
 			Assert.AreEqual( 277, _file.Latest.Team[0].MonsterId );
 			Assert.AreNotEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
-			_file.SaveAs( "upd.sav" );
+			_file.Save( "upd.sav" );
 			Assert.AreEqual( _file.Latest.Team[0].Checksum, _file.Latest.Team[0].CalculatedChecksum );
 		}
 
@@ -238,7 +238,7 @@ namespace TestProject1
 			{
 				Assert.IsFalse( t.IsDirty );
 			}
-			_file.SaveAs( "tmp.sav" );
+			_file.Save( "tmp.sav" );
 			for( int i = 0; i < _file.Latest.Team.Count; i++ )
 			{
 				Assert.AreEqual( i, _file.Latest.Team[i].Mark );
@@ -253,7 +253,7 @@ namespace TestProject1
 			_file.PropertyChanged += ( a, e ) => properties.Add( e.PropertyName );
 			_file.Latest.Items[0].Count = 44;
 
-			Assert.AreEqual( 3, properties.Count );
+			Assert.AreNotEqual( 0, properties.Count );
 		}
 
 		[Test]
@@ -510,7 +510,7 @@ namespace TestProject1
 		public void AfterSaveFileHasSameSize()
 		{
 			var f = new SaveFile( "p.sav" );
-			f.SaveAs( "tmp.sav" );
+			f.Save( "tmp.sav" );
 
 			Assert.AreEqual( new FileInfo( "p.sav" ).Length, new FileInfo( "tmp.sav" ).Length );
 		}
@@ -605,7 +605,7 @@ namespace TestProject1
 				}
 			}
 
-			_file.SaveAs( "outtmp.sav" );
+			_file.Save( "outtmp.sav" );
 			var f2 = new SaveFile( "outtmp.sav" );
 			foreach( var p in f2.Latest.Team )
 			{

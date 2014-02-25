@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public class GameSection : INotifyPropertyChanged, IHaveDirtyState
+	public class GameSection : INotifyPropertyChanged
 	{
 		#region Lookuptables
 		static readonly string[] Names = new[]

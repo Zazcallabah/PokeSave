@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PokeSave
 {
-	public class SaveFile : IHaveDirtyState
+	public class SaveFile : IFileContent
 	{
 		readonly byte[] _tail;
 		public string FileName { get; private set; }
@@ -96,33 +96,27 @@ namespace PokeSave
 			return sb.ToString();
 		}
 
-		void SaveFileWithBackup( string name )
+		public void Save()
 		{
-			if( File.Exists( name ) )
+			if( File.Exists( FileName ) )
 			{
-				string tmp = name;
+				string tmp = FileName;
 				int i = 1;
 				while( File.Exists( tmp ) )
-					tmp = name + "." + ( i++ );
-				File.Move( name, tmp );
+					tmp = FileName + "." + ( i++ );
+				File.Move( FileName, tmp );
 			}
+			Save( FileName );
+		}
 
-			using( FileStream fs = File.OpenWrite( name ) )
+		public void Save( string path )
+		{
+			using( FileStream fs = File.OpenWrite( path ) )
 			{
 				A.Save( fs );
 				B.Save( fs );
 				fs.Write( _tail, 0, _tail.Length );
 			}
-		}
-
-		public void Save()
-		{
-			SaveFileWithBackup( FileName );
-		}
-
-		public void SaveAs( string name )
-		{
-			SaveFileWithBackup( name );
 		}
 
 

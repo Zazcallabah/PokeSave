@@ -16,7 +16,7 @@ namespace PokeSave
 
 			_dex = new Dictionary<uint, MonsterInfo>();
 
-			using( var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream( "PokeSave.dex.bin" ) )
+			using( var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream( "PokeSave.Resources.dex.bin" ) )
 			{
 				var data = new byte[11536];
 				stream.Read( data, 0, data.Length );

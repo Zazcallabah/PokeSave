@@ -79,7 +79,7 @@ namespace PokeConsoleClient
 				_com.WriteLine( "No file chosen" );
 				return;
 			}
-			_current.SaveAs( name );
+			_current.Save( name );
 		}
 
 		void LoadFile( string input )

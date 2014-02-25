@@ -1,11 +1,12 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace PokeSave
 {
-	public class MonsterEntry : INotifyPropertyChanged, IHaveDirtyState
+	public class MonsterEntry : INotifyPropertyChanged, IFileContent
 	{
 		readonly GameSection _data;
 		readonly int _offset;
@@ -1216,6 +1217,12 @@ namespace PokeSave
 			_data.SetInt( offset, _specificXor.Run( data[0] ) );
 			_data.SetInt( offset + 4, _specificXor.Run( data[1] ) );
 			_data.SetInt( offset + 8, _specificXor.Run( data[2] ) );
+		}
+
+		public void Save( string path )
+		{
+			Save();
+			File.WriteAllBytes( path, To3gPkm() );
 		}
 
 		public void Save()

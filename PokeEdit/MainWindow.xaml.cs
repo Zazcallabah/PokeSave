@@ -32,7 +32,8 @@ namespace PokeEdit
 			InitializeComponent();
 			Drop += MainWindowDrop;
 #if DEBUG
-			//	Add( @"C:\src\VisualBoyAdvance 1.8.0 beta 3\pfr.sa1" );
+			Add( @"C:\src\VisualBoyAdvance 1.8.0 beta 3\pfr.sa1" );
+			Add( @"C:\src\xs\data.txt" );
 #endif
 		}
 
@@ -124,19 +125,7 @@ namespace PokeEdit
 			var sc = (SaveControl) savecontainer.Children[0];
 			return (SaveFile) sc.DataContext;
 		}
-
-		void SaveAsButtonClicked( object sender, RoutedEventArgs e )
-		{
-			var dlg = new SaveFileDialog();
-			bool? result = dlg.ShowDialog();
-
-			if( result == true )
-			{
-				string filename = dlg.FileName;
-				ExtractSaveFileFromElement( (Button) sender ).SaveAs( filename );
-			}
-		}
-
+		
 		void SaveButtonClicked( object sender, RoutedEventArgs e )
 		{
 			ExtractSaveFileFromElement( (Button) sender ).Save();

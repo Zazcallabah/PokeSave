@@ -55,19 +55,13 @@ namespace PokeEdit
 		}
 
 		// commands
-		// hex edit
-		// save (saves file as is)
-		// save as (queries for file name)
-		// open -DONE
-		// convert pkm to other gen pkm
-		// compare commanD? - queries for winmerge if not found, related to hex viewer
-		// close command
 
 		// bulk commands
 		// export pkm to stringfile - query for gen
 		// export pkm to zipped 3gpkm (and other gens)
 		// merge
 		// claim - queries for original trainer
+		// save (saves file as is)
 
 		// filters for selecting all files of one type, for easy bulk export
 

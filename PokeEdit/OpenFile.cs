@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel;
 using System.Windows.Input;
+using Microsoft.Win32;
 using PokeSave;
 
 namespace PokeEdit
@@ -10,13 +11,15 @@ namespace PokeEdit
 	/// </summary>
 	public class OpenFile : INotifyPropertyChanged
 	{
-		public OpenFile( IHaveDirtyState data )
+		public OpenFile( IFileContent data )
 		{
 			Data = data;
 			Data.PropertyChanged += ( s, e ) => InvokePropertyChanged( "Data" );
 			EditCommand = new RelayCommand( InvokeEdit );
 			StopEditCommand = new RelayCommand( InvokeStopEdit );
 			ClaimCommand = new RelayCommand( Claim );
+			SaveAsCommand = new RelayCommand( SaveAs );
+			CloseCommand = new RelayCommand( Close );
 		}
 
 		void Claim()
@@ -25,21 +28,39 @@ namespace PokeEdit
 				( (SaveFile) Data ).Latest.ClaimAll();
 		}
 
+		void SaveAs()
+		{
+			var dlg = new SaveFileDialog();
+			bool? result = dlg.ShowDialog();
+
+			if( result == true )
+			{
+				Data.Save( dlg.FileName );
+			}
+		}
+
+		void Close()
+		{
+		}
+
 		/// <summary>
 		/// PKM types uses path for a hash to avoid duplicates.
 		/// </summary>
 		public string Path { get; set; }
 		public string Label { get; set; }
-		public IHaveDirtyState Data { get; private set; }
+		public IFileContent Data { get; private set; }
 		public FileType Type { get; set; }
 
 		public ICommand EditCommand { get; private set; }
 		public ICommand StopEditCommand { get; private set; }
 		public ICommand ClaimCommand { get; private set; }
-		public ICommand SaveCommand { get; private set; }
+		public ICommand SaveAsCommand { get; private set; }
+		public ICommand CloseCommand { get; private set; }
 
 		public event EventHandler<EventArgs> Edit;
 		public event EventHandler<EventArgs> StopEdit;
+
+		public bool Selected { get; set; }
 
 		void InvokeStopEdit()
 		{
