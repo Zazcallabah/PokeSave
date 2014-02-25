@@ -19,7 +19,7 @@ namespace PokeEdit
 			StopEditCommand = new RelayCommand( InvokeStopEdit );
 			ClaimCommand = new RelayCommand( Claim );
 			SaveAsCommand = new RelayCommand( SaveAs );
-			CloseCommand = new RelayCommand( Close );
+			CloseCommand = new RelayCommand( InvokeClose );
 		}
 
 		void Claim()
@@ -39,10 +39,6 @@ namespace PokeEdit
 			}
 		}
 
-		void Close()
-		{
-		}
-
 		/// <summary>
 		/// PKM types uses path for a hash to avoid duplicates.
 		/// </summary>
@@ -50,6 +46,7 @@ namespace PokeEdit
 		public string Label { get; set; }
 		public IFileContent Data { get; private set; }
 		public FileType Type { get; set; }
+		public bool Selected { get; set; }
 
 		public ICommand EditCommand { get; private set; }
 		public ICommand StopEditCommand { get; private set; }
@@ -59,8 +56,15 @@ namespace PokeEdit
 
 		public event EventHandler<EventArgs> Edit;
 		public event EventHandler<EventArgs> StopEdit;
+		public event EventHandler<EventArgs> Close;
 
-		public bool Selected { get; set; }
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		void InvokeClose()
+		{
+			if( Close != null )
+				Close( this, EventArgs.Empty );
+		}
 
 		void InvokeStopEdit()
 		{
@@ -73,8 +77,6 @@ namespace PokeEdit
 			if( Edit != null )
 				Edit( this, EventArgs.Empty );
 		}
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		void InvokePropertyChanged( string propertyName )
 		{

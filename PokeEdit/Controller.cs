@@ -26,20 +26,34 @@ namespace PokeEdit
 			if( listargs.ListChangedType == ListChangedType.ItemAdded )
 			{
 				var item = OpenFiles[listargs.NewIndex];
-				item.Edit += ( s, e ) => EditFile( (OpenFile) s );
-				item.StopEdit += ( s, e ) => StopEditFile( (OpenFile) s );
+				item.Edit += EditFile;
+				item.StopEdit += StopEditFile;
+				item.Close += CloseFile;
 			}
 		}
 
-		public void StopEditFile( OpenFile file )
+		void CloseFile( object sender, EventArgs e )
 		{
+			StopEditFile( sender, e );
+			var file = (OpenFile) sender;
+			file.Edit -= EditFile;
+			file.StopEdit -= StopEditFile;
+			file.Close -= CloseFile;
+
+			OpenFiles.Remove( file );
+		}
+
+		public void StopEditFile( object sender, EventArgs e )
+		{
+			var file = (OpenFile) sender;
 			var list = GetListForType( file.Type );
 			if( list.Any( ft => ft.Path == file.Path ) )
 				list.Remove( file );
 		}
 
-		public void EditFile( OpenFile file )
+		public void EditFile( object sender, EventArgs e )
 		{
+			var file = (OpenFile) sender;
 			var list = GetListForType( file.Type );
 			if( list.All( ft => ft.Path != file.Path ) )
 				list.Add( file );
