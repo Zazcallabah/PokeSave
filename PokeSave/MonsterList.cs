@@ -25,6 +25,12 @@ namespace PokeSave
 			}
 		}
 
+		public static MonsterInfo Get( string name )
+		{
+			Init();
+			return _dex.Values.FirstOrDefault( e => e.Name == name );
+		}
+
 		public static MonsterInfo Get( uint index )
 		{
 			Init();

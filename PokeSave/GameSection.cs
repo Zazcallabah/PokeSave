@@ -166,9 +166,7 @@ namespace PokeSave
 			}
 		}
 
-		#region INotifyPropertyChanged Members
 		public event PropertyChangedEventHandler PropertyChanged;
-		#endregion
 
 		public void SetText( int offset, int count, string data )
 		{

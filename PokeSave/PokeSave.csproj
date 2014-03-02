@@ -28,6 +28,8 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Fifth\SaveFile5G.cs" />
+    <Compile Include="Fourth\SaveFile4G.cs" />
     <Compile Include="Box.cs" />
     <Compile Include="DexEntry.cs" />
     <Compile Include="Enums.cs" />
@@ -36,7 +38,10 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FileTypeDetector.cs" />
     <Compile Include="GenderDecision.cs" />
+    <Compile Include="GTS\DnsFake.cs" />
+    <Compile Include="GTS\WebFake.cs" />
     <Compile Include="IFileContent.cs" />
+    <Compile Include="LevelLookup.cs" />
     <Compile Include="MoveList.cs" />
     <Compile Include="MonsterInfo.cs" />
     <Compile Include="MonsterList.cs" />
@@ -48,11 +53,14 @@
     <Compile Include="NameList.cs" />
     <Compile Include="PcBuffer.cs" />
     <Compile Include="PersonalityEngine.cs" />
+    <Compile Include="PreferenceTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveFile.cs" />
+    <Compile Include="Sixth\Gen6TypeInformation.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="SubstructureOffset.cs" />
     <Compile Include="TextTable.cs" />
+    <Compile Include="TypeChart.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\abilities.bin" />
@@ -64,6 +72,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Third\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\types.bin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
