@@ -92,6 +92,9 @@
     <Compile Include="FilePanel.xaml.cs">
       <DependentUpon>FilePanel.xaml</DependentUpon>
     </Compile>
+    <Compile Include="StatsPanel.xaml.cs">
+      <DependentUpon>StatsPanel.xaml</DependentUpon>
+    </Compile>
     <Compile Include="RelayCommand.cs" />
     <Compile Include="TeamListPanel.xaml.cs">
       <DependentUpon>TeamListPanel.xaml</DependentUpon>
@@ -107,6 +110,9 @@
     </Compile>
     <Compile Include="SaveControl.xaml.cs">
       <DependentUpon>SaveControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SearchWindow.xaml.cs">
+      <DependentUpon>SearchWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="DexHolderPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -133,6 +139,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="FilePanel.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="StatsPanel.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -165,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SaveControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SearchWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

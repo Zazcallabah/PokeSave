@@ -111,17 +111,18 @@
 			</StackPanel>
 		</Expander>
 			
-		<Expander Header="EVs">
+		<Expander Header="Stats">
 			<StackPanel Orientation="Horizontal">
 				<StackPanel>
-					<PokeEdit:PropertyPanel Label="HP" PropertyName="HPEV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Attack" PropertyName="AttackEV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Defense" PropertyName="DefenseEV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Speed"  PropertyName="SpeedEV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="SpAttackEV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="SpDefenseEV" DataContext="{Binding}"/>
+					<TextBlock>\t\tIV EV Calc Actual</TextBlock>
+					<PokeEdit:StatsPanel Stat="HP" DataContext="{Binding}"/>
+					<PokeEdit:StatsPanel Stat="Attack" DataContext="{Binding}"/>
+					<PokeEdit:StatsPanel Stat="Defense" DataContext="{Binding}"/>
+					<PokeEdit:StatsPanel Stat="Speed" DataContext="{Binding}"/>
+					<PokeEdit:StatsPanel Stat="SpAttack" DataContext="{Binding}"/>
+					<PokeEdit:StatsPanel Stat="SpDefense" DataContext="{Binding}"/>
 				</StackPanel>
-				<StackPanel>
+					<StackPanel>
 					<PokeEdit:PropertyPanel PropertyName="Coolness" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="Beauty" DataContext="{Binding}"/>
 					<PokeEdit:PropertyPanel PropertyName="Cuteness" DataContext="{Binding}"/>
@@ -131,18 +132,6 @@
 				</StackPanel>
 			</StackPanel>
 		</Expander>
-		
-		<Expander Header="IVs">
-				<StackPanel>
-					<PokeEdit:PropertyPanel Label="HP" PropertyName="HPIV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Attack" PropertyName="AttackIV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Defense" PropertyName="DefenseIV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Speed"  PropertyName="SpeedIV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Sp Attack" PropertyName="SpAttackIV" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel Label="Sp Defense"  PropertyName="SpDefenseIV" DataContext="{Binding}"/>
-				</StackPanel>
-		</Expander>
-
 		<Expander Header="Misc">
 				<StackPanel>
 					<PokeEdit:PropertyPanel PropertyName="Language" DataContext="{Binding}"/>

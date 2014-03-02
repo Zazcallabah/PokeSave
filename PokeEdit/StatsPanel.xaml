@@ -1,0 +1,12 @@
+﻿<UserControl
+	x:Class="PokeEdit.StatsPanel"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+	<StackPanel Orientation="Horizontal">
+		<TextBlock Width="60" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" Margin="2" Name="Text" />
+		<TextBox Width="30" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Name="IV"/>
+		<TextBox Width="30" Height="20" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="2" Name="EV"/>
+		<TextBlock Width="30" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" Margin="2" Name="Calc"/>
+		<TextBlock Width="30" Height="20" HorizontalAlignment="Right" VerticalAlignment="Center" TextAlignment="Right" Margin="2" Name="Actual"/>
+	</StackPanel>
+</UserControl>
