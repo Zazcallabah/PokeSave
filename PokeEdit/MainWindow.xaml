@@ -107,7 +107,8 @@
 				<TextBlock Padding="10" HorizontalAlignment="Center" Visibility="{Binding OpenFiles.Count, Converter={StaticResource showEmpty}}">Drag files here</TextBlock>
 				<TextBlock FontSize="50" HorizontalAlignment="Center" TextAlignment="Center" FontFamily="Resources/#FontAwesome" Padding="0,30,0,0" Visibility="{Binding OpenFiles.Count, Converter={StaticResource showEmpty}}">&#xf063;<LineBreak/>&#xf0f6;</TextBlock>
 				<StackPanel Grid.Row="1" Orientation="Horizontal">
-					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Content="&#xf115;" Margin="2" Click="OpenClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf115;" Margin="2" Click="OpenClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30"  Content="&#xf02d;" Margin="2" Click="SearchClick"></Button>
 				</StackPanel>
 				</Grid>
 			</ScrollViewer>

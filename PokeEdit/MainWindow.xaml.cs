@@ -24,6 +24,7 @@ namespace PokeEdit
 	{
 		readonly Dictionary<string, Editor> _editwindows;
 		readonly Controller _controller;
+		SearchWindow _search;
 
 		public MainWindow()
 		{
@@ -32,8 +33,8 @@ namespace PokeEdit
 			InitializeComponent();
 			Drop += MainWindowDrop;
 #if DEBUG
-			Add( @"C:\src\VisualBoyAdvance 1.8.0 beta 3\pfr.sa1" );
-			Add( @"C:\src\xs\data.txt" );
+			Add( @"C:\src\vba\pkm.txt" );
+			Add( @"C:\src\vba\pfr - Copy.sa1" );
 #endif
 		}
 
@@ -53,6 +54,8 @@ namespace PokeEdit
 
 		void Add( string path )
 		{
+			if( !File.Exists( path ) )
+				return;
 			if( _controller.OpenFiles.Any( f => f.Path == path ) )
 				return;
 
@@ -118,6 +121,15 @@ namespace PokeEdit
 				}
 		}
 
+		void SearchClick( object sender, RoutedEventArgs e )
+		{
+			if( _search == null )
+			{
+				_search = new SearchWindow { DataContext = new SearchPresenter() };
+				_search.Show();
+			}
+		}
+
 		SaveFile ExtractSaveFileFromElement( Button button )
 		{
 			var buttoncontainer = (StackPanel) VisualTreeHelper.GetParent( button );
@@ -125,7 +137,7 @@ namespace PokeEdit
 			var sc = (SaveControl) savecontainer.Children[0];
 			return (SaveFile) sc.DataContext;
 		}
-		
+
 		void SaveButtonClicked( object sender, RoutedEventArgs e )
 		{
 			ExtractSaveFileFromElement( (Button) sender ).Save();
