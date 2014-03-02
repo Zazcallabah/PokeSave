@@ -19,7 +19,7 @@ namespace PokeSave
 		public byte HP;
 		public uint Item1;
 		public uint Item2;
-		public byte LevelUpType;
+		public ExperienceRate LevelUpType;
 		public string Name { get; private set; }
 		public byte SafariRate;
 		public byte SpAttack;
@@ -47,7 +47,7 @@ namespace PokeSave
 			Gender = source[offset + 16];
 			StepsToHatch = source[offset + 17];
 			BaseFriendship = source[offset + 18];
-			LevelUpType = source[offset + 19];
+			LevelUpType = (ExperienceRate) source[offset + 19];
 			EggGroup1 = source[offset + 20];
 			EggGroup2 = source[offset + 21];
 			Ability1 = source[offset + 22];
@@ -70,4 +70,5 @@ namespace PokeSave
 			return sb.ToString();
 		}
 	}
+
 }
