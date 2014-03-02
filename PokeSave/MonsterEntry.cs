@@ -227,6 +227,11 @@ namespace PokeSave
 			}
 		}
 
+		public uint CalculatedLevel
+		{
+			get { return LevelLookup.CalculatedLevel( TypeInformation.LevelUpType, XP ); }
+		}
+
 		public uint Virus
 		{
 			get { return Storage ? 0u : _data[_offset + 85]; }
@@ -769,6 +774,11 @@ namespace PokeSave
 			}
 		}
 
+		public uint TotalEV
+		{
+			get { return HPEV + SpeedEV + AttackEV + DefenseEV + SpAttackEV + SpDefenseEV; }
+		}
+
 		public uint Coolness
 		{
 			get { return GetEncryptedByte( EVsOffset + 4, 2 ); }
@@ -779,6 +789,93 @@ namespace PokeSave
 					SetEncryptedByte( EVsOffset + 4, 2, (byte) value );
 					InvokePropertyChanged( "Coolness" );
 				}
+			}
+		}
+
+		uint IvByStat( Stat stat )
+		{
+			if( stat == Stat.Attack )
+				return AttackIV;
+			if( stat == Stat.Defense )
+				return DefenseIV;
+			if( stat == Stat.Speed )
+				return SpeedIV;
+			if( stat == Stat.SpAttack )
+				return SpAttackIV;
+			if( stat == Stat.SpDefense )
+				return SpDefenseIV;
+			throw new ArgumentException( "Not valid stat" );
+		}
+
+		uint EvByStat( Stat stat )
+		{
+			if( stat == Stat.Attack )
+				return AttackEV;
+			if( stat == Stat.Defense )
+				return DefenseEV;
+			if( stat == Stat.Speed )
+				return SpeedEV;
+			if( stat == Stat.SpAttack )
+				return SpAttackEV;
+			if( stat == Stat.SpDefense )
+				return SpDefenseEV;
+			throw new ArgumentException( "Not valid stat" );
+		}
+		uint BaseByStat( Stat stat )
+		{
+			if( stat == Stat.Attack )
+				return TypeInformation.Attack;
+			if( stat == Stat.Defense )
+				return TypeInformation.Defense;
+			if( stat == Stat.Speed )
+				return TypeInformation.Speed;
+			if( stat == Stat.SpAttack )
+				return TypeInformation.SpAttack;
+			if( stat == Stat.SpDefense )
+				return TypeInformation.SpDefense;
+			throw new ArgumentException( "Not valid stat" );
+		}
+
+		uint CalculateStat( Stat stat )
+		{
+			var ev = EvByStat( stat );
+			var iv = IvByStat( stat );
+			var @base = BaseByStat( stat );
+			var factor = PreferenceTable.CalculateFactorForStat( Nature, stat );
+			var first = iv + ( 2.0 * @base ) + ( ev / 4.0 );
+			var second = first * CalculatedLevel;
+			var third = second / 100.0;
+			return (uint) Math.Floor( third * factor );
+		}
+
+		public uint CalculatedAttack
+		{
+			get { return CalculateStat( Stat.Attack ); }
+		}
+		public uint CalculatedDefense
+		{
+			get { return CalculateStat( Stat.Defense ); }
+		}
+		public uint CalculatedSpeed
+		{
+			get { return CalculateStat( Stat.Speed ); }
+		}
+		public uint CalculatedSpAttack
+		{
+			get { return CalculateStat( Stat.SpAttack ); }
+		}
+		public uint CalculatedSpDefense
+		{
+			get { return CalculateStat( Stat.SpDefense ); }
+		}
+
+		public uint CalculatedHP
+		{
+			get
+			{
+				var @base = TypeInformation.HP;
+				var div = HPIV + ( 2 * @base ) + HPEV / 4.0 + 100;
+				return (uint) Math.Floor( ( div * CalculatedLevel ) / 100.0 + 10 );
 			}
 		}
 
