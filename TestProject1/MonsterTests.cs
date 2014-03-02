@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using NUnit.Framework;
 using PokeSave;
 
@@ -26,8 +27,6 @@ namespace TestProject1
 		{
 			var b = _saveA.Team[0].RawData;
 		}
-
-
 
 		[Test]
 		public void MonsterListParse()
@@ -63,7 +62,7 @@ namespace TestProject1
 
 		}
 
-				public void IVValuesCanSetSpAttack()
+		public void IVValuesCanSetSpAttack()
 		{
 			var t = TestSection();
 
