@@ -68,6 +68,7 @@ Thanks and sources
 * [CodeMonkey85](https://github.com/codemonkey85)
 * Kaphotics, OmegaDonut, onyxphase, Bond697, and others from the pp irc
 * [Font Awesome by Dave Gandy](http://fontawesome.io)
+* [PokeLib](https://github.com/Chase-san/PokeLib)
 
 License
 -------
