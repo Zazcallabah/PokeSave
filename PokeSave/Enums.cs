@@ -56,7 +56,35 @@ namespace PokeSave
 		Psychic,
 		Ice,
 		Dragon,
-		Dark
+		Dark,
+		Fairy
+	}
+
+	public enum Stat
+	{
+		Attack,
+		Defense,
+		Speed,
+		SpAttack,
+		SpDefense
+	}
+	public enum Flavor
+	{
+		Spicy,
+		Sour,
+		Dry,
+		Bitter,
+		Sweet
+	}
+
+	public enum ExperienceRate
+	{
+		MediumFast = 0,
+		Erratic,
+		Fluctuating,
+		MediumSlow,
+		Fast,
+		Slow
 	}
 
 	public enum MonsterNature
