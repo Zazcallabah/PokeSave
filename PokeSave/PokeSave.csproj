@@ -56,6 +56,7 @@
     <Compile Include="PreferenceTable.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveFile.cs" />
+    <Compile Include="Sixth\Gen6TypeChart.cs" />
     <Compile Include="Sixth\Gen6TypeInformation.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="SubstructureOffset.cs" />
@@ -78,6 +79,19 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\types.bin" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\gen6typechart.bin" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\gen6dextypes.bin" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\gen1typechart.bin" />
+    <EmbeddedResource Include="Resources\gen5typechart.bin" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\gen1dextypes.bin" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

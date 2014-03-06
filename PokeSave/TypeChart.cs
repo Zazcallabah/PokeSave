@@ -1,107 +1,165 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 
 namespace PokeSave
 {
-	public static class TypeChart
+	public class Line
 	{
-		static readonly Line[] _lines;
-
-		static TypeChart()
+		static readonly IDictionary<char, decimal> _weights = new Dictionary<char, decimal>()
 		{
-			var data = @"Normal 1 1 1 1 1 ½ 1 0 ½ 1 1 1 1 1 1 1 1 1
-Fighting 2 1 ½ ½ 1 2 ½ 0 2 1 1 1 1 ½ 2 1 2 ½
-Flying 1 2 1 1 1 ½ 2 1 ½ 1 1 2 ½ 1 1 1 1 1
-Poison 1 1 1 ½ ½ ½ 1 ½ 0 1 1 2 1 1 1 1 1 2
-Ground 1 1 0 2 1 2 ½ 1 2 2 1 ½ 2 1 1 1 1 1
-Rock 1 ½ 2 1 ½ 1 2 1 ½ 2 1 1 1 1 2 1 1 1
-Bug 1 ½ ½ ½ 1 1 1 ½ ½ ½ 1 2 1 2 1 1 2 ½
-Ghost 0 1 1 1 1 1 1 2 1 1 1 1 1 2 1 1 ½ 1
-Steel 1 1 1 1 1 2 1 1 ½ ½ ½ 1 ½ 1 2 1 1 2
-Fire 1 1 1 1 1 ½ 2 1 2 ½ ½ 2 1 1 2 ½ 1 1
-Water 1 1 1 1 2 2 1 1 1 2 ½ ½ 1 1 1 ½ 1 1
-Grass 1 1 ½ ½ 2 2 ½ 1 ½ ½ 2 ½ 1 1 1 ½ 1 1
-Electric 1 1 2 1 0 1 1 1 1 1 2 ½ ½ 1 1 ½ 1 1
-Psychic 1 2 1 2 1 1 1 1 ½ 1 1 1 1 ½ 1 1 0 1
-Ice 1 1 2 1 2 1 1 1 ½ ½ ½ 2 1 1 ½ 2 1 1
-Dragon 1 1 1 1 1 1 1 1 ½ 1 1 1 1 1 1 2 1 0
-Dark 1 ½ 1 1 1 1 1 2 1 1 1 1 1 2 1 1 ½ ½
-Fairy 1 2 1 ½ 1 1 1 1 ½ ½ 1 1 1 1 1 2 2 1".Split( new[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries );
-			int i = 0;
-			_lines = data.Select( d => new Line( d, i++ ) ).ToArray();
+			{ 'H', 0.5m },
+			{ 'D', 2m },
+			{ '0', 0m },
+			{ 'Q', 0.25m },
+			{ '4', 4m },
+			{ '@', 1m }
+		};
+
+		static readonly IDictionary<MonsterType, int> _headerIndexes = new Dictionary<MonsterType, int>
+		{
+			{ MonsterType.Normal, 0 },
+			{ MonsterType.Fire, 1 },
+			{ MonsterType.Water, 2 },
+			{ MonsterType.Electric, 3 },
+			{ MonsterType.Grass, 4 },
+			{ MonsterType.Ice, 5 },
+			{ MonsterType.Fighting, 6 },
+			{ MonsterType.Poison, 7 },
+			{ MonsterType.Ground, 8 },
+			{ MonsterType.Flying, 9 },
+			{ MonsterType.Psychic, 10 },
+			{ MonsterType.Bug, 11 },
+			{ MonsterType.Rock, 12 },
+			{ MonsterType.Ghost, 13 },
+			{ MonsterType.Dragon, 14 },
+			{ MonsterType.Dark, 15 },
+			{ MonsterType.Steel, 16 },
+			{ MonsterType.Fairy, 17 }
+		};
+
+		public Line( Line a, Line b )
+		{
+			Weights = new decimal[a.Weights.Length];
+			for( int i = 0; i < Weights.Length; i++ )
+				Weights[i] = Combiner.Run( a.Weights[i], b.Weights[i] );
+			Type = new[] { a.Type[0], b.Type[0] };
 		}
 
-		public static MonsterType[] AttackStrongAgainst( MonsterType attackingType )
+		public Line( string line )
 		{
-			return AttackFilter( attackingType, "2" );
+			var spl = line.Split( ';' );
+			Type =
+				spl.Take( spl.Length == 2 ? 1 : 2 ).Select( s => (MonsterType) Enum.Parse( typeof( MonsterType ), s ) ).ToArray();
+			Weights = spl.Last().Select( c => _weights[c] ).ToArray();
 		}
 
-		public static MonsterType[] AttackWeakAgainstTypes( MonsterType attackingType )
+		public MonsterType[] Type { get; private set; }
+
+		public decimal[] Weights { get; private set; }
+
+		public decimal AttackedBy( MonsterType type )
 		{
-			return AttackFilter( attackingType, "½" );
+			return Weights[_headerIndexes[type]];
 		}
 
-		public static MonsterType[] AttackNoneAgainstTypes( MonsterType attackingType )
+		public bool Is( MonsterType[] types )
 		{
-			return AttackFilter( attackingType, "0" );
-		}
-
-		public static MonsterType[] DefendInvincibleAgainst( MonsterType type )
-		{
-			return DefendFilter( type, "0" );
-		}
-
-		public static MonsterType[] DefendWeakAgainst( MonsterType type )
-		{
-			return DefendFilter( type, "2" );
-		}
-
-		public static MonsterType[] DefendStrongAgainst( MonsterType type )
-		{
-			return DefendFilter( type, "½" );
-		}
-
-		public static MonsterType[] DefendFilter( MonsterType type, string lookup )
-		{
-			var indexline = _lines.First( r => r.Type == type );
-			var defendstats = _lines.Select( l => l.Weights[indexline.Index] ).ToArray();
-			var ret = new List<MonsterType>();
-			for( int i = 0; i < defendstats.Length; i++ )
-			{
-				if( defendstats[i] == lookup )
-					ret.Add( _lines.First( r => r.Index == i ).Type );
-			}
-			return ret.ToArray();
-		}
-
-		public static MonsterType[] AttackFilter( MonsterType type, string lookup )
-		{
-			var attackStats = _lines.First( r => r.Type == type );
-			var ret = new List<MonsterType>();
-			for( int i = 0; i < attackStats.Weights.Length; i++ )
-			{
-				if( attackStats.Weights[i] == lookup )
-					ret.Add( _lines.First( r => r.Index == i ).Type );
-			}
-			return ret.ToArray();
+			if( Type.Length != types.Length )
+				return false;
+			if( Type.Length == 1 )
+				return Type[0] == types[0];
+			return ( Type[0] == types[0] && Type[1] == types[1] ) || ( Type[0] == types[1] && Type[1] == types[0] );
 		}
 	}
 
-	public class Line
+
+	public class Rule
 	{
-		public int Index { get; set; }
-		public string Name { get; private set; }
-		public MonsterType Type { get; private set; }
-		public string[] Weights { get; private set; }
-		public Line( string s, int index )
+		readonly decimal A;
+		readonly decimal B;
+
+		public Rule( decimal a, decimal b, decimal result )
 		{
-			Index = index;
-			var spl = s.Split( ' ' );
-			Name = spl[0];
-			Type = (MonsterType) Enum.Parse( typeof( MonsterType ), spl[0] );
-			Weights = spl.Skip( 1 ).ToArray();
+			A = a;
+			B = b;
+			Result = result;
+		}
+
+		public decimal Result { get; private set; }
+
+		public bool Applies( decimal a, decimal b )
+		{
+			return ( a == A && b == B ) || a == B && b == A;
+		}
+	}
+
+	public static class Combiner
+	{
+		static readonly IList<Rule> _rules = new List<Rule>()
+		{
+			new Rule( .5m, .5m, .25m ),
+			new Rule( 2, 2, 4 ),
+			new Rule( 2, .5m, 1 ),
+			new Rule( 1, .5m, .5m ),
+			new Rule( 1, 2, 2 ),
+			new Rule( 1, 1, 1 ),
+			new Rule( 0, 0, 0 ),
+			new Rule( 0, 1, 0 ),
+			new Rule( 0, 2, 0 ),
+			new Rule( 0, .5m, 0 ),
+		};
+
+		public static decimal Run( decimal a, decimal b )
+		{
+			foreach( var r in _rules )
+				if( r.Applies( a, b ) )
+					return r.Result;
+			return 1m;
+		}
+	}
+
+
+	public abstract class TypeChart
+	{
+		readonly Line[] data;
+
+		protected TypeChart( string path )
+		{
+			var single = new List<Line>();
+			using( var textstream = new StreamReader( Assembly
+						.GetExecutingAssembly()
+						.GetManifestResourceStream( "PokeSave.Resources." + path ) ) )
+			{
+				string line;
+				while( ( line = textstream.ReadLine() ) != null )
+					single.Add( new Line( line ) );
+			}
+
+			var doubles = new List<Line>();
+			for( int i = 0; i < single.Count; i++ )
+				for( int j = i + 1; j < single.Count; j++ )
+				{
+					doubles.Add( new Line( single[i], single[j] ) );
+				}
+			Types = single.SelectMany( s => s.Type ).ToArray();
+			data = single.Concat( doubles ).ToArray();
+		}
+
+		public MonsterType[] Types { get; private set; }
+		public MonsterType[] AttackTypes { get; private set; }
+
+		public Line For( MonsterType type )
+		{
+			return For( new[] { type } );
+		}
+
+		public Line For( MonsterType[] type )
+		{
+			return data.FirstOrDefault( line => line.Is( type ) );
 		}
 	}
 }
