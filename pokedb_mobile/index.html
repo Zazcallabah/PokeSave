@@ -23,10 +23,10 @@
 </head>
 <body>
 	<div data-role="page" id="mainPage">
-		<div data-role="header"><h1>PokeDB mobile</h1></div>
+		<div data-role="header"><h1>PokeDB Gen VI</h1></div>
 		<div data-role="content">
 			<p>
-				<input type="text" id="searchField" placeholder="Name">
+				<input type="text" id="searchField" placeholder="Enemy name">
 				<ul id="suggestions" data-role="listview" data-inset="true"></ul>
 			</p>
 			<p id="output"></p>
@@ -52,7 +52,7 @@ for( var i = 0; i< obj.length;i++)
 	}
 	list.push({label:obj[i].label,value:i});
 }
-var template = "<h3>{{label}}</h3> <ul>{{#value.Types}}<li>{{.}}</li>{{/value.Types}}</ul> <h4>Info</h4> <ul>{{#value.I}}<li class=\"{{t}}\"><strong>{{t}}</strong> {{Type}}</li>{{/value.I}}</ul> ";
+var template = "<h3>{{label}}</h3> <ul>{{#value.Types}}<li>{{.}}</li>{{/value.Types}}</ul> <h4>Attacks will damage {{label}} like this</h4> <ul>{{#value.I}}<li class=\"{{t}}\"><strong>{{t}}</strong> {{Type}}</li>{{/value.I}}</ul> ";
 function update( hash )
 {
 	var item = obj[hash.substring(1)];
@@ -64,7 +64,7 @@ $("#mainPage").bind("pageshow", function(e) {
 	$("#searchField").autocomplete({
 		target: $('#suggestions'),
 		source: list,
-		minLength: 2,
+		minLength: 1,
 		link:'#',
 		callback:function(cb) {
 			$('#searchField').val('');
