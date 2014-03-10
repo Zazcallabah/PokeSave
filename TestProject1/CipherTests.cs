@@ -3,6 +3,7 @@ using PokeSave;
 
 namespace TestProject1
 {
+
 	[TestFixture]
 	public class CipherTests
 	{
@@ -62,4 +63,5 @@ namespace TestProject1
 			Assert.AreEqual( value, start.IsSet( bit ) );
 		}
 	}
+
 }
