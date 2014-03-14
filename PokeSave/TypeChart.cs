@@ -150,7 +150,6 @@ namespace PokeSave
 		}
 
 		public MonsterType[] Types { get; private set; }
-		public MonsterType[] AttackTypes { get; private set; }
 
 		public Line For( MonsterType type )
 		{

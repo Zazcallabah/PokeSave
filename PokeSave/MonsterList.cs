@@ -28,7 +28,8 @@ namespace PokeSave
 		public static MonsterInfo Get( string name )
 		{
 			Init();
-			return _dex.Values.FirstOrDefault( e => e.Name == name );
+			var NAME = name.ToUpperInvariant();
+			return _dex.Values.FirstOrDefault( e => e.Name == NAME );
 		}
 
 		public static MonsterInfo Get( uint index )

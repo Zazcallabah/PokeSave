@@ -28,7 +28,10 @@ namespace PokeSave.Sixth
 
 		public MonsterType[] GetTypeByName( string name )
 		{
-			return List[name];
+			if( List.ContainsKey( name ) )
+				return List[name];
+			else
+				return null;
 		}
 	}
 
@@ -77,6 +80,8 @@ namespace PokeSave.Sixth
 		public MonsterType[] GetTypeByName( string name )
 		{
 			var info = MonsterList.Get( name );
+			if( info == null )
+				return null;
 			if( info.Type1 == info.Type2 )
 				return new[] { info.Type1 };
 			return new[] { info.Type1, info.Type2 };
