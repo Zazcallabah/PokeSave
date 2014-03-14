@@ -1,4 +1,4 @@
-PokeDB mobile
+﻿PokeDB mobile
 =============
 
 Use case: You are gaming and encounter a pokemon you don't recognise. Enter the name into the search field and click on the name.
