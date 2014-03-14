@@ -11,6 +11,7 @@ Binaries
 _ReSharper*/
 *.resharper
 .DS_Store
+.idea
 ._.DS_Store
 *.results.xml
 test-results.xml
