@@ -4,6 +4,7 @@
 Use case: You are gaming and encounter a pokemon you don't recognise. Enter the name into the search field and click on the name.
 The type of the pokemon will be shown, as well as which types are strong and weak against it.
 
+Also the most likely moveset types will be shown, along with what that moveset is strong and weak against.
 
 
 
