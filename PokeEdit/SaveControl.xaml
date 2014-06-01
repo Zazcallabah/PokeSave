@@ -20,6 +20,7 @@
 				<PokeEdit:ReadOnlyPropertyPanel PropertyName="TrainerId" DataContext="{Binding Latest}" />
 				<PokeEdit:ReadOnlyPropertyPanel PropertyName="TimePlayed" DataContext="{Binding Latest}" />
 				<PokeEdit:ReadOnlyPropertyPanel PropertyName="SecurityKey" DataContext="{Binding Latest}" />
+				<PokeEdit:PropertyPanel PropertyName="Coins" DataContext="{Binding Latest}" />
 				<PokeEdit:ReadOnlyPropertyPanel PropertyName="GameCode" DataContext="{Binding Latest}" />
 				<PokeEdit:ReadOnlyPropertyPanel PropertyName="SaveIndex" DataContext="{Binding Latest}" />
 			</StackPanel>

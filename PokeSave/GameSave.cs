@@ -35,6 +35,7 @@ namespace PokeSave
 					{ "TeamSize", 0x34 },
 					{ "TeamList", 0x38 },
 					{ "Money", 0x290 },
+					{ "Coins", 0x294 },
 					{ "PCItems", 0x298 },
 					{ "PCItemsLength", 30 },
 					{ "Items", 0x310 },
@@ -77,6 +78,7 @@ namespace PokeSave
 					{ "TeamSize", 0x234 },
 					{ "TeamList", 0x238 },
 					{ "Money", 0x490 },
+					{ "Coins", 0x494 },
 					{ "PCItems", 0x498 },
 					{ "PCItemsLength", 50 },
 					{ "Items", 0x560 },
@@ -119,6 +121,7 @@ namespace PokeSave
 					{ "TeamSize", 0x234 },
 					{ "TeamList", 0x238 },
 					{ "Money", 0x490 },
+					{ "Coins", 0x494 },
 					{ "PCItems", 0x498 },
 					{ "PCItemsLength", 50 },
 					{ "Items", 0x560 },
@@ -375,6 +378,19 @@ namespace PokeSave
 				{
 					_sections[1].SetInt( Pointers["Money"], Xor.Run( value ) );
 					InvokePropertyChanged( "Money" );
+				}
+			}
+		}
+
+		public uint Coins
+		{
+			get { return  _sections[1].GetInt( Pointers["Coins"] ); }
+			set
+			{
+				if( value != Coins )
+				{
+					_sections[1].SetInt( Pointers["Coins"], value );
+					InvokePropertyChanged( "Coins" );
 				}
 			}
 		}
