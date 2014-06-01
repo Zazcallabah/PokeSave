@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel;
+using System.IO;
 using System.Windows.Input;
 using Microsoft.Win32;
 using PokeSave;
@@ -7,7 +8,7 @@ using PokeSave;
 namespace PokeEdit
 {
 	/// <summary>
-	/// Controller entity for opened file
+	///     Controller entity for opened file
 	/// </summary>
 	public class OpenFile : INotifyPropertyChanged
 	{
@@ -22,6 +23,23 @@ namespace PokeEdit
 			CloseCommand = new RelayCommand( InvokeClose );
 		}
 
+		/// <summary>
+		///     PKM types uses path for a hash to avoid duplicates.
+		/// </summary>
+		public string Path { get; set; }
+
+		public string Label { get; set; }
+		public IFileContent Data { get; private set; }
+		public FileType Type { get; set; }
+		public bool Selected { get; set; }
+
+		public ICommand EditCommand { get; private set; }
+		public ICommand StopEditCommand { get; private set; }
+		public ICommand ClaimCommand { get; private set; }
+		public ICommand SaveAsCommand { get; private set; }
+		public ICommand CloseCommand { get; private set; }
+		public event PropertyChangedEventHandler PropertyChanged;
+
 		void Claim()
 		{
 			if( Type == FileType.Gen3Save )
@@ -34,31 +52,37 @@ namespace PokeEdit
 			bool? result = dlg.ShowDialog();
 
 			if( result == true )
-			{
 				Data.Save( dlg.FileName );
-			}
 		}
 
-		/// <summary>
-		/// PKM types uses path for a hash to avoid duplicates.
-		/// </summary>
-		public string Path { get; set; }
-		public string Label { get; set; }
-		public IFileContent Data { get; private set; }
-		public FileType Type { get; set; }
-		public bool Selected { get; set; }
+		public void SaveWithBackup()
+		{
+			if( File.Exists( Path ) )
+			{
+				string tmp = Path;
+				int i = 1;
+				while( File.Exists( tmp ) )
+					tmp = Path + "." + ( i++ );
+				File.Move( Path, tmp );
+			}
+			Data.Save( Path );
 
-		public ICommand EditCommand { get; private set; }
-		public ICommand StopEditCommand { get; private set; }
-		public ICommand ClaimCommand { get; private set; }
-		public ICommand SaveAsCommand { get; private set; }
-		public ICommand CloseCommand { get; private set; }
+		}
+
+		public void Merge( OpenFile external )
+		{
+			var externalsave = ( (SaveFile) external.Data ).Latest;
+			( (SaveFile) Data ).Latest.Merge( externalsave );
+		}
+
+		public void Repair()
+		{
+			( (SaveFile) Data ).Latest.RepairPokeDex();
+		}
 
 		public event EventHandler<EventArgs> Edit;
 		public event EventHandler<EventArgs> StopEdit;
 		public event EventHandler<EventArgs> Close;
-
-		public event PropertyChangedEventHandler PropertyChanged;
 
 		void InvokeClose()
 		{

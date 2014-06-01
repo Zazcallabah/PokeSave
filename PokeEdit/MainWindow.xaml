@@ -21,7 +21,7 @@
 
 		<ScrollViewer Background="#FFFFFF" VerticalScrollBarVisibility="Auto">
 				<StackPanel Orientation="Horizontal">
-					<ItemsControl ItemsSource="{Binding Gen3Saves}">
+					<ItemsControl ItemsSource="{Binding Gen3Saves}" >
 						<ItemsControl.ItemTemplate>
 							<DataTemplate>
 								<Border CornerRadius="8"
@@ -107,8 +107,10 @@
 				<TextBlock Padding="10" HorizontalAlignment="Center" Visibility="{Binding OpenFiles.Count, Converter={StaticResource showEmpty}}">Drag files here</TextBlock>
 				<TextBlock FontSize="50" HorizontalAlignment="Center" TextAlignment="Center" FontFamily="Resources/#FontAwesome" Padding="0,30,0,0" Visibility="{Binding OpenFiles.Count, Converter={StaticResource showEmpty}}">&#xf063;<LineBreak/>&#xf0f6;</TextBlock>
 				<StackPanel Grid.Row="1" Orientation="Horizontal">
-					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf115;" Margin="2" Click="OpenClick"></Button>
-					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30"  Content="&#xf02d;" Margin="2" Click="SearchClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf115;" Margin="2" ToolTip="Open" Click="OpenClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf02d;" Margin="2" ToolTip="Search" Click="SearchClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf066;" Margin="2" ToolTip="Merge" Click="MergeClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf019;" Margin="2" ToolTip="Save with backup" Click="SaveAllClick"></Button>
 				</StackPanel>
 				</Grid>
 			</ScrollViewer>

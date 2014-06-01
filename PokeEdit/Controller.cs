@@ -59,6 +59,42 @@ namespace PokeEdit
 				list.Add( file );
 		}
 
+		public void SaveAll()
+		{
+			var l = OpenFiles.Where( f => f.Selected ).ToArray();
+			if( l.Length == 0 )
+				return;
+			foreach( var file in l )
+			{
+				file.SaveWithBackup();
+			}
+		}
+
+		public void MergeFiles()
+		{
+			var l = OpenFiles.Where( f => f.Selected ).ToArray();
+			if( l.Length <= 1 )
+				return;
+
+			var first = l[0];
+
+
+			for( int i = 1; i < l.Length; i++ )
+			{
+				first.Merge( l[i] );
+			}
+
+			for( int i = 1; i < l.Length; i++ )
+			{
+				l[i].Merge( first );
+			}
+
+			for( int i = 0; i < l.Length; i++ )
+			{
+				l[i].Repair();
+			}
+		}
+
 		BindingList<OpenFile> GetListForType( FileType type )
 		{
 			if( type == FileType.PKM )
@@ -73,7 +109,6 @@ namespace PokeEdit
 		// bulk commands
 		// export pkm to stringfile - query for gen
 		// export pkm to zipped 3gpkm (and other gens)
-		// merge
 		// claim - queries for original trainer
 		// save (saves file as is)
 

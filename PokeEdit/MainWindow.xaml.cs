@@ -130,6 +130,16 @@ namespace PokeEdit
 			}
 		}
 
+		void MergeClick( object sender, RoutedEventArgs e )
+		{
+			_controller.MergeFiles();
+		}
+
+		void SaveAllClick( object sender, RoutedEventArgs e )
+		{
+			_controller.SaveAll();
+		}
+
 		SaveFile ExtractSaveFileFromElement( Button button )
 		{
 			var buttoncontainer = (StackPanel) VisualTreeHelper.GetParent( button );
