@@ -532,7 +532,7 @@ namespace PokeSave
 			{
 				if( Move1 != value )
 				{
-					SetEncryptedWord( ActionOffset, true, (byte) value );
+					SetEncryptedWord( ActionOffset, true, (ushort) value );
 					InvokePropertyChanged( "Move1" );
 					InvokePropertyChanged( "Move1Name" );
 				}
@@ -552,7 +552,7 @@ namespace PokeSave
 			{
 				if( Move2 != value )
 				{
-					SetEncryptedWord( ActionOffset, false, (byte) value );
+					SetEncryptedWord( ActionOffset, false, (ushort) value );
 					InvokePropertyChanged( "Move2" );
 					InvokePropertyChanged( "Move2Name" );
 				}
@@ -572,7 +572,7 @@ namespace PokeSave
 			{
 				if( Move3 != value )
 				{
-					SetEncryptedWord( ActionOffset + 4, true, (byte) value );
+					SetEncryptedWord( ActionOffset + 4, true, (ushort) value );
 					InvokePropertyChanged( "Move3" );
 					InvokePropertyChanged( "Move3Name" );
 				}
@@ -592,7 +592,7 @@ namespace PokeSave
 			{
 				if( Move4 != value )
 				{
-					SetEncryptedWord( ActionOffset + 4, false, (byte) value );
+					SetEncryptedWord( ActionOffset + 4, false, (ushort) value );
 					InvokePropertyChanged( "Move4" );
 					InvokePropertyChanged( "Move4Name" );
 				}
@@ -1221,8 +1221,8 @@ namespace PokeSave
 						InvokePropertyChanged( prop.Name );
 						Debug.WriteLine( prop.Name );
 					}
-//				else
-//			InvokePropertyChanged("");
+				else
+					InvokePropertyChanged( "" );
 			}
 		}
 
@@ -1442,11 +1442,6 @@ namespace PokeSave
 			}
 			sb.Append( " o:" + OriginInfo.ToString( "X" ) );
 			return sb.ToString();
-		}
-
-		public override string ToString()
-		{
-			return Full();
 		}
 
 		public void InvokePropertyChanged( string e )
