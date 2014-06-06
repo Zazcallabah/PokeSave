@@ -12,6 +12,8 @@ namespace PokeEdit
 	/// </summary>
 	public class OpenFile : INotifyPropertyChanged
 	{
+		bool _selected;
+
 		public OpenFile( IFileContent data )
 		{
 			Data = data;
@@ -31,7 +33,19 @@ namespace PokeEdit
 		public string Label { get; set; }
 		public IFileContent Data { get; private set; }
 		public FileType Type { get; set; }
-		public bool Selected { get; set; }
+
+		public bool Selected
+		{
+			get { return _selected; }
+			set
+			{
+				if( value != _selected )
+				{
+					_selected = value;
+					InvokePropertyChanged( "Selected" );
+				}
+			}
+		}
 
 		public ICommand EditCommand { get; private set; }
 		public ICommand StopEditCommand { get; private set; }

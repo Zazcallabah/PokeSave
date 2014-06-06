@@ -7,6 +7,7 @@
 	<Window.Resources>
 		<PokeEdit:EmptyListMeansVisibleConverter x:Key="showEmpty" />
 		<PokeEdit:EmptyListMeansCollapsedConverter x:Key="hideEmpty" />
+		<PokeEdit:SelectedOpenFilesToBooleanConverter x:Key="enableIfFilesSelected" />
 	</Window.Resources>
 	<Grid Background="#D3D3D3">
 		<Grid.RowDefinitions>
@@ -109,8 +110,8 @@
 				<StackPanel Grid.Row="1" Orientation="Horizontal">
 					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf115;" Margin="2" ToolTip="Open" Click="OpenClick"></Button>
 					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf02d;" Margin="2" ToolTip="Search" Click="SearchClick"></Button>
-					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf066;" Margin="2" ToolTip="Merge" Click="MergeClick"></Button>
-					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf019;" Margin="2" ToolTip="Save with backup" Click="SaveAllClick"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf066;" Margin="2" ToolTip="Merge" Click="MergeClick" IsEnabled="{Binding OpenFiles, Converter={StaticResource enableIfFilesSelected}}"></Button>
+					<Button FontFamily="Resources/#FontAwesome" FontSize="19" Width="30" Content="&#xf019;" Margin="2" ToolTip="Save with backup" Click="SaveAllClick" IsEnabled="{Binding OpenFiles, Converter={StaticResource enableIfFilesSelected}}"></Button>
 				</StackPanel>
 				</Grid>
 			</ScrollViewer>

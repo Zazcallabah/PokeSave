@@ -1,10 +1,28 @@
 using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 
 namespace PokeEdit
 {
+	public class SelectedOpenFilesToBooleanConverter : IValueConverter
+	{
+		public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
+		{
+			var list = value as BindingList<OpenFile>;
+			if( list == null )
+				return false;
+			return list.Any( o => o.Selected );
+		}
+
+		public object ConvertBack( object value, Type targetType, object parameter, CultureInfo culture )
+		{
+			return null;
+		}
+	}
+
 	public class EmptyListMeansVisibleConverter : IValueConverter
 	{
 		public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
@@ -17,6 +35,7 @@ namespace PokeEdit
 			return null;
 		}
 	}
+
 	public class EmptyListMeansCollapsedConverter : IValueConverter
 	{
 		public object Convert( object value, Type targetType, object parameter, CultureInfo culture )
@@ -29,6 +48,7 @@ namespace PokeEdit
 			return null;
 		}
 	}
+
 	public class BoolToFontWeightConverter : IValueConverter
 	{
 		public object Convert( object value, Type targetType,

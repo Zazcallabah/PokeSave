@@ -32,10 +32,6 @@ namespace PokeEdit
 			DataContext = _controller = new Controller();
 			InitializeComponent();
 			Drop += MainWindowDrop;
-#if DEBUG
-			Add( @"C:\src\vba\pkm.txt" );
-			Add( @"C:\src\vba\pfr - Copy.sa1" );
-#endif
 		}
 
 		void MainWindowDrop( object sender, DragEventArgs e )
