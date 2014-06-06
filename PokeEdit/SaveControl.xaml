@@ -46,6 +46,9 @@
 		<PokeEdit:DexHolderPanel Margin="3" DataContext="{Binding Latest.Dex,Mode=OneWay}" />
 
 		<PokeEdit:PcBoxHolderPanel Margin="4"  Background="#FFFFFF" DataContext="{Binding Latest.Boxes,Mode=OneWay}" />
-
+		<StackPanel Orientation="Horizontal">
+			<Button Height="26" Margin="4" Width="60" Content="Sort PC" Click="SortClick" />
+			<Button Height="26" Margin="4" Width="60" Content="Claim all" Click="ClaimClick" />
+		</StackPanel>
 	</StackPanel>
 </UserControl>

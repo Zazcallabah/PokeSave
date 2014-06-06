@@ -19,6 +19,7 @@ namespace PokeSave
 
 		public MonsterEntry( byte[] data, bool from3gpkm )
 		{
+			PropertyChangedEnabled = true;
 			_data = new GameSection( data );
 			_offset = 0;
 			Storage = data.Length == 80;
@@ -46,6 +47,7 @@ namespace PokeSave
 
 		public MonsterEntry( GameSection data, int offset, bool storage )
 		{
+			PropertyChangedEnabled = true;
 			_data = data;
 			_offset = offset;
 			Storage = storage;
@@ -1213,13 +1215,18 @@ namespace PokeSave
 
 				_specificXor = new Cipher( Personality, OriginalTrainerId );
 
-				foreach( var prop in GetType().GetProperties() )
-				{
-					InvokePropertyChanged( prop.Name );
-					Debug.WriteLine( prop.Name );
-				}
+				if( PropertyChangedEnabled )
+					foreach( var prop in GetType().GetProperties() )
+					{
+						InvokePropertyChanged( prop.Name );
+						Debug.WriteLine( prop.Name );
+					}
+//				else
+//			InvokePropertyChanged("");
 			}
 		}
+
+		public bool PropertyChangedEnabled { get; set; }
 
 		public bool Storage { get; private set; }
 		public event PropertyChangedEventHandler PropertyChanged;

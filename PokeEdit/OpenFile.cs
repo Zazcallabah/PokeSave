@@ -20,7 +20,6 @@ namespace PokeEdit
 			Data.PropertyChanged += ( s, e ) => InvokePropertyChanged( "Data" );
 			EditCommand = new RelayCommand( InvokeEdit );
 			StopEditCommand = new RelayCommand( InvokeStopEdit );
-			ClaimCommand = new RelayCommand( Claim );
 			SaveAsCommand = new RelayCommand( SaveAs );
 			CloseCommand = new RelayCommand( InvokeClose );
 		}
@@ -49,16 +48,9 @@ namespace PokeEdit
 
 		public ICommand EditCommand { get; private set; }
 		public ICommand StopEditCommand { get; private set; }
-		public ICommand ClaimCommand { get; private set; }
 		public ICommand SaveAsCommand { get; private set; }
 		public ICommand CloseCommand { get; private set; }
 		public event PropertyChangedEventHandler PropertyChanged;
-
-		void Claim()
-		{
-			if( Type == FileType.Gen3Save )
-				( (SaveFile) Data ).Latest.ClaimAll();
-		}
 
 		void SaveAs()
 		{

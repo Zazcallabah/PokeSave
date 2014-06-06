@@ -58,6 +58,7 @@
     <Compile Include="SaveFile.cs" />
     <Compile Include="Sixth\Gen6TypeChart.cs" />
     <Compile Include="Sixth\Gen6TypeInformation.cs" />
+    <Compile Include="SortedBoxObject.cs" />
     <Compile Include="StringList.cs" />
     <Compile Include="SubstructureOffset.cs" />
     <Compile Include="TextTable.cs" />

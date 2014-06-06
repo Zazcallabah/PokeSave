@@ -384,7 +384,7 @@ namespace PokeSave
 
 		public uint Coins
 		{
-			get { return  _sections[1].GetInt( Pointers["Coins"] ); }
+			get { return _sections[1].GetInt( Pointers["Coins"] ); }
 			set
 			{
 				if( value != Coins )
@@ -458,6 +458,20 @@ namespace PokeSave
 				me.MakeOwn( this );
 		}
 
+		public void SortPC()
+		{
+			var sorted = PcBuffer
+				.Select( t => new SortedBoxObject { Mark = t.Mark, MonsterId = t.MonsterId, Data = t.RawData } )
+				.OrderBy( o => o )
+				.ToArray();
+
+			for( int i = 0; i < PcBuffer.Count; i++ )
+			{
+				PcBuffer[i].PropertyChangedEnabled = false;
+				PcBuffer[i].RawData = sorted[i].Data;
+				PcBuffer[i].PropertyChangedEnabled = true;
+			}
+		}
 
 		void ExtractTeam()
 		{
