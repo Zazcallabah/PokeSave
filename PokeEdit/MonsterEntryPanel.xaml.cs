@@ -33,6 +33,11 @@ namespace PokeEdit
 			( (MonsterEntry) DataContext ).Clear();
 		}
 
+		void BoostIVClicked( object sender, RoutedEventArgs e )
+		{
+			( (MonsterEntry) DataContext ).BoostIV();
+		}
+
 
 		void ClaimClicked( object sender, RoutedEventArgs e )
 		{

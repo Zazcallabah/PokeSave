@@ -114,29 +114,28 @@
 		<Expander Header="Stats">
 			<StackPanel Orientation="Horizontal">
 				<StackPanel>
-					<TextBlock>\t\tIV EV Calc Actual</TextBlock>
+					<TextBlock>IV   EV    Calc Actual</TextBlock>
 					<PokeEdit:StatsPanel Stat="HP" DataContext="{Binding}"/>
 					<PokeEdit:StatsPanel Stat="Attack" DataContext="{Binding}"/>
 					<PokeEdit:StatsPanel Stat="Defense" DataContext="{Binding}"/>
 					<PokeEdit:StatsPanel Stat="Speed" DataContext="{Binding}"/>
 					<PokeEdit:StatsPanel Stat="SpAttack" DataContext="{Binding}"/>
 					<PokeEdit:StatsPanel Stat="SpDefense" DataContext="{Binding}"/>
-				</StackPanel>
-					<StackPanel>
-					<PokeEdit:PropertyPanel PropertyName="Coolness" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Beauty" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Cuteness" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Smartness" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Toughness" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="Feel" DataContext="{Binding}"/>
+					<Button Content="Boost IV" Click="BoostIVClicked" Margin="2"/>
 				</StackPanel>
 			</StackPanel>
 		</Expander>
 		<Expander Header="Misc">
-				<StackPanel>
-					<PokeEdit:PropertyPanel PropertyName="Language" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="IVs" DataContext="{Binding}"/>
-					<PokeEdit:PropertyPanel PropertyName="PPBonus" DataContext="{Binding}"/>
+			<StackPanel>
+				<PokeEdit:PropertyPanel PropertyName="Coolness" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Beauty" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Cuteness" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Smartness" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Toughness" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Feel" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="Language" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="IVs" DataContext="{Binding}"/>
+				<PokeEdit:PropertyPanel PropertyName="PPBonus" DataContext="{Binding}"/>
 				<PokeEdit:PropertyPanel PropertyName="Ribbons" DataContext="{Binding}"/>
 			</StackPanel>
 		</Expander>

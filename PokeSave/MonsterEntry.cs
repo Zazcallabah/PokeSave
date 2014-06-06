@@ -11,6 +11,7 @@ namespace PokeSave
 		readonly GameSection _data;
 		readonly int _offset;
 		Cipher _specificXor;
+		static Random _r = new Random();
 
 		public MonsterEntry( string data )
 			: this( Convert.FromBase64String( data ), false )
@@ -1458,6 +1459,23 @@ namespace PokeSave
 		public void Clear()
 		{
 			RawData = new byte[100];
+		}
+
+		static uint Boost( uint iv )
+		{
+			if( iv < 20 )
+				return (uint) _r.Next( 12 ) + 20;
+			return iv;
+		}
+
+		public void BoostIV()
+		{
+			HPIV = Boost( HPIV );
+			SpeedIV = Boost( SpeedIV );
+			AttackIV = Boost( AttackIV );
+			DefenseIV = Boost( DefenseIV );
+			SpAttackIV = Boost( SpAttackIV );
+			SpDefenseIV = Boost( SpDefenseIV );
 		}
 
 		public byte[] To3gPkm()
