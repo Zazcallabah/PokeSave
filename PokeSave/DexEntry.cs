@@ -45,8 +45,8 @@ namespace PokeSave
 					_save.Section( 0 )[0x5c + Offset] = result;
 					if( Offset <= 30 )
 					{
-						_save.Section( 1 )[_save.Pointers["DexOffset1"] + Offset] = result;
-						_save.Section( 4 )[_save.Pointers["DexOffset2"] + Offset] = result;
+						_save.Section( 1 )[_save.Pointers["DexSeenOffset1"] + Offset] = result;
+						_save.Section( 4 )[_save.Pointers["DexSeenOffset2"] + Offset] = result;
 					}
 					InvokePropertyChanged( "Seen" );
 				}

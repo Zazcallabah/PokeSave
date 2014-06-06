@@ -49,15 +49,16 @@ namespace PokeSave
 					{ "Berries", 0x54c },
 					{ "BerriesLength", 43 },
 					{ "Rival", 0xBCC },
-					{ "DexOffset1", 0x5F8 },
-					{ "DexOffset2", 0xB98 },
-					{ "DexOffset3", 0x11C },
-					{ "DexOffset4", 0x68 },
-					{ "DexOffset5", 0x1B },
-					{ "DexOffset5Value", 0xB9 },
-					{ "DexOffset3Value1", 0x58 },
-					{ "DexOffset3Value2", 0x62 },
-					{ "DexOffset4bitindex", 0 },
+					{ "DexSeenOffset1", 0x5F8 },
+					{ "DexSeenOffset2", 0xB98 },
+					{ "NationalDexOffset1", 0x1B },
+					{ "NationalDexOffset1Value1", 0xB9 },
+					{ "NationalDexOffset1Value2", -1 },
+					{ "NationalDexOffset2", 0x68 },
+					{ "NationalDexIndex2", 0 },
+					{ "NationalDexOffset3", 0x11C },
+					{ "NationalDexOffset3Value1", 0x58 },
+					{ "NationalDexOffset3Value2", 0x62 },
 					{ "BoxNames", 0x8344 },
 					{ "BoxWallpapers", 0x83C2 },
 				}
@@ -92,15 +93,16 @@ namespace PokeSave
 					{ "Berries", 0x790 },
 					{ "BerriesLength", 46 },
 					{ "Rival", -1 },
-					{ "DexOffset1", 0x938 },
-					{ "DexOffset2", 0xC0C },
-					{ "DexOffset3", 0x44C },
-					{ "DexOffset4", 0x3A6 },
-					{ "DexOffset5", 0x1A },
-					{ "DexOffset5Value", 0xDA },
-					{ "DexOffset3Value1", 0x2 },
-					{ "DexOffset3Value2", 0x3 },
-					{ "DexOffset4bitindex", 6 },
+					{ "DexSeenOffset1", 0x988 },
+					{ "DexSeenOffset2", 0xCA4 },
+					{ "NationalDexOffset1", 0x19 },
+					{ "NationalDexOffset1Value1", 1 },
+					{ "NationalDexOffset1Value2", 0xDA },
+					{ "NationalDexOffset2", 0x402 },
+					{ "NationalDexIndex2", 6 },
+					{ "NationalDexOffset3", 0x4A8 },
+					{ "NationalDexOffset3Value1", 2 },
+					{ "NationalDexOffset3Value2", 3 },
 					{ "BoxNames", 0x8344 },
 					{ "BoxWallpapers", 0x83C2 },
 				}
@@ -135,15 +137,16 @@ namespace PokeSave
 					{ "Berries", 0x740 },
 					{ "BerriesLength", 46 },
 					{ "Rival", -1 },
-					{ "DexOffset1", 0x938 },
-					{ "DexOffset2", 0xC0C },
-					{ "DexOffset3", 0x44C },
-					{ "DexOffset4", 0x3A6 },
-					{ "DexOffset5", 0x1A },
-					{ "DexOffset5Value", 0xDA },
-					{ "DexOffset3Value1", 0x2 },
-					{ "DexOffset3Value2", 0x3 },
-					{ "DexOffset4bitindex", 6 },
+					{ "DexSeenOffset1", 0x938 },
+					{ "DexSeenOffset2", 0xC0C },
+					{ "NationalDexOffset1", 0x19 },
+					{ "NationalDexOffset1Value1", 1 },
+					{ "NationalDexOffset1Value2", 0xDA },
+					{ "NationalDexOffset2", 0x3A6 },
+					{ "NationalDexIndex2", 6 },
+					{ "NationalDexOffset3", 0x44C },
+					{ "NationalDexOffset3Value1", 0x2 },
+					{ "NationalDexOffset3Value2", 0x3 },
 					{ "BoxNames", 0x8344 },
 					{ "BoxWallpapers", 0x83C2 },
 				}
@@ -406,15 +409,22 @@ namespace PokeSave
 
 		public bool National
 		{
-			get { return _sections[2][_pointers[Type]["DexOffset4"]].IsSet( Pointers["DexOffset4bitindex"] ); }
+			get { return _sections[2][Pointers["NationalDexOffset2"]].IsSet( Pointers["NationalDexIndex2"] ); }
 			set
 			{
 				if( National != value )
 				{
 					if( value )
-						_sections[2][_pointers[Type]["DexOffset4"]].SetBit( Pointers["DexOffset4bitindex"] );
+						_sections[2][Pointers["NationalDexOffset2"]].SetBit( Pointers["NationalDexIndex2"] );
 					else
-						_sections[2][_pointers[Type]["DexOffset4"]].ClearBit( Pointers["DexOffset4bitindex"] );
+						_sections[2][Pointers["NationalDexOffset2"]].ClearBit( Pointers["NationalDexIndex2"] );
+
+					_sections[0][Pointers["NationalDexOffset1"]] = (byte) Pointers["NationalDexOffset1Value1"];
+					if( Pointers["NationalDexOffset1Value2"] != -1 )
+						_sections[0][Pointers["NationalDexOffset1"] + 1] = (byte) Pointers["NationalDexOffset1Value2"];
+
+					_sections[2][Pointers["NationalDexOffset3"]] = (byte) Pointers["NationalDexOffset3Value1"];
+					_sections[2][Pointers["NationalDexOffset3"] + 1] = (byte) Pointers["NationalDexOffset3Value2"];
 
 					InvokePropertyChanged( "National" );
 				}
