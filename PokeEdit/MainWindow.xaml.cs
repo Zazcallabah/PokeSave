@@ -10,6 +10,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Navigation;
 using Microsoft.Win32;
@@ -133,7 +134,9 @@ namespace PokeEdit
 
 		void SaveAllClick( object sender, RoutedEventArgs e )
 		{
+			Mouse.OverrideCursor = Cursors.Wait;
 			_controller.SaveAll();
+			Mouse.OverrideCursor = null;
 		}
 
 		SaveFile ExtractSaveFileFromElement( Button button )
