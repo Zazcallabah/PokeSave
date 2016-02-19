@@ -2,6 +2,8 @@ PokeSave
 ========
 PokeSave, working title, intends to be an easy and intuitive tool for editing Pokemon save files. Currently it only supports generation 3 games, and I have only tested it on emulator 128k saves.
 
+![Screenshot](scr-ps.png)
+
 Roadmap
 -----
 * Add support for just adding pkm-file.
